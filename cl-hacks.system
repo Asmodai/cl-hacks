@@ -1,0 +1,10 @@
+;;; -*- Mode: LISP; Syntax: ZETALISP -*-
+
+;;;
+;;; CL-HACKS system definition file for Symbolics Genera
+;;;
+
+#+GENERA
+(SI:SET-SYSTEM-SOURCE-FILE "CL-HACKS" "SYS: CL-HACKS; SYSDCL")
+
+;;; EOF
