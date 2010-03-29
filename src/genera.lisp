@@ -70,9 +70,8 @@ already has them?")
     (let ((read-symb (find-symbol "READ-SEQUENCE"))
 	  (write-symb (find-symbol "WRITE-SEQUENCE"))
 	  (ensure-dir (find-symbol "ENSURE-DIRECTORIES-EXIST")))
-      (in-package :common-lisp-user)
-      (import read-symb (find-package 'cl-hacks))
-      (import write-symb (find-package 'cl-hacks))
-      (import ensure-dir (find-package 'cl-hacks)))))
+      (import read-symb (find-package 'future-common-lisp))
+      (import write-symb (find-package 'future-common-lisp))
+      (import ensure-dir (find-package 'future-common-lisp)))))
 
 ;; EOF
