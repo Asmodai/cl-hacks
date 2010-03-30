@@ -1,8 +1,8 @@
-;;; -*- Mode: Lisp; Syntax: COMMON-LISP; Package: COMMON-LISP-USER; Base: 10 -*-
+;;; -*- Mode: Lisp; Syntax: ANSI-COMMON-LISP; Package: COMMON-LISP-USER; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; cl-hacks.asd --- ASDF package definition.
 ;;;
-;;; Time-stamp: <Tuesday Sep  1, 2009 22:40:37 asmodai>
+;;; Time-stamp: <Tuesday Mar 30, 2010 09:13:25 asmodai>
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -63,8 +63,34 @@ programs :)"
     ((:module :src
               :components
 	      ((:file "package")
-	       (:file "version"
-		:depends-on ("package"))))))
+	       (:file "ifstar" :depends-on ("package"))
+	       (:file "macros" :depends-on ("package"))
+	       (:file "functions" :depends-on ("package"))
+	       (:file "lists" :depends-on ("macros"))
+	       (:file "seqs" :depends-on ("macros"))
+	       (:file "symbols" :depends-on ("macros"))
+	       (:file "strings" :depends-on ("macros"))
+	       (:file "math" :depends-on ("macros"))
+	       (:file "datetime" :depends-on ("macros"))
+	       (:file "strmatch" :depends-on ("macros"))
+	       (:file "random" :depends-on ("package"))
+	       (:file "iterate" :depends-on ("macros"))
+	       (:file "impl" :depends-on ("macros"))
+	       (:file "color" :depends-on ("macros"))
+	       (:file "console" :depends-on ("macros"))
+	       (:file "buff-input" :depends-on ("macros"))
+	       (:file "byte-stream" :depends-on ("macros"))
+	       (:file "collecting" :depends-on ("macros"))
+	       (:file "dynamic-state" :depends-on ("macros"))
+	       (:file "memoize" :depends-on ("macros"))
+	       (:file "os" :depends-on ("macros"))
+	       (:file "io" :depends-on ("macros" "impl"))
+	       (:file "wrapping-standard" :depends-on ("macros"))
+	       #+cl-hacks-mop (:file "mop" :depends-on ("macros"))
+	       #+cl-hacks-mop (:file "clos" :depends-on ("symbols" "macros" "mop"))
+	       (:file "equal" :depends-on ("macros" #+cl-hacks-mop "mop"))
+	       (:file "processes" :depends-on ("macros"))
+	       (:file "version" :depends-on ("package" "os"))))))
 
 
 ;; cl-hacks.asd ends here

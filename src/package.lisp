@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- Package definition
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:31:56 asmodai>
-;;; Revision:   44
+;;; Time-stamp: <Tuesday Mar 30, 2010 09:13:08 asmodai>
+;;; Revision:   45
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -418,6 +418,10 @@
    
    ;;
    ;; byte-stream.lisp
+   #:make-binary-array-output-stream
+   #:get-output-stream-data
+   #:dump-output-stream-data
+   #:make-byte-array-input-stream
 
    ;;
    ;; signals.lisp
@@ -427,7 +431,10 @@
    #:singleton-class
    #:reset-singleton-classes
    #:define-abstract-class
-   #:define-final-class     
+   #:define-final-class    
+   #:attributes-class
+   #:slot-attribute
+   #:slot-attributes
 ))
 
 ;;; This is so we can tell CL-HACKS has been loaded

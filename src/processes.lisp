@@ -2,8 +2,8 @@
 ;;;
 ;;; processes.lisp --- Multi-processing functions.
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:32:15 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Tuesday Mar 30, 2010 08:12:49 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -39,7 +39,7 @@
 (in-package #:cl-hacks)
 
 #+genera
-(error "The functions contained in PROCESSES.LISP can clobber Sybolics
+(error "The functions contained in PROCESSES.LISP can clobber Symbolics
 functions.  Please do not load this file.")
 
 (defun make-process (name func)
@@ -48,27 +48,22 @@ functions.  Please do not load this file.")
   #+lispworks (mp:process-run-function name nil func)
   #+sb-thread (sb-thread:make-thread func :name name)
   #+openmcl (ccl:process-run-function name func)
-  #-(or allegro cmu lispworks sb-thread openmcl genera)
-  (funcall func)
-  )
+  #-(or allegro cmu lispworks sb-thread openmcl)
+  (funcall func))
 
 (defun destroy-process (process)
   #+cmu (mp:destroy-process process)
   #+allegro (mp:process-kill process)
   #+sb-thread (sb-thread:destroy-thread process)
   #+lispworks (mp:process-kill process)
-  #+openmcl (ccl:process-kill process)
-  #+genera (process:kill process :if-without-aborts :ask)
-  )
+  #+openmcl (ccl:process-kill process))
 
 (defun make-lock (name)
   #+allegro (mp:make-process-lock :name name)
   #+cmu (mp:make-lock name)
   #+lispworks (mp:make-lock :name name)
   #+sb-thread (sb-thread:make-mutex :name name)
-  #+openmcl (ccl:make-lock name)
-  #+genera (process:make-lock name)
-  )
+  #+openmcl (ccl:make-lock name))
 
 (defmacro with-lock-held ((lock) &body body)
   #+allegro
@@ -82,8 +77,7 @@ functions.  Please do not load this file.")
   #+openmcl
   `(ccl:with-lock-grabbed (,lock) ,@body)
   #-(or allegro cmu lispworks sb-thread openmcl)
-  `(progn ,@body)
-  )
+  `(progn ,@body))
 
 (defmacro with-timeout ((seconds) &body body)
   #+allegro
@@ -98,11 +92,10 @@ functions.  Please do not load this file.")
                                  #'(lambda ()
                                      ,@body) nil)
   #-(or allegro cmu sb-thread openmcl genera)
-  `(progn ,@body)
-  )
+  `(progn ,@body))
 
 (defun process-sleep (n)
   #+allegro (mp:process-sleep n)
-  #-(and allegro (not genera)) (sleep n)
+  #-(and allegro (not genera)) (sleep n))
 
 ;;; processes.lisp ends here
