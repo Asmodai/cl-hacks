@@ -2,8 +2,8 @@
 ;;;
 ;;; os.lisp --- OS-specific functions
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 18:05:08 asmodai>
-;;; Revision:   6
+;;; Time-stamp: <Tuesday Mar 30, 2010 11:20:43 asmodai>
+;;; Revision:   13
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -128,11 +128,14 @@ returns (VALUES string-output error-output exit-status)"
     #-(or openmcl clisp lispworks allegro scl cmu sbcl abcl)
     (error "COMMAND-OUTPUT not implemented.")))
 
-(defun run-shell-command (program args)
+(defun run-shell-command (program &rest args)
   "This function provides a quick and dirty interface to COMMAND-OUTPUT, but it will only
 return the exit status."
-  (multiple-value-bind (output error status)
-      (command-output program args)))
+  (let ((command (apply #'format nil program args)))
+    (multiple-value-bind (output error status)
+	(command-output command)
+      (declare (ignore output error))
+      status)))
 
 (defun delete-directory-and-files (dir &key (if-does-not-exist :error) (quiet t) force)
   #+allegro (excl:delete-directory-and-files dir :if-does-not-exist if-does-not-exist
@@ -167,7 +170,6 @@ return the exit status."
                              (funcall (find-symbol "GetCurrentProcessId"
                                                    :win32)))
                             (t
-                             (system::getenv "PID")))
-  )
+                             (system::getenv "PID"))))
 
 ;;; os.lisp ends here

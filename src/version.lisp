@@ -2,8 +2,8 @@
 ;;;
 ;;; version.lisp --- Lisp identification functions.
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 17:26:36 asmodai>
-;;; Revision:   74
+;;; Time-stamp: <Tuesday Mar 30, 2010 12:40:19 asmodai>
+;;; Revision:   81
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -154,9 +154,12 @@ present in BSD."
 supporting software, or nil if no appropriate or relevant result can
 be produced."
   #+unix
-  (command-output
-   #+(or bsd darwin) "/usr/bin/uname -r"
-   #-(and bsd darwin) "/bin/uname -r")
+  (multiple-value-bind (output error status)
+      (command-output
+       #+(or bsd darwin) "/usr/bin/uname -r"
+       #-(and bsd darwin) "/bin/uname -r")
+    (declare (ignore error status))
+    (strip-newlines output))
   #+genera
   (progn
     (let ((major-version nil)
@@ -194,7 +197,7 @@ be produced."
 ;;; {{{ Machine information:
 
 
-;; TODO: Add support for BSD's sysctl and Windows.
+;; TODO: Add support for Windows.
 (defun common-machine-version ()
   "Ascertains and returns the machine version from either the operating
 system or the underlaying hardware."
@@ -205,15 +208,23 @@ system or the underlaying hardware."
 	  when (eql (search "model name" line) 0)
 	    return (string-trim " " (subseq line
 					    (1+ (position #\: line))))))
+  #+(or bsd darwin)
+  (multiple-value-bind (output error status)
+      (command-output 
+       #+darwin "/usr/sbin/sysctl machdep.cpu.brand_string"
+       #+bsd "/sbin/sysctl hw.model")
+    (declare (ignore error status))
+    (string-left-trim-whitespace
+     (second
+      (delimited-string-to-list (strip-newlines output) #\:))))
   #+abcl
   (java:jstatic "getProperty" "java.lang.System" "java.version")
   #+(and genera (not vlm))
   (common-lisp:machine-version)
   #+(and genera vlm)
   "Unix Workstation"
-  #-(or linux abcl genera)
-  "Unknown"
-  )
+  #-(or linux abcl bsd darwin genera)
+  "Unknown")
 
 (defun common-machine-type ()
   "Ascertains and returns the machine type either using *FEATURES*
@@ -231,6 +242,8 @@ or from the OS and/or hardware."
     #+(or x86 pc386 pc iapx386 i386 i486 i586 i686 pentium
 	  pentiummmx pentiumpro pentium2 pentium3 pentium4)
     (setf mtype "x86")
+    #+(or x86-64 x86_64)
+    (setf mtype "x86-64")
     #+(or ppc powerpc)
     (setf mtype "PowerPC")
     mtype))

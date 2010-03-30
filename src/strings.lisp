@@ -2,8 +2,8 @@
 ;;;
 ;;; strings.lisp --- String functions
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 15:56:40 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Tuesday Mar 30, 2010 11:23:59 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -291,7 +291,7 @@
 
 (defun usb8-array-to-string (vec &key (start 0) end)
   (declare (type (simple-array (unsigned-byte 8) (*)) vec)
-	   (fixnum short))
+	   (fixnum start))
   (unless end
     (setq end (length vec)))
   (let* ((len (- end start))
@@ -398,7 +398,7 @@ PCHAR.  Leading zeros are present.  LEN must be a fixnum.")
        ((or (zerop val) (minusp pos))
 	(when minus? (setf (schar result 0) #\-))
 	result)
-    (declare (fixnum mod zero-coe pos)
+    (declare (fixnum mod zero-code pos)
 	     (simple-string result)
 	     (integer val))
     (setf (schar result pos) (code-char (+ zero-code mod)))))
@@ -831,6 +831,7 @@ PCHAR.  Leading zeros are present.  LEN must be a fixnum.")
 (defun strip-newlines (string)
   (let ((len (length string)))
     (if (char= (schar string (1- len)) #\NewLine)
-	(setf (schar string (1- len)) #\Null))))
+	(setf (schar string (1- len)) #\Null))
+    string))
 
 ;; strings.lisp ends here
