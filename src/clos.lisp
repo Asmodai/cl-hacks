@@ -1,9 +1,9 @@
 ;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; clos.lisp --- Several new CLOS classes and some hacks.
-;;; Revision:   12
+;;; Revision:   17
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:25:08 asmodai>
+;;; Time-stamp: <Tuesday Mar 30, 2010 09:07:08 asmodai>
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -43,24 +43,24 @@
 ;;; ===================================================================
 ;;; {{{ Singleton classes:                   (Source: Tim Bradshaw)
 
-(defclass singleton-class (standard-class)
+(defclass singleton-class (cl-hacks-mop:standard-class)
   ((instance :initform nil))
   (:documentation
    "The singleton class metaclass."))
 
-(defmethod validate-superclass ((class singleton-class)
-				(superclass standard-class))
+(defmethod cl-hacks-mop:validate-superclass ((class singleton-class)
+				(superclass cl-hacks-mop:standard-class))
   ;; It's OK for a standard class to be a superclass of a singlton
   ;; class.
   t)
 
-(defmethod validate-superclass ((class singleton-class)
+(defmethod cl-hacks-mop:validate-superclass ((class singleton-class)
 				(superclass singleton-class))
   ;; It's OK for a singleton class to be a subclass of a singlton
   ;; class
   t)
 
-(defmethod validate-superclass ((class standard-class)
+(defmethod cl-hacks-mop:validate-superclass ((class cl-hacks-mop:standard-class)
 				(superclass singleton-class))
   ;; It's not OK for a standard class which is not a singleton
   ;; class to be a subclass of a singleton class.
@@ -99,7 +99,7 @@
 ;;; methods. Except the instantiation capability, they have the same
 ;;; capabilities as a concrete class or type.
 
-(defclass abstract-class (standard-class)
+(defclass abstract-class (cl-hacks-mop:standard-class)
   ()
   (:documentation "The abstract class metaclass."))
 
@@ -108,14 +108,14 @@
   (error "Trying to make an instance of ~A which is an abstract class."
 	 (class-name c)))
 
-(defmethod validate-superclass ((class abstract-class)
-				(superclass standard-class))
+(defmethod cl-hacks-mop:validate-superclass ((class abstract-class)
+				(superclass cl-hacks-mop:standard-class))
   ;; This is, in general, somewhat too permissive, but we are going to
   ;; allow any instance of (a subclass of) STANDARD-CLASS to act as a
   ;; superclass of any instance of ABSTRACT-CLASS.
   t)
 
-(defmethod validate-superclass ((class standard-class)
+(defmethod cl-hacks-mop:validate-superclass ((class cl-hacks-mop:standard-class)
 				(superclass abstract-class))
   ;; ... and the other way around.
   t)
@@ -145,18 +145,18 @@
 ;;; A final class cannot be subclassed. This is done for reasons of
 ;;; security and efficiency. 
 
-(defclass final-class (standard-class)
+(defclass final-class (cl-hacks-mop:standard-class)
   ()
   (:documentation "The final class metaclass."))
 
-(defmethod validate-superclass ((class final-class)
-				(superclass standard-class))
+(defmethod cl-hacks-mop:validate-superclass ((class final-class)
+				(superclass cl-hacks-mop:standard-class))
   ;; This is, in general, somewhat too permissive, but we are going to
   ;; allow any instance of (a subclass of) STANDARD-CLASS to act as a
   ;; superclass of any instance of FINAL-CLASS.
   t)
 
-(defmethod validate-superclass ((class standard-class)
+(defmethod cl-hacks-mop:validate-superclass ((class cl-hacks-mop:standard-class)
 				(superclass final-class))
   ;; One just can't subclass a final class.
   (error "Attempting to subclass a final class."))
@@ -175,49 +175,49 @@
 ;;; ===================================================================
 ;;; {{{ Attribute classes:                          (Source: KMRCL)
 
-(defclass attributes-class (standard-class)
+(defclass attributes-class (cl-hacks-mop:standard-class)
   ()
   (:documentation "A metaclass that implements attributes on slots."))
 
-(defclass attributes-dsd (standard-direct-slot-definition)
+(defclass attributes-dsd (cl-hacks-mop:standard-direct-slot-definition)
   ((attributes :initarg :attributes
 	       :initform nil
 	       :accessor dsd-attributes)))
 
-(defclass attributes-esd (standard-effectives-slot-definition)
+(defclass attributes-esd (cl-hacks-mop:standard-effective-slot-definition)
   ((attributes :initarg :attributes
 	       :initform nil
 	       :accessor esd-attributes)))
 
 #-genera
-(process-slot-option attributes-class :attributes)
+(cl-hacks-mop:process-slot-option attributes-class :attributes)
 
 #+(or cmu scl sbcl openmcl genera)
-(defmethod validate-superclass ((class attributes-class)
-				(superclass standard-class))
+(defmethod cl-hacks-mop:validate-superclass ((class attributes-class)
+				(superclass cl-hacks-mop:standard-class))
   t)
 
-(defmethod direct-slot-definition-class ((cl attributes-class)
+(defmethod cl-hacks-mop:direct-slot-definition-class ((cl attributes-class)
 					 #+cl-hacks-normal-dsdc &rest initargs)
   (declare (ignore initargs))
-  (find-class 'attributes-dsd))
+  (cl-hacks-mop:find-class 'attributes-dsd))
 
-(defmethod effective-slot-definition-class ((cl attributes-class)
+(defmethod cl-hacks-mop:effective-slot-definition-class ((cl attributes-class)
 					    #+cl-hacks-normal-dsdc &rest initargs)
   (declare (ignore initargs))
-  (find-class 'attributes-esd))
+  (cl-hacks-mop:find-class 'attributes-esd))
 
-(defmethod compute-effective-slot-definition ((cl attributes-class)
-					      #+cl-hacks-mop-normal-cesd name dsds)
+(defmethod cl-hacks-mop:compute-effective-slot-definition ((cl attributes-class)
+					      #+cl-hacks-normal-cesd name dsds)
   #+cl-hacks-normal-cesd (declare (ignore name))
   (let ((esd (call-next-method)))
     (setf (esd-attributes esd) (remove-duplicates (cl-hacks:mapappend #'dsd-attributes dsds)))
     esd))
 
-(defmethod compute-slots ((class attributes-class))
+(defmethod cl-hacks-mop:compute-slots ((class attributes-class))
   (let* ((normal-slots (call-next-method))
 	 (alist (mapcar #'(lambda (slot)
-			    (cons (slot-definition-name slot)
+			    (cons (cl-hacks-mop:slot-definition-name slot)
 				  (mapcar #'(lambda (attr) (list attr))
 					  (esd-attributes slot))))
 			normal-slots)))

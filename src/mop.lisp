@@ -2,8 +2,8 @@
 ;;;
 ;;; mop.lisp --- Imports a MOP environment.
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:30:46 asmodai>
-;;; Revision:   12
+;;; Time-stamp: <Tuesday Mar 30, 2010 08:20:56 asmodai>
+;;; Revision:   22
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -37,22 +37,21 @@
 ;;; }}}
 
 #-genera
-(in-package #:cl-hacks)
+(in-package #:cl-user)
 
 #+sbcl
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (if (find-package 'sb-mop)
       (pushnew :cl-hacks-sbcl-mop cl:*features*)
-    (pushnew :cl-hacks-sbcl-pcl cl:*features*)))
+      (pushnew :cl-hacks-sbcl-pcl cl:*features*)))
 
 #+cmu
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (if (eq (symbol-package 'pcl:find-class)
 	  (find-package 'common-lisp))
       (pushnew :cl-hacks-cmucl-mop cl:*features*)
-    (pushnew :cl-hacks-cmucl-pcl cl:*features*)))
+      (pushnew :cl-hacks-cmucl-pcl cl:*features*)))
 
-(in-package :cl-user)
 (defpackage #:cl-hacks-mop
   (:use #:cl
 	#:cl-hacks
@@ -63,40 +62,14 @@
 	#+clisp #:clos
 	#+scl #:clos
 	#+openmcl #:openmcl-mop
-	;;#+genera #:clos
-	)
-  (:export #:class-of
-           #:class-name
-	   #:class-slots
-	   #:find-class
-	   #:standard-class
-	   #:slot-definition-name
-	   #:finalize-inheritance
-	   #:standard-direct-slot-definition
-	   #:standard-effective-slot-definition
-	   #:validate-superclass
-	   #:compute-effective-slot-definition-initargs
-	   #:direct-slot-definition
-	   #:effective-slot-definition
-	   #:compute-effective-slot-definition
-	   #:slot-value-using-class
-	   #:class-prototype
-	   #:generic-function-method-class
-	   #:intern-eql-specializer
-	   #:make-method-lambda
-	   #:generic-function-lambda-list
-	   #:compute-slots
-	   #:class-direct-slots
-	   #:process-slot-option
-	   #:process-class-option))
+	#+genera #:clos
+	))
 
-
-(in-package :cl-hacks-mop)
+(in-package #:cl-hacks-mop)
 
 #+lispworks
 (defun intern-eql-specializer (slot)
   `(eql ,slot))
-
 
 (defmacro process-class-option (metaclass slot-name &optional required)
   #+lispworks
@@ -108,8 +81,7 @@
 	      (quote ,metaclass) name))
      (list name `',value))
   #-lispworks
-  (declare (ignore metaclass slot-name required))
-  )
+  (declare (ignore metaclass slot-name required)))
 
 (defmacro process-slot-option (metaclass slot-name)
   #+lispworks
@@ -120,8 +92,7 @@
 					  slot)
      (list* option `',value already-processed-options))
   #-lispworks
-  (declare (ignore metaclass slot-name))
-  )
+  (declare (ignore metaclass slot-name)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (shadowing-import
@@ -160,7 +131,7 @@
      sb-pcl::compute-effective-slot-definition-initargs
      sb-pcl::slot-value-using-class
      sb-pcl:class-prototype
-     sb-pcl:generic-function-lambda-list
+     sb-pcl:generic-function-method-class
      sb-pcl:intern-eql-specializer
      sb-pcl:make-method-lambda
      sb-pcl:generic-function-lambda-list
@@ -237,7 +208,7 @@
      openmcl-mop:intern-eql-specializer
      openmcl-mop:make-method-lambda
      openmcl-mop:generic-function-lambda-list
-     openmcl-mop::compute-slots)
+     openmcl-mop::compute-slots) 
 
    ;;
    ;; Genera
@@ -263,35 +234,35 @@
      clos-internals::make-method-lambda
      clos:generic-function-lambda-list
      ;;clos::compute-slots
-   ))
+)))
 
 
-;;(eval-when (:compile-toplevel :load-toplevel :execute)
-;;  (export '(class-of
-;;	    class-name
-;;            class-slots
-;;	    find-class
-;;	    standard-class
-;;	    slot-definition-name
-;;	    finalize-inheritance
-;;	    standard-direct-slot-definition
-;;	    standard-effective-slot-definition
-;;	    validate-superclass
-;;	    compute-effective-slot-definition-initargs
-;;	    direct-slot-definition
-;;	    effective-slot-definition
-;;	    compute-effective-slot-definition
-;;	    slot-value-using-class
-;;	    class-prototype
-;;	    generic-function-method-class
-;;	    intern-eql-specializer
-;;	    make-method-lambda
-;;	    generic-function-lambda-list
-;;	    compute-slots			
-;;	    class-direct-slots
-;;	    process-slot-option
-;;	    process-class-option))
-
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (export '(class-of
+	    class-name
+	    class-slots
+	    find-class
+            standard-class
+            slot-definition-name
+	    finalize-inheritance
+            standard-direct-slot-definition
+            standard-effective-slot-definition
+	    validate-superclass
+            compute-effective-slot-definition-initargs
+            direct-slot-definition-class
+	    effective-slot-definition-class
+            compute-effective-slot-definition
+            slot-value-using-class
+            class-prototype
+	    generic-function-method-class
+	    intern-eql-specializer
+            make-method-lambda
+	    generic-function-lambda-list
+            compute-slots
+            class-direct-slots
+            process-slot-option
+            process-class-option))
+  
   #+sbcl
   (if (find-package #'sb-mop)
       (setq cl:*features* (delete :cl-hacks-sbcl-mop cl:*features*))
@@ -302,18 +273,18 @@
       (setq cl:*features* (delete :cl-hacks-cmucl-mop cl:*features*))
     (setq cl:*features* (delete :cl-hacks-cmucl-pcl cl:*features*)))
 
-  (when (>= (length (clos-internals::generic-function-lambda-list
-		     (clos:ensure-generic-function
+  (when (>= (length (generic-function-lambda-list
+		     (ensure-generic-function
 		      'compute-effective-slot-definition)))
 	    3)
     (pushnew :cl-hacks-normal-cesd cl:*features*))
 
-  (when (>= (length (clos-internals::generic-function-lambda-lists
-		     (clos:ensure-generic-function
+  (when (>= (length (generic-function-lambda-list
+		     (ensure-generic-function
 		      'direct-slot-definition-class)))
 	    3)
     (pushnew :cl-hacks-normal-dsdc cl:*features*))
-
+  
   ) ;; eval-when
 
 ;;; mop.lisp ends here
