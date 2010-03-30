@@ -431,10 +431,7 @@
    #:singleton-class
    #:reset-singleton-classes
    #:define-abstract-class
-   #:define-final-class    
-   #:attributes-class
-   #:slot-attribute
-   #:slot-attributes
+   #:define-final-class
 ))
 
 ;;; This is so we can tell CL-HACKS has been loaded

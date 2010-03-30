@@ -1,4 +1,4 @@
-;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
+;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: USER; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; mop.lisp --- Imports a MOP environment.
 ;;;
@@ -65,7 +65,7 @@
 	#+genera #:clos
 	))
 
-(in-package #:cl-hacks-mop)
+(in-package :cl-hacks-mop)
 
 #+lispworks
 (defun intern-eql-specializer (slot)
@@ -220,22 +220,22 @@
      clos::standard-class
      clos::slot-definition-name
      clos-internals::finalize-inheritance
-     ;;clos::standard-direct-slot-definition    ; <- already imported, apparently
-     ;;clos::standard-effective-slot-definition
-;;     clos::effective-slot-definition-class
+     clos-internals::standard-direct-slot-definition
+     clos-internals::standard-effective-slot-definition
+     clos-internals::effective-slot-definition-class
+     clos-internals::compute-effective-slot-definition
      clos:class-direct-slots
-;;     clos::validate-superclass
+     clos-internals::validate-superclass
      clos-internals::direct-slot-definition-class
      clos-internals::compute-effective-slot-definition-initargs
      clos::slot-value-using-class
      clos::class-prototype
+     clos::ensure-generic-function
      clos:generic-function-method-class
      ;;clos::intern-eql-specializer
      clos-internals::make-method-lambda
      clos:generic-function-lambda-list
-     ;;clos::compute-slots
-)))
-
+     clos-internals::compute-slots)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (export '(class-of
@@ -283,8 +283,6 @@
 		     (ensure-generic-function
 		      'direct-slot-definition-class)))
 	    3)
-    (pushnew :cl-hacks-normal-dsdc cl:*features*))
-  
-  ) ;; eval-when
+    (pushnew :cl-hacks-normal-dsdc cl:*features*)))
 
 ;;; mop.lisp ends here
