@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- Package definition
 ;;;
-;;; Time-stamp: <Tuesday Mar 30, 2010 09:13:08 asmodai>
-;;; Revision:   45
+;;; Time-stamp: <Wednesday Mar 31, 2010 00:30:02 asmodai>
+;;; Revision:   47
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -75,16 +75,20 @@
 		:scl                 #:location-boundp
 		:scl                 #:fdefinition
 		:scl                 #:destructuring-bind
+		:scl                 #:defselect
+		:zl                  #:named-lambda
 		:condition           #:define-condition
 		:cl                  #:load-time-value)
   (:export
    ;;
    ;; console.lisp
    #:*console-messages*
+   #:*console-message-types*
    #:cmsg
    #:cmsg-c
    #:cmsg-add
    #:cmsg-remove
+   #:cmsg-list
    #:fixme
 
    ;;
@@ -287,6 +291,7 @@
    ;; equal.lisp
    #:generalized-equal
    #:generalized-equal-function
+   #:generalized-equal-array
    #:generalized-equal-hash-table
    #:generalized-equal-fielded-object
    #:class-slot-names
@@ -337,7 +342,7 @@
    #:pretty-date-ut
    #:date-string
    #:print-seconds
-   #:*posix-epoch*
+   #:+posix-epoch+
    #:posix-time-to-utime
    #:utime-to-posix-time
    #:*monthnames*
@@ -392,12 +397,14 @@
    #:+field-delim+
    #:+eof-char+
    #:+newline+
+   #:field-buffers
    #:make-fields-buffer
    #:read-buffered-fields
    #:make-field-buffer2
    #:read-buffered-fields2
    #:bfield
    #:+max-line+
+   #:read-buffered-line
 
    ;;
    ;; impl.lisp
@@ -430,8 +437,17 @@
    ;; clos.lisp
    #:singleton-class
    #:reset-singleton-classes
+   #:abstract-class
    #:define-abstract-class
+   #:final-class
    #:define-final-class
+
+   ;;
+   ;; zetalisp.lisp
+   #-genera #:named-lambda
+   #-genera #:standardize-function-spec
+   #-genera #:validate-function-spec
+   #-genera #:defselect
 ))
 
 ;;; This is so we can tell CL-HACKS has been loaded

@@ -2,7 +2,7 @@
 ;;;
 ;;; cl-hacks.asd --- ASDF package definition.
 ;;;
-;;; Time-stamp: <Tuesday Mar 30, 2010 09:13:25 asmodai>
+;;; Time-stamp: <Wednesday Mar 31, 2010 00:30:49 asmodai>
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -90,7 +90,7 @@ programs :)"
 	       #+cl-hacks-mop (:file "clos" :depends-on ("symbols" "macros" "mop"))
 	       (:file "equal" :depends-on ("macros" #+cl-hacks-mop "mop"))
 	       (:file "processes" :depends-on ("macros"))
+	       (:file "zetalisp" :depends-on ("package"))
 	       (:file "version" :depends-on ("package" "os"))))))
-
 
 ;; cl-hacks.asd ends here
