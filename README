@@ -7,3 +7,5 @@ The CL-HACKS package is a port of Kevin M. Rosenberg's KMRCL package.
 It has been tickled so that it works with Symbolics Genera (with the
 ANSI Common Lisp context.)
 
+
+Note: This doesn't work well with Corman Lisp.

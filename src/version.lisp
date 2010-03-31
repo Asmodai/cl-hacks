@@ -124,7 +124,7 @@ present in BSD."
 	    #+freebsd "FreeBSD"
 	    #+openbsd "OpenBSD"
 	    #+netbsd "NetBSD"
-	    #+mswindows "Microsoft Windows"
+	    #+(or mswindows win32 win64) "Microsoft Windows"
 	    #+(and unix (not (or bsd linux sunos osd1 darwin
 				 freebsd openbsd netbsd)))
 	    "UNIX"

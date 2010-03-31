@@ -194,7 +194,7 @@
 
 (defun quit (&optional (code 0))
   (declare (ignorable code))
-  #+allegro (excl:exec code :quiet t)
+  #+allegro (excl:exit code :quiet t)
   #+clisp (#+lisp=cl ext:quit #-lisp=cl lisp:quit code)
   #+(or cmu scl) (ext:quit code)
   #+cormanlisp (win32:exitprocess code)

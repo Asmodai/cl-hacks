@@ -2,8 +2,8 @@
 ;;;
 ;;; strings.lisp --- String functions
 ;;;
-;;; Time-stamp: <Tuesday Mar 30, 2010 11:23:59 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Wednesday Mar 31, 2010 18:22:23 asmodai>
+;;; Revision:   6
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg

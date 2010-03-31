@@ -69,6 +69,7 @@
   fspec)
 
 (defun validate-function-spec (fspec &optional nil-allowed &aux handler)
+  (declare (ignorable handler))
   (cond ((null fspec) nil-allowed)
 	((symbolp fspec) t)
 	((atom fspec) nil)))

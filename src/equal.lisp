@@ -108,8 +108,8 @@
 (defun class-slot-names (c-name)
   "Given a CLASS-NAME, returns a list of the slots in the class."
   #+(or allegro cmu lispworks sbcl scl)
-  (mapcar #'kmr-mop:slot-definition-name
-          (kmr-mop:class-slots (kmr-mop:find-class c-name)))
+  (mapcar #'cl-hacks-mop:slot-definition-name
+          (cl-hacks-mop:class-slots (cl-hacks-mop:find-class c-name)))
   #+(and mcl (not openmcl))
   (let* ((class (find-class c-name nil)))
     (when (typep class 'standard-class)
@@ -129,8 +129,8 @@
   #+allegro (class-slot-names s-name)
   #+lispworks (structure:structure-class-slot-names
 		(find-class s-name))
-  #+(or sbcl cmu) (mapcar #'kmr-mop:slot-definition-name
-                          (kmr-mop:class-slots (kmr-mop:find-class s-name)))
+  #+(or sbcl cmu) (mapcar #'cl-hacks-mop:slot-definition-name
+                          (cl-hacks-mop:class-slots (cl-hacks-mop:find-class s-name)))
   #+genera
   (mapcar #'clos:slot-definition-name
 	  (clos:class-slots (clos:find-class s-name)))
