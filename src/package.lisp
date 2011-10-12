@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- Package definition
 ;;;
-;;; Time-stamp: <Wednesday Mar 31, 2010 00:30:02 asmodai>
-;;; Revision:   47
+;;; Time-stamp: <Wednesday Oct 12, 2011 06:13:45 asmodai>
+;;; Revision:   48
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -56,29 +56,29 @@
    )
   #+genera
   (:import-from :clos-internals      #:validate-superclass
-		:clos                #:defclass
-		:clos                #:defmethod
-		:clos                #:slot-value
-		:future-common-lisp  #:nth-value 
-		:future-common-lisp  #:declaim
-		:future-common-lisp  #:get-setf-expansion
-		:future-common-lisp  #:pathname
-		:future-common-lisp  #:pathname-host
-		:future-common-lisp  #:pathname-directory
-		:future-common-lisp  #:pathname-device
-		:future-common-lisp  #:open
-		:future-common-lisp  #:make-pathname
-		:future-common-lisp  #:logical-pathname
-		:future-common-lisp  #:translate-logical-pathname
-		:future-common-lisp  #:function-lambda-expression
-		:future-common-lisp  #:lambda
-		:scl                 #:location-boundp
-		:scl                 #:fdefinition
-		:scl                 #:destructuring-bind
-		:scl                 #:defselect
-		:zl                  #:named-lambda
-		:condition           #:define-condition
-		:cl                  #:load-time-value)
+                :clos                #:defclass
+                :clos                #:defmethod
+                :clos                #:slot-value
+                :future-common-lisp  #:nth-value 
+                :future-common-lisp  #:declaim
+                :future-common-lisp  #:get-setf-expansion
+                :future-common-lisp  #:pathname
+                :future-common-lisp  #:pathname-host
+                :future-common-lisp  #:pathname-directory
+                :future-common-lisp  #:pathname-device
+                :future-common-lisp  #:open
+                :future-common-lisp  #:make-pathname
+                :future-common-lisp  #:logical-pathname
+                :future-common-lisp  #:translate-logical-pathname
+                :future-common-lisp  #:function-lambda-expression
+                :future-common-lisp  #:lambda
+                :scl                 #:location-boundp
+                :scl                 #:fdefinition
+                :scl                 #:destructuring-bind
+                :scl                 #:defselect
+                :zl                  #:named-lambda
+                :condition           #:define-condition
+                :cl                  #:load-time-value)
   (:export
    ;;
    ;; console.lisp
@@ -139,6 +139,7 @@
    #:defglpar
    #:pprint-macro
    #:pprint-macro-1
+   #:discard-docstring
 
    ;;
    ;; lists.lisp
@@ -448,6 +449,7 @@
    #-genera #:standardize-function-spec
    #-genera #:validate-function-spec
    #-genera #:defselect
+   #-genera #:defsubst
 ))
 
 ;;; This is so we can tell CL-HACKS has been loaded
