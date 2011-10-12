@@ -2,8 +2,8 @@
 ;;;
 ;;; zetalisp.lisp --- Nice Zetalisp stuff
 ;;;
-;;; Time-stamp: <Wednesday Mar 31, 2010 00:27:13 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Wednesday Oct 12, 2011 05:59:04 asmodai>
+;;; Revision:   6
 ;;;
 ;;; Copyright (c) 2010 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -64,15 +64,15 @@
        (symbolp (car fspec)))
   (unless (validate-function-spec fspec)
     (if error-p
-	(error "~S is not a valid function spec" fspec)
-	(return-from standardize-function-spec nil)))
+(error "~S is not a valid function spec" fspec)
+(return-from standardize-function-spec nil)))
   fspec)
 
 (defun validate-function-spec (fspec &optional nil-allowed &aux handler)
   (declare (ignorable handler))
   (cond ((null fspec) nil-allowed)
-	((symbolp fspec) t)
-	((atom fspec) nil)))
+((symbolp fspec) t)
+((atom fspec) nil)))
 
 ;;; }}}
 ;;; ------------------------------------------------------------------
@@ -111,7 +111,7 @@ non-NIL, the automatically-generated clauses for :WHICH-OPERATIONS,
 :OPERATION-HANDLED-P, and :SEND-IF-HANDLES are suppressed."
   (let* ((default-handler (if (consp fspec) (second fspec) nil))
          (no-which-operations (if (consp fspec) (third fspec) nil))
-	 (fspec (standardize-function-spec (if (consp fspec) (first fspec) fspec)))
+ (fspec (standardize-function-spec (if (consp fspec) (first fspec) fspec)))
          (operation-list nil)
          (clauses-list nil))
     (loop for (key . method-body) in methods
@@ -128,15 +128,15 @@ non-NIL, the automatically-generated clauses for :WHICH-OPERATIONS,
            (setq clauses-list
                  (append `((:which-operations
                             (apply (lambda (&rest ignore)
-				     ',operation-list) args))
+     ',operation-list) args))
                            (:operation-handled-p
                             (apply (lambda (op &rest ignore)
-				     (not (null (member op ',operation-list :test #'eq))))
+     (not (null (member op ',operation-list :test #'eq))))
                                    args))
                            (:send-if-handles
                             (apply (lambda (op &rest to-send)
-				     (when (member op ',operation-list :test #'eq)
-				       (apply (function ,fspec) op to-send)))
+     (when (member op ',operation-list :test #'eq)
+       (apply (function ,fspec) op to-send)))
                                    args)))
                          clauses-list))))
     (setq clauses-list (nreverse clauses-list))
@@ -145,12 +145,33 @@ non-NIL, the automatically-generated clauses for :WHICH-OPERATIONS,
             `(case op
                ,@clauses-list
                (otherwise (apply #',default-handler op args)))
-	    `(ccase op
-	       ,@clauses-list)))))
+    `(ccase op
+       ,@clauses-list)))))
 
 ;;; }}}
 ;;; ------------------------------------------------------------------
 
+;;; ------------------------------------------------------------------
+;;; {{{ DEFSUBST:
+
+(defmacro defsubst (name args &body body)
+  "Defines inline functions.  It is used just like `defin' and does
+almost the same thing.
+
+  (defsubst name lambda-list . body)
+
+`defsubst' defines a function that executes identically to the one
+that a similar call to `defun' would define.  The difference comes
+when a function that calls this one is compiled.  Then, the call is
+open-coded by substituting the inline function's definition into the
+code being compiled.  Such a function is called an inline function."
+  (defmacro defsubst (function lambda-list &body body)
+    `(progn
+       (proclaim '(inline function))
+       (defun ,function ,lambda-list ,@body))))
+
+;;; }}}
+;;; ------------------------------------------------------------------
 
 ;;; zetalisp.lisp ends here
 
