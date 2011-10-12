@@ -2,8 +2,8 @@
 ;;;
 ;;; color.lisp --- Functions for manipulating and dealing with colour values.
 ;;;
-;;; Time-stamp: <Wednesday Oct 12, 2011 13:36:14 asmodai>
-;;; Revision:   4
+;;; Time-stamp: <Wednesday Oct 12, 2011 13:52:41 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -334,11 +334,7 @@
 ;;; ==================================================================
 ;;; {{{ RGB colour space:
 
-(defun rgb->hex (r g b)
-  "Convert an RGB colour value into a hexadecimal string."
-  (declare (optimize (speed 3) (safety 0))
-           (type fixnum r g b))
-  (format t "#~2,'0X~2,'0X~2,'0X" r g b))
+
 
 (defun rgb-invert (r g b)
   "Invert an RGB colour value."
@@ -396,7 +392,7 @@
                 (/ delta maxrgb)
                 0.0)))
     (multiple-value-bind (v d)
-        (round (* s 100))
+        (truncate (* s 100))
       (declare (ignore d))
       v)))
 
@@ -421,7 +417,7 @@
           (if (< hue 0.0)
               (1+ hue))
           (multiple-value-bind (v d)
-              (round (* hue 360))
+              (truncate (* hue 360))
             (declare (ignore d))
             v)))))
     
@@ -433,20 +429,28 @@
          (minrgb (min r g b))
          (delta (- maxrgb minrgb)))
     (multiple-value-bind (v d)
-        (round (* maxrgb 100))
+        (truncate (* maxrgb 100))
       (declare (ignore d))
       v)))
 
+(defmethod color->rgbhex8 ((color color))
+  "Convert an RGB colour value into a hexadecimal string."
+  (declare (optimize (speed 3) (safety 0)))
+  (multiple-value-bind (r g b)
+      (color->rgb255 color)
+    (format t "#~2,'0X~2,'0X~2,'0X" r g b)))
+
+
 (defmethod color->rgb255 ((color color))
-  (values (* (red-component color) 255)
-          (* (green-component color) 255)
-          (* (blue-component color) 255)))
+  (values (truncate (* (red-component color) 255))
+          (truncate (* (green-component color) 255))
+          (truncate (* (blue-component color) 255))))
 
 (defmethod color->rgba255 ((color color))
-  (values (* (red-component color) 255)
-          (* (green-component color) 255)
-          (* (blue-component color) 255)
-          (* (alpha-component color) 255)))
+  (values (truncate (* (red-component color) 255))
+          (truncate (* (green-component color) 255))
+          (truncate (* (blue-component color) 255))
+          (truncate (* (alpha-component color) 255))))
 
 (defmethod color->hsb ((color color))
   (values (hue-component color)
