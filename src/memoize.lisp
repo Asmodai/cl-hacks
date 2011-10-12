@@ -2,8 +2,8 @@
 ;;;
 ;;; memoize.lisp --- Memoization
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:30:35 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Wednesday Oct 12, 2011 05:14:38 asmodai>
+;;; Revision:   4
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 1995-2000 Tim Bradshaw
@@ -57,14 +57,14 @@
   (let ((table (make-hash-table :test test)))
     (values
      #'(lambda (&rest args)
-	 (declare (dynamic-extent args))
-	 (let ((k (funcall key args)))
-	   (multiple-value-bind (val found-p)
-	       (gethash k table)
-	     (if found-p
-		 val
-		 (setf (gethash k table) (apply fn args)))))))
-    table))
+         (declare (dynamic-extent args))
+         (let ((k (funcall key args)))
+           (multiple-value-bind (val found-p)
+               (gethash k table)
+             (if found-p
+                 val
+                 (setf (gethash k table) (apply fn args))))))
+     table)))
 
 (defun memoize-function (fn-name &key (key #'first) (test #'eql))
   "Memoize FN-NAME, a symbol, causing its results to be stashed.
@@ -80,7 +80,7 @@ the compiler can optimize away self-calls in various ways.
 DEF-MEMOIZED-FUNCTION should work for those cases as it is careful to
 ensure the function can not be inlined like this."
   (declare (type symbol fn-name)
-	   (type function key test))
+           (type function key test))
   (when (not (fboundp fn-name))
     (error "~a is not FBOUND." fn-name))
   (when (assoc fn-name *memoized-functions*)
@@ -88,7 +88,7 @@ ensure the function can not be inlined like this."
   (multiple-value-bind (wrapper table)
       (make-memo (symbol-function fn-name) key test)
     (push (list fn-name table (symbol-function fn-name))
-	  *memoized-functions*)
+          *memoized-functions*)
     (setf (symbol-function fn-name) wrapper)
     fn-name))
 
@@ -105,7 +105,7 @@ ensure the function can not be inlined like this."
 (defun unmemoize-functions ()
   "Unmemoize all functions"
   (mapcar #'unmemoize-function
-	  (mapcar #'car *memoized-functions*)))
+          (mapcar #'car *memoized-functions*)))
 
 (defun clear-memoized-function (fn-name)
   "Clear memoized results for FN-NAME."
@@ -119,7 +119,7 @@ ensure the function can not be inlined like this."
 (defun clear-memoized-functions ()
   "Clear memoized results for all functions."
   (mapcar #'clear-memoized-function
-	  (mapcar #'car *memoized-functions*)))
+          (mapcar #'car *memoized-functions*)))
 
 (defun function-memoized-p (fn-name)
   "Is FN-NAME memoized?"
@@ -137,9 +137,9 @@ arglist for MEMOIZE-FUNCTION.  ARGS & BODY are passed off to DEFUN.
 This will declare FNSPEC NOTINLINE, which may be necessary to prevent
 good compilers optimizing away self calls & stuff like that."
   (let* ((normalized-fnspec (etypecase fnspec
-			      (symbol (list fnspec))
-			      (list fnspec)))
-	 (name (car normalized-fnspec)))
+                              (symbol (list fnspec))
+                              (list fnspec)))
+         (name (car normalized-fnspec)))
     (when (function-memoized-p name)
       (unmemoize-function name))
     `(progn
@@ -150,9 +150,9 @@ good compilers optimizing away self calls & stuff like that."
       ;; declaration does this.
       (declaim (notinline ,name))
       (defun ,name ,args
-	,@body)
+        ,@body)
       (apply #'memoize-function (list ',(car normalized-fnspec)
-				 ,@(cdr normalized-fnspec)))
+                                 ,@(cdr normalized-fnspec)))
       ',name)))
 
 (defmacro memoized-labels ((&rest labdefs) &body bod)
@@ -169,48 +169,48 @@ DEF-MEMOIZED-FUNCTION."
   ;; (binding them in the macro & then splicing the literal in to the
   ;; expansion). Can MAKE-LOAD-FORM do this better?
   `(labels ,(loop for (fspec fargs . fbod) in labdefs
-		  collect
-		  (destructuring-bind (fname &key (key '(function first))
-					     (test '(function eql)))
-		      (if (listp fspec)
-			  ;; FSPEC is of the form (NAME :key
-			  ;; .. :test ..), where we use the keywords
-			  ;; to get the key from the arglist and
-			  ;; decide what test to use for the
-			  ;; hashtable.
-			  fspec
-			  (list fspec :key '(function first) 
-				:test '(function eql)))
-		    (let ((htn (make-symbol "HT"))	;hashtable name
-			  (kn (make-symbol "K"))	;key from arglist name
-			  (vn (make-symbol "V"))	;value found name
-			  (fpn (make-symbol "FP"))	;foundp name
-			  (argsn (make-symbol "ARGS")))	;args name
-		      ;; here's the definition clause in the LABELS:
-		      ;; note we have to generalise rthe args to an
-		      ;; &REST, but hopefully the DYNAMIC-EXTENT
-		      ;; avoids too much lossage.
-		      `(,fname (&rest ,argsn)
-			(declare (dynamic-extent ,argsn)	;stop consing
-			 (notinline ,fname))	;stop TRO (?)
-			;; this use of LOAD-TIME-VALUE should ensure
-			;; that the hashtable is unique in compiled
-			;; code.  This has kind of interesting
-			;; effects, as it's shared amongst seperate
-			;; closures that you might return, so use of
-			;; one can speed up another!
-			(let ((,htn (load-time-value (make-hash-table
-						      :test ,test)))
-			      (,kn (funcall ,key ,argsn)))
-			  (multiple-value-bind (,vn ,fpn)
-			      (gethash ,kn ,htn)
-			    (if ,fpn
-				,vn		;found in table: return value
-				;; didn't find it: compute value
-				(setf (gethash ,kn ,htn)
-				      (apply #'(lambda ,fargs
-						 ,@fbod)
-					     ,argsn)))))))))
+                  collect
+                  (destructuring-bind (fname &key (key '(function first))
+                                             (test '(function eql)))
+                      (if (listp fspec)
+                          ;; FSPEC is of the form (NAME :key
+                          ;; .. :test ..), where we use the keywords
+                          ;; to get the key from the arglist and
+                          ;; decide what test to use for the
+                          ;; hashtable.
+                          fspec
+                          (list fspec :key '(function first) 
+                                :test '(function eql)))
+                    (let ((htn (make-symbol "HT"))      ;hashtable name
+                          (kn (make-symbol "K"))        ;key from arglist name
+                          (vn (make-symbol "V"))        ;value found name
+                          (fpn (make-symbol "FP"))      ;foundp name
+                          (argsn (make-symbol "ARGS"))) ;args name
+                      ;; here's the definition clause in the LABELS:
+                      ;; note we have to generalise rthe args to an
+                      ;; &REST, but hopefully the DYNAMIC-EXTENT
+                      ;; avoids too much lossage.
+                      `(,fname (&rest ,argsn)
+                        (declare (dynamic-extent ,argsn)        ;stop consing
+                         (notinline ,fname))    ;stop TRO (?)
+                        ;; this use of LOAD-TIME-VALUE should ensure
+                        ;; that the hashtable is unique in compiled
+                        ;; code.  This has kind of interesting
+                        ;; effects, as it's shared amongst seperate
+                        ;; closures that you might return, so use of
+                        ;; one can speed up another!
+                        (let ((,htn (load-time-value (make-hash-table
+                                                      :test ,test)))
+                              (,kn (funcall ,key ,argsn)))
+                          (multiple-value-bind (,vn ,fpn)
+                              (gethash ,kn ,htn)
+                            (if ,fpn
+                                ,vn             ;found in table: return value
+                                ;; didn't find it: compute value
+                                (setf (gethash ,kn ,htn)
+                                      (apply #'(lambda ,fargs
+                                                 ,@fbod)
+                                             ,argsn)))))))))
     ,@bod))
 
 ;;; indentation for zmacs
