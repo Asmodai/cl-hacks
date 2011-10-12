@@ -2,8 +2,8 @@
 ;;;
 ;;; zetalisp.lisp --- Nice Zetalisp stuff
 ;;;
-;;; Time-stamp: <Wednesday Oct 12, 2011 05:59:04 asmodai>
-;;; Revision:   6
+;;; Time-stamp: <Wednesday Oct 12, 2011 06:07:54 asmodai>
+;;; Revision:   8
 ;;;
 ;;; Copyright (c) 2010 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -64,15 +64,15 @@
        (symbolp (car fspec)))
   (unless (validate-function-spec fspec)
     (if error-p
-(error "~S is not a valid function spec" fspec)
-(return-from standardize-function-spec nil)))
+        (error "~S is not a valid function spec" fspec)
+        (return-from standardize-function-spec nil)))
   fspec)
 
 (defun validate-function-spec (fspec &optional nil-allowed &aux handler)
   (declare (ignorable handler))
   (cond ((null fspec) nil-allowed)
-((symbolp fspec) t)
-((atom fspec) nil)))
+        ((symbolp fspec) t)
+        ((atom fspec) nil)))
 
 ;;; }}}
 ;;; ------------------------------------------------------------------
@@ -81,37 +81,46 @@
 ;;; {{{ DEFSELECT:
 
 (defmacro defselect (fspec &body methods)
-  "Define a function named FSPEC which dispatches on its first argument to
-find a method.  Each element of METHODS is a method for one or several
-possible first arguments.  Syntax:
+  "Define a function named FSPEC which dispatches on its first
+argument to find a method.  Each element of METHODS is a method for
+one or several possible first arguments.  Syntax:
 
-   (DEFSELECT fspec           (DEFSELECT (fspec default-handler no-which-operations)
-     (operation (args ...)      (operation (args ...)
-       body ...)                  body ...)
-     (operation (args ...)      (operation (args ...)
-       body ...))                 body ...))
+   (DEFSELECT fspec
+     (operation (args ...)
+       body ...)
+     (operation (args ...)
+       body ...))
 
-FSPEC is the name of the function to be defined.  OPERATION is a keyword or a
-list of keywords that names the operations to be handled by the clause.  ARGS
-is a lambda-list for the clause;  it should not include an argument for the
-operation.  BODY is the body of the function for the clause.  When FSPEC is
-called, it will choose a clause based on the first argument, bind its
-parameters to the remaining arguments, and run the body, returning its
-result.
+   (DEFSELECT (fspec default-handler no-which-operations)
+     (operation (args ...)
+       body ...)
+     (operation (args ...)
+       body ...))
 
-A clause may instead look like (OPERATION . SYMBOL), in which SYMBOL is the
-name of a function that will be called for the OPERATION.  It will be given
-all the arguments, including the operation symbol itself, unlike the body of
-a normal clause.
+FSPEC is the name of the function to be defined.  OPERATION is a
+keyword or a list of keywords that names the operations to be handled
+by the clause.  ARGS is a lambda-list for the clause;  it should not
+include an argument for the operation.  BODY is the body of the
+function for the clause.  When FSPEC is called, it will choose a
+clause based on the first argument, bind its parameters to the
+remaining arguments, and run the body, returning its result.
 
-DEFAULT-HANDLER is optional;  it is a function which is called if the first
-argument is an unknown operation.  If unsupplied or NIL, an unknown operation
-will cause a continuable error.  NO-WHICH-OPERATIONS is also optional;  if
-non-NIL, the automatically-generated clauses for :WHICH-OPERATIONS,
-:OPERATION-HANDLED-P, and :SEND-IF-HANDLES are suppressed."
+A clause may instead look like (OPERATION . SYMBOL), in which SYMBOL
+is the name of a function that will be called for the OPERATION.  It
+will be given all the arguments, including the operation symbol
+itself, unlike the body of a normal clause.
+
+DEFAULT-HANDLER is optional;  it is a function which is called if the
+first argument is an unknown operation.  If unsupplied or NIL, an
+unknown operation will cause a continuable error.  NO-WHICH-OPERATIONS
+is also optional;  if non-NIL, the automatically-generated clauses for
+:WHICH-OPERATIONS, :OPERATION-HANDLED-P, and :SEND-IF-HANDLES are
+suppressed."
   (let* ((default-handler (if (consp fspec) (second fspec) nil))
          (no-which-operations (if (consp fspec) (third fspec) nil))
- (fspec (standardize-function-spec (if (consp fspec) (first fspec) fspec)))
+         (fspec (standardize-function-spec (if (consp fspec)
+                                               (first fspec)
+                                               fspec)))
          (operation-list nil)
          (clauses-list nil))
     (loop for (key . method-body) in methods
@@ -119,7 +128,8 @@ non-NIL, the automatically-generated clauses for :WHICH-OPERATIONS,
                     (setq operation-list (revappend key operation-list))
                     (push key operation-list))
           doing (if (symbolp method-body)
-                    (push `(,key (apply #',method-body op args)) clauses-list)
+                    (push `(,key (apply #',method-body op args))
+                          clauses-list)
                     (push `(,key (apply (lambda ,@method-body) args))
                           clauses-list)))
     (cond (no-which-operations
@@ -128,15 +138,19 @@ non-NIL, the automatically-generated clauses for :WHICH-OPERATIONS,
            (setq clauses-list
                  (append `((:which-operations
                             (apply (lambda (&rest ignore)
-     ',operation-list) args))
+                                     ',operation-list) args))
                            (:operation-handled-p
                             (apply (lambda (op &rest ignore)
-     (not (null (member op ',operation-list :test #'eq))))
+                                     (not (null (member op
+                                                        ',operation-list
+                                                        :test #'eq))))
                                    args))
                            (:send-if-handles
                             (apply (lambda (op &rest to-send)
-     (when (member op ',operation-list :test #'eq)
-       (apply (function ,fspec) op to-send)))
+                                     (when (member op ',operation-list
+                                                   :test #'eq)
+                                       (apply (function ,fspec) op
+                                              to-send)))
                                    args)))
                          clauses-list))))
     (setq clauses-list (nreverse clauses-list))
@@ -145,8 +159,8 @@ non-NIL, the automatically-generated clauses for :WHICH-OPERATIONS,
             `(case op
                ,@clauses-list
                (otherwise (apply #',default-handler op args)))
-    `(ccase op
-       ,@clauses-list)))))
+            `(ccase op
+               ,@clauses-list)))))
 
 ;;; }}}
 ;;; ------------------------------------------------------------------
@@ -174,4 +188,3 @@ code being compiled.  Such a function is called an inline function."
 ;;; ------------------------------------------------------------------
 
 ;;; zetalisp.lisp ends here
-

@@ -2,8 +2,8 @@
 ;;;
 ;;; macros.lisp --- Several macro hacks.
 ;;;
-;;; Time-stamp: <Wednesday Oct 12, 2011 05:39:03 asmodai>
-;;; Revision:   4
+;;; Time-stamp: <Wednesday Oct 12, 2011 06:07:16 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -63,7 +63,7 @@
 
 (defmacro awhen (test-form &body body)
   `(aif ,test-form
-(progn ,@body)))
+        (progn ,@body)))
 
 (defmacro awhile (expr &body body)
   `(do ((it ,expr ,expr))
@@ -72,22 +72,22 @@
 
 (defmacro aand (&rest args)
   (cond ((null args)
- t)
-((null (cdr args))
- (car args))
-(t
- `(aif ,(car args) (aand ,@(cdr args))))))
+         t)
+        ((null (cdr args))
+         (car args))
+        (t
+         `(aif ,(car args) (aand ,@(cdr args))))))
 
 (defmacro acond (&rest clauses)
   (if (null clauses)
       nil
       (let ((cl1 (car clauses))
-    (sym (gensym)))
-`(let ((,sym ,(car cl1)))
-   (if ,sym
-       (let ((it ,sym))
- ,@(cdr cl1))
-       (acond ,@(cdr clauses)))))))
+            (sym (gensym)))
+        `(let ((,sym ,(car cl1)))
+           (if ,sym
+               (let ((it ,sym))
+                 ,@(cdr cl1))
+               (acond ,@(cdr clauses)))))))
 
 (defmacro alambda (params &body body)
   `(Labels ((self ,params ,@body))
@@ -102,35 +102,35 @@
 (defmacro aif2 (test &optional then else)
   (let ((win (gensym)))
     `(multiple-value-bind (it ,win)
- ,test
+         ,test
        (if (or it ,win)
-   ,then
-   ,else))))
+           ,then
+           ,else))))
 
 (defmacro awhen2 (test &body body)
   `(aif2 ,test
- (progn ,@body)))
+         (progn ,@body)))
 
 (defmacro awhile2 (test &body body)
   (let ((flag (gensym)))
     `(let ((,flag t))
        (while ,flag
- (aif2 ,test
-       (progn ,@body)
-       (setq ,flag nil))))))
+         (aif2 ,test
+               (progn ,@body)
+               (setq ,flag nil))))))
 
 (defmacro acond2 (&rest clauses)
   (if (null clauses)
       nil
       (let ((cl1 (car clauses))
-    (val (gensym))
-    (win (gensym)))
-`(multiple-value-bind (,val ,win)
-     ,(car cl1)
-   (if (or ,val ,win)
-       (let ((it ,val))
- ,@(cdr cl1))
-       (acond2 ,@(cdr clauses)))))))
+            (val (gensym))
+            (win (gensym)))
+        `(multiple-value-bind (,val ,win)
+             ,(car cl1)
+           (if (or ,val ,win)
+               (let ((it ,val))
+                 ,@(cdr cl1))
+               (acond2 ,@(cdr clauses)))))))
 
 ;;; }}}
 ;;; ===================================================================
@@ -153,8 +153,8 @@
 (defmacro loop-for ((var start stop) &body body)
   (let ((gstop (gensym)))
     `(do ((,var ,start (1+ ,var))
-  (,gstop ,stop))
- ((> ,var ,gstop))
+          (,gstop ,stop))
+         ((> ,var ,gstop))
        ,@body)))
 
 ;;; }}}
@@ -165,19 +165,19 @@
 
 (defmacro with-each-stream-line ((var stream) &body body)
   (let ((eof (gensym))
-(eof-value (gensym))
-(strm (gensym)))
+        (eof-value (gensym))
+        (strm (gensym)))
     `(let ((,strm ,stream)
-   (,eof ',eof-value))
+           (,eof ',eof-value))
        (do ((,var (read-line ,strm nil ,eof) (read-line ,strm nil ,eof)))
-   ((eql ,var ,eof))
- ,@body))))
+           ((eql ,var ,eof))
+         ,@body))))
 
 (defmacro with-each-file-line ((var file) &body body)
   (let ((stream (gensym)))
     `(with-open-file (,stream ,file :direction :input)
        (with-each-stream-line (,var ,stream)
- ,@body))))
+         ,@body))))
 
 ;;; }}}
 ;;; ===================================================================
@@ -189,7 +189,7 @@
   (let ((insym (gensym)))
     `(let ((,insym ,obj))
        (or ,@(mapcar #'(lambda (c) `(eql ,insym ,c))
-     choices)))))
+                     choices)))))
 
 (defmacro mean (&rest args)
   `(/ (+ ,@args) ,(length args)))
@@ -207,8 +207,8 @@
 (defmacro with-ignore-errors (&rest forms)
   `(progn
      ,@(mapcar
- #'(lambda (x) (list 'ignore-errors x))
- forms)))
+        #'(lambda (x) (list 'ignore-errors x))
+        forms)))
 
 ;;; }}}
 ;;; ===================================================================
@@ -220,28 +220,28 @@
   (let ((t1 (gensym)))
     `(let ((,t1 (get-internal-real-time)))
        (values
- (progn ,@body)
- (coerce (/ (- (get-internal-real-time) ,t1)
-    internal-time-units-per-second)
- 'double-float)))))
+        (progn ,@body)
+        (coerce (/ (- (get-internal-real-time) ,t1)
+                   internal-time-units-per-second)
+                'double-float)))))
 
 (defmacro time-iterations (n &body body)
   (let ((i (gensym))
-(count (gensym)))
+        (count (gensym)))
     `(progn
        (let ((,count ,n))
- (format t "~&Test with ~d iterations: ~w" ,count (quote ,body))
- (let ((t1 (get-internal-real-time)))
-   (dotimes ,i ,count)
-   ,@body)
- (let* ((t2 (get-internal-real-time))
-(secs (coerse (/ (- t2 t1)
- internal-time-units-per-second)
-      'double-float)))
-   (format t "~&Total time: ")
-   (print-seconds secs)
-   (format t ", time per iteration: ")
-   (print-seconds (coerce (/ secs ,n) 'double-float)))))))
+         (format t "~&Test with ~d iterations: ~w" ,count (quote ,body))
+         (let ((t1 (get-internal-real-time)))
+           (dotimes ,i ,count)
+           ,@body)
+         (let* ((t2 (get-internal-real-time))
+                (secs (coerse (/ (- t2 t1)
+                                 internal-time-units-per-second)
+                              'double-float)))
+           (format t "~&Total time: ")
+           (print-seconds secs)
+           (format t ", time per iteration: ")
+           (print-seconds (coerce (/ secs ,n) 'double-float)))))))
 
 ;;; }}}
 ;;; ===================================================================
@@ -268,31 +268,31 @@
 (defmacro defglex (x &optional (value nil valuep) (docstr nil docp))
   "DEFGLEX is like DEFVAR, not DEFPARAMETER, but for global lexicals."
   `(progn
-    ,@(if valuep
-  `((unless (get-properties (symbol-plist ',x) '(glex-value))
-      (setf (glex-value ',x) ,value)))
-  '())
-    ;; This must be known at compile time so users can be compiled.
-    (eval-when (:compile-toplevel :load-toplevel :execute)
-      (define-symbol-macro ,x (glex-value ',x)))
-    ,@(if docp
-  `((setf (documentation ',x 'variable) ',docstr))
-  '())
-    ',x))
+     ,@(if valuep
+           `((unless (get-properties (symbol-plist ',x) '(glex-value))
+               (setf (glex-value ',x) ,value)))
+           '())
+     ;; This must be known at compile time so users can be compiled.
+     (eval-when (:compile-toplevel :load-toplevel :execute)
+       (define-symbol-macro ,x (glex-value ',x)))
+     ,@(if docp
+           `((setf (documentation ',x 'variable) ',docstr))
+           '())
+     ',x))
 
 (defmacro defglpar (x &optional (value nil valuep) (docstr nil docp))
   "DEFGLPAR is like DEFPARAMETER, but for global lexicals."
   `(progn
-    ,@(if valuep
-  `((setf (glex-value ',x) ,value))
-  '())
-    ;; This must be known at compile time so users can be compiled.
-    (eval-when (:compile-toplevel :load-toplevel :execute)
-      (define-symbol-macro ,x (glex-value ',x)))
-    ,@(if docp
-  `((setf (documentation ',x 'variable) ',docstr))
-  '())
-    ',x))
+     ,@(if valuep
+           `((setf (glex-value ',x) ,value))
+           '())
+     ;; This must be known at compile time so users can be compiled.
+     (eval-when (:compile-toplevel :load-toplevel :execute)
+       (define-symbol-macro ,x (glex-value ',x)))
+     ,@(if docp
+           `((setf (documentation ',x 'variable) ',docstr))
+           '())
+     ',x))
 
 ;;; }}}
 ;;; ===================================================================
@@ -302,42 +302,43 @@
 
 (defmacro def-cached-vector (name element-type)
   (let ((get-name (concat-symbol "get-" name "-vector"))
-(release-name (concat-symbol "release-" name "-vector"))
-(table-name (concat-symbol "*cached-" name "-table*"))
-(lock-name (concat-symbol "*cached-" name "-lock*")))
+        (release-name (concat-symbol "release-" name "-vector"))
+        (table-name (concat-symbol "*cached-" name "-table*"))
+        (lock-name (concat-symbol "*cached-" name "-lock*")))
     `(eval-when (:compile-toplevel :load-toplevel :execute)
        (defvar ,table-name (make-hash-table :test 'equal))
        (defvar ,lock-name (cl-hacks::make-lock ,name))
        (defun ,get-name (size)
- (cl-hacks::with-lock-held (,lock-name)
-   (let ((buffers (gethash (cons size ,element-type) ,table-name) buffers)
- buffer)
-     (make-array size :element-type ,element-type))))
+         (cl-hacks::with-lock-held (,lock-name)
+           (let ((buffers (gethash (cons size ,element-type)
+                                   ,table-name) buffers)
+                 buffer)
+             (make-array size :element-type ,element-type))))
        (defun ,release-name (buffer)
- (cl-hacks::with-lock-held (,lock-name)
-   (let ((buffers (gethash (cons (array-total-size buffer)
- ,element-type)
-   ,table-name)))
-     (setf (gethash (cons (array-total-size buffer)
-  ,element-type) ,table-name)
-   (cons buffer buffers))))))))
+         (cl-hacks::with-lock-held (,lock-name)
+           (let ((buffers (gethash (cons (array-total-size buffer)
+                                         ,element-type)
+                                   ,table-name)))
+             (setf (gethash (cons (array-total-size buffer)
+                                  ,element-type) ,table-name)
+                   (cons buffer buffers))))))))
 
 (defmacro def-cached-instance (name)
   (let* ((new-name (concat-symbol "new-" name "-instance"))
- (release-name (concat-symbol "release-" name "-instance"))
- (cache-name (concat-symbol "*cached-" name "-instance-table*"))
- (lock-name (concat-symbol "*cached-" name "-instance-lock*")))
+         (release-name (concat-symbol "release-" name "-instance"))
+         (cache-name (concat-symbol "*cached-" name "-instance-table*"))
+         (lock-name (concat-symbol "*cached-" name "-instance-lock*")))
     `(eval-when (:compile-toplevel :load-toplevel :execute)
        (defvar ,cache-name nil)
        (defvar ,lock-name (cl-hacks::make-lock ',name))
        (defun ,new-name ()
- (cl-hacks::with-lock-held (,lock-name)
-   (if ,cache-name
-       (pop ,cache-name)
-       (make-instance ',name))))
+         (cl-hacks::with-lock-held (,lock-name)
+           (if ,cache-name
+               (pop ,cache-name)
+               (make-instance ',name))))
        (defun ,release-name (instance)
- (cl-hacks::with-lock-held (,lock-name)
-   (push instance ,cache-name))))))
+         (cl-hacks::with-lock-held (,lock-name)
+           (push instance ,cache-name))))))
 
 ;;; }}}
 ;;; ===================================================================
@@ -356,14 +357,14 @@
 (defmacro ppmx (form)
   "Pretty-print the macro expansion of FORM."
   `(let* ((exp1 (macroexpand-1 ',form))
-  (exp (macroexpand exp1))
-  (*print-circle* nil))
+          (exp (macroexpand exp1))
+          (*print-circle* nil))
      (cond ((equal exp exp1)
-    (format t "~&Macro expansion:")
-    (pprint exp))
-   (t
-    (format t "~&First step of expansion:")
-    (pprint exp)))
+            (format t "~&Macro expansion:")
+            (pprint exp))
+           (t
+            (format t "~&First step of expansion:")
+            (pprint exp)))
      (format t "~%~%")
      (values)))
 
@@ -376,8 +377,8 @@
 (defmacro defconstant* (sym value &optional doc)
   "Ensure VALUE is evaluated once."
   `(defconstant ,sym (if (boundp ',sym)
- (symbol-value ',sym)
- ,value)
+                         (symbol-value ',sym)
+                         ,value)
      ,@(when doc (list doc))))
 
 ;;; }}}
