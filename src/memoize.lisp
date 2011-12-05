@@ -1,9 +1,9 @@
-;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; memoize.lisp --- Memoization
 ;;;
-;;; Time-stamp: <Wednesday Oct 12, 2011 05:14:38 asmodai>
-;;; Revision:   4
+;;; Time-stamp: <Monday Dec  5, 2011 05:07:30 asmodai>
+;;; Revision:   7
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 1995-2000 Tim Bradshaw

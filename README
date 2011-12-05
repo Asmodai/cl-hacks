@@ -1,11 +1,41 @@
 -*- Mode: Text -*-
 
-CL-HACKS
---------
+                               CL-HACKS
 
-The CL-HACKS package is a port of Kevin M. Rosenberg's KMRCL package.
-It has been tickled so that it works with Symbolics Genera (with the
-ANSI Common Lisp context.)
+The CL-HACKS package is a port of Kevin M. Rosenberg's KMRCL,
+Alexandria, parts of CLOCC and various other packages assembled
+together in one place and expanded upon so they work on Symbolics
+Genera.
+
+Parts of Zetalisp, Symbolics Common Lisp, and Future Common Lisp have
+been thrown in for good measure too.
 
 
-Note: This doesn't work well with Corman Lisp.
+                            PACKAGE LAYOUT
+
+CL-HACKS has five separate packages, but only one that the user need
+worry about.  These packages are:
+
+CL-HACKS-INTERNALS  Contains extensions to Lisp that are required for
+                    the rest of the CL-HACKS packages to function.  I
+                    have placed these in their own package to ensure
+                    that they are available and not accidentally
+                    broken during careless edits.
+                    
+CL-HACKS-FAD        A port of Dr. Edi Weitz' CL-FAD for Symbolics
+                    Genera.
+
+CL-HACKS-MOP        Contains MOP extensions.
+
+CL-HACKS-CLOS       Contains various CLOS extensions.
+
+CL-HACKS            The main package.
+
+
+There is a UUID package that is meant to be used on Genera only.  For
+other Common Lisp systems, it is recommended that you use the
+following instead:
+
+Ironclad (http://www.method-combination.net/lisp/files/ironclad.tar.gz)
+UUID (http://dardoria.net/software/uuid.html)
+

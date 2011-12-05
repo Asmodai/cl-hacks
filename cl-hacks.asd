@@ -1,18 +1,17 @@
-;;; -*- Mode: Lisp; Syntax: ANSI-COMMON-LISP; Package: COMMON-LISP-USER; Base: 10; Lowercase: Yes -*-
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: CL-USER; Base: 10; Lowercase: Yes -*-
 ;;;
-;;; cl-hacks.asd --- ASDF package definition.
+;;; cl-hacks.asd --- CL-Hacks ASDF package definition
 ;;;
-;;; Time-stamp: <Wednesday Mar 31, 2010 00:30:49 asmodai>
+;;; Time-stamp: <Monday Dec  5, 2011 06:05:47 asmodai>
+;;; Revision:   1
 ;;;
-;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
-;;; Copyright (c) 2002 Keven M. Rosenberg
-;;; Copyright (c) 2002 Tim Bradshaw
+;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
 ;;; Author:     Paul Ward <asmodai@gmail.com>
 ;;; Maintainer: Paul Ward <asmodai@gmail.com>
-;;; Created:    Tue Sep  1 19:00:00 2009
-;;; Keywords:   Common Lisp CLOS Hacks
-;;; URL:        http://unixware.kicks-ass.org/
+;;; Created:    05 Dec 2011 05:54:30
+;;; Keywords:   
+;;; URL:        not distributed yet
 ;;;
 ;;; {{{ License:
 ;;;
@@ -35,62 +34,93 @@
 ;;; 02111-1307  USA
 ;;;
 ;;; }}}
+;;;
+;;; {{{ Commentary:
+;;;
+;;; }}}
+
+#+genera
+(error "Please do not load this file into a Symbolics system.
+This is only for Common Lisp systems that support ASDF.")
 
 (in-package #:common-lisp-user)
 
-(defpackage #:cl-hacks-system
-  (:use #:asdf #:common-lisp))
+(defpackage cl-hacks
+  (:use #:asdf
+        #:common-lisp))
 
-(pushnew :cl-hacks *features*)
+(in-package #:fucki-system)
 
-;; Check for MOP hacks
-#+(or allegro cmu clisp lispworks sbcl scl openmcl)
-(pushnew :cl-hacks-mop *features*)
-
-(in-package #:cl-hacks-system)
-
-(defsystem cl-hacks
-    :name "cl-hacks"
+(defsystem fucki
+    :name "Common Lisp Hacks"
     :author "Paul Ward <asmodai@gmail.com>"
-    :version "2.0"
+    :version "3.0"
     :maintainer "Paul Ward <asmodai@gmail.com>"
-    :licence "GNU Lesser General Public License"
-    :description "Lisp utility library for Common Lisp"
-    :long-description "cl-hacks provides some common hacks that I use in my
-programs :)"
-    
-    :components
-    ((:module :src
-              :components
-	      ((:file "package")
-	       (:file "ifstar" :depends-on ("package"))
-	       (:file "macros" :depends-on ("package"))
-	       (:file "functions" :depends-on ("package"))
-	       (:file "lists" :depends-on ("macros"))
-	       (:file "seqs" :depends-on ("macros"))
-	       (:file "symbols" :depends-on ("macros"))
-	       (:file "strings" :depends-on ("macros"))
-	       (:file "math" :depends-on ("macros"))
-	       (:file "datetime" :depends-on ("macros"))
-	       (:file "strmatch" :depends-on ("macros"))
-	       (:file "random" :depends-on ("package"))
-	       (:file "iterate" :depends-on ("macros"))
-	       (:file "impl" :depends-on ("macros"))
-	       (:file "color" :depends-on ("macros"))
-	       (:file "console" :depends-on ("macros"))
-	       (:file "buff-input" :depends-on ("macros"))
-	       (:file "byte-stream" :depends-on ("macros"))
-	       (:file "collecting" :depends-on ("macros"))
-	       (:file "dynamic-state" :depends-on ("macros"))
-	       (:file "memoize" :depends-on ("macros"))
-	       (:file "os" :depends-on ("macros"))
-	       (:file "io" :depends-on ("macros" "impl"))
-	       (:file "wrapping-standard" :depends-on ("macros"))
-	       #+cl-hacks-mop (:file "mop" :depends-on ("macros"))
-	       #+cl-hacks-mop (:file "clos" :depends-on ("symbols" "macros" "mop"))
-	       (:file "equal" :depends-on ("macros" #+cl-hacks-mop "mop"))
-	       (:file "processes" :depends-on ("macros"))
-	       (:file "zetalisp" :depends-on ("package"))
-	       (:file "version" :depends-on ("package" "os"))))))
+    :license "Lisp Lesser General Public License (LLGPL)"
+    :description "Various Common Lisp hacks"
+    :long-description "CL-Hacks provides some common hacks that I use in various Common Lisp code on many implementations, including Symbolics Genera."
 
-;; cl-hacks.asd ends here
+    :depends-on ()
+
+    :components
+    ((:module :sys
+              :components
+              ((:file "package")
+               (:file "definitions" :depends-on ("package"))
+               (:file "binding" :depends-on ("package"))
+               (:file "symbolics" :depends-on ("package"))
+               (:file "symbols" :depends-on ("package"))
+               (:file "functions" :depends-on ("package"))
+               (:file "ifstar" :depends-on ("package"))
+               (:file "anaphoric" :depends-on ("package"))
+               (:file "macros" :depends-on ("package"))
+               (:file "lists" :depends-on ("package"))
+               (:file "control-flow" :depends-on ("package" "macros"))
+               (:file "looping" :depends-on ("package" "macros"))
+               (:file "types" :depends-on ("package" "macros"))
+               (:file "arrays" :depends-on ("package" "macros"))
+               (:file "sequences" :depends-on ("package" "macros"))
+               (:file "hash-tables" :depends-on ("package" "macros"))))
+     (:module :fad
+              :components
+              ((:file "package")
+               (:file "fad" :depends-on ("package"))))
+     (:module :mop
+              :components
+              ((:file "package")
+               (:file "mop-extensions" :depends-on ("package"))))
+     (:module :clos
+              :components
+              ((:file "package")
+               (:file "classes" :depends-on ("package"))
+               (:file "wrapping-standard" :depends-on ("package"))))
+     (:module :src
+              :components
+              ((:file "package")
+               (:file "symbols" :depends-on ("package"))
+               (:file "strings" :depends-on ("package"))
+               (:file "buff-input" :depends-on ("package"))
+               (:file "byte-stream" :depends-on ("package"))
+               (:file "collecting" :depends-on ("package"))
+               (:file "console" :depends-on ("package"))
+               (:file "datetime" :depends-on ("package"))
+               (:file "dynamic-state" :depends-on ("package"))
+               (:file "equal" :depends-on ("package"))
+               (:file "for" :depends-on ("package"))
+               (:file "glex" :depends-on ("package"))
+               (:file "implementations" :depends-on ("package"))
+               (:file "io" :depends-on ("package"))
+               (:file "iterate" :depends-on ("package"))
+               (:file "math" :depends-on ("package"))
+               (:file "lists" :depends-on ("package"))
+               (:file "macros" :depends-on ("package"))
+               (:file "matrix" :depends-on ("package"))
+               (:file "memoize" :depends-on ("package"))
+               (:file "mp" :depends-on ("package"))
+               (:file "os" :depends-on ("package"))
+               (:file "random" :depends-on ("package"))
+               (:file "version" :depends-on ("package"))
+               (:file "exports" :depends-on ("package"))))))
+
+;;; cl-hacks.asd ends here
+

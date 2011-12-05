@@ -1,9 +1,9 @@
-;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; symbols.lisp --- Symbol functions.
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:33:07 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Monday Dec  5, 2011 05:07:54 asmodai>
+;;; Revision:   7
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -46,29 +46,29 @@
   (let ((vars '()))
     (do-symbols (s 'common-lisp)
       (multiple-value-bind (sym status)
-	  (find-symbol (symbol-name s) 'common-lisp)
-	(when (and (or (eq status :external)
-		       (eq status :internal))
-		   (boundp sym))
-	  (push sym vars))))
+          (find-symbol (symbol-name s) 'common-lisp)
+        (when (and (or (eq status :external)
+                       (eq status :internal))
+                   (boundp sym))
+          (push sym vars))))
     (nreverse vars)))
 
 (defun cl-functions ()
   (let ((funcs '()))
     (do-symbols (s 'common-lisp)
       (multiple-value-bind (sym status)
-	  (find-symbol (symbol-name s) 'common-lisp)
-	(when (and (or (eq status :external)
-		       (eq status :internal))
-		   (fboundp sym))
-	  (push sym funcs))))
+          (find-symbol (symbol-name s) 'common-lisp)
+        (when (and (or (eq status :external)
+                       (eq status :internal))
+                   (fboundp sym))
+          (push sym funcs))))
     (nreverse funcs)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (when (char= #\a (schar (symbol-name '#:a) 0))
     (pushnew :cl-hacks-lowercase-reader cl:*features*))
   (when (not (string= (symbol-name '#:a)
-		      (symbol-name '#:A)))
+                      (symbol-name '#:A)))
     (pushnew :cl-hacks-case-sensitive cl:*features*)))
 
 (defun string-default-case (str)
@@ -77,19 +77,19 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (setq cl:*features* (delete :cl-hacks-lowercase-reader cl:*features*)
-	cl:*features* (delete :cl-hacks-case-sensitive cl:*features*)))
+        cl:*features* (delete :cl-hacks-case-sensitive cl:*features*)))
 
 (defun concat-symbol-pkg (pkg &rest args)
   (declare (dynamic-extent args))
   (flet ((stringify (arg)
-	   (etypecase arg
-	     (string 
-	      (string-upcase arg))
-	     (symbol
-	      (symbol-name arg)))))
+           (etypecase arg
+             (string 
+              (string-upcase arg))
+             (symbol
+              (symbol-name arg)))))
     (let ((str (apply #'concatenate 'string (mapcar #'stringify args))))
       (nth-value 0 (intern (string-default-case str)
-			   (if pkg pkg *package*))))))
+                           (if pkg pkg *package*))))))
 
 (defun concat-symbol (&rest args)
   (apply #'concat-symbol-pkg nil args))
@@ -101,11 +101,13 @@
     (symbol (nth-value 0 (intern (symbol-name name) :keyword)))))
 
 (defun ensure-keyword-upcase (name)
-  (nth-value 0 (intern (string-upcase (symbol-name (ensure-keyword name))) :keyword)))
+  (nth-value 0 (intern
+                (string-upcase
+                 (symbol-name (ensure-keyword name))) :keyword)))
 
 (defun ensure-keyword-default-case (name)
   (nth-value 0 (intern (string-default-case
-			(symbol-name (ensure-keyword name))) :keyword)))
+                        (symbol-name (ensure-keyword name))) :keyword)))
 
 (defun show (&optional (what :variables) (package *package*))
   (ecase what
@@ -113,27 +115,31 @@
     (:functions (show-functions package))))
 
 (defun show-variables (package &optional (stream *standard-output*))
+  (format stream "~&; Showing variables for package ~A:~%"
+          (package-name package))
   (do-symbols (s package)
     (multiple-value-bind (sym status)
-	(find-symbol (symbol-name s) package)
+        (find-symbol (symbol-name s) package)
       (when (and (or (eq status :internal)
-		     (eq status :external))
-		 (boundp sym))
-	(format stream "~&Symbol ~s~t -> ~s~%"
-		sym
-		(symbol-value sym))))))
+                     (eq status :external))
+                 (boundp sym))
+        (format stream "~&; Symbol ~S~T -> ~S~T[~A]~%"
+                sym
+                (symbol-value sym)
+                (string-capitalize (string status)))))))
 
 (defun show-functions (package &optional (stream *standard-output*))
+  (format stream "~&; Showing functions for package ~A:~%"
+          (package-name package))
   (do-symbols (s package)
     (multiple-value-bind (sym status)
-	(find-symbol (symbol-name s) package)
+        (find-symbol (symbol-name s) package)
       (when (and (or (eq status :internal)
-		     (eq status :external))
-		 (fboundp sym))
-	(format stream "~&Function ~s~t -> ~s~%"
-		sym
-		(symbol-function sym))))))
+                     (eq status :external))
+                 (fboundp sym))
+        (format stream "~&; Function ~S~T -> ~S~T[~A]~%"
+                sym
+                (symbol-function sym)
+                (string-capitalize (string status)))))))
 
 ;; symbols.lisp ends here
-
-		    

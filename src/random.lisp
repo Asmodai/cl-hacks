@@ -2,8 +2,8 @@
 ;;;
 ;;; random.lisp --- Random number generation
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:32:31 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Monday Dec  5, 2011 05:07:47 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -42,16 +42,16 @@
 #-genera
 (defun seed-random-generator ()
   (let ((randfile (make-pathname
-		    :directory '(:absolute "dev")
-		    :name "urandom")))
+                    :directory '(:absolute "dev")
+                    :name "urandom")))
     (setf *random-state* (make-random-state t))
     (if (probe-file randfile)
-	(with-open-file
-	  (rfs randfile :element-type 'unsigned-byte)
-	  (let* ((seed (read-byte rfs)))
-	    (loop for item from 1 to seed
-		  do (loop for it from 0 to (+ (read-byte rfs) 5)
-			   do (random 65536))))))))
+        (with-open-file
+          (rfs randfile :element-type 'unsigned-byte)
+          (let* ((seed (read-byte rfs)))
+            (loop for item from 1 to seed
+                  do (loop for it from 0 to (+ (read-byte rfs) 5)
+                           do (random 65536))))))))
 
 #+genera
 (defun seed-random-generator () )
@@ -59,8 +59,8 @@
 (defmacro random-choice (&rest exprs)
   `(case (random ,(length exprs))
      ,@(let ((key -1))
-	 (mapcar #'(lambda (expr)
-		     `(,(incf key) ,expr))
-		 exprs))))
+         (mapcar #'(lambda (expr)
+                     `(,(incf key) ,expr))
+                 exprs))))
 
 ;;; random.lisp ends here

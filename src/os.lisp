@@ -1,9 +1,9 @@
-;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; os.lisp --- OS-specific functions
 ;;;
-;;; Time-stamp: <Tuesday Mar 30, 2010 11:20:43 asmodai>
-;;; Revision:   13
+;;; Time-stamp: <Monday Dec  5, 2011 05:07:38 asmodai>
+;;; Revision:   16
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -37,7 +37,10 @@
 ;;; }}}
 
 #-genera
-(in-package "CL-HACKS")
+(in-package #:cl-hacks)
+
+#+sbcl
+(require 'sb-posix)
 
 (defun command-output (control-string &rest args)
   "Interpolate ARGS into CONTROL-STRING as if by FORMAT, and
@@ -53,32 +56,32 @@ returns (VALUES string-output error-output exit-status)"
     ;; SBCL
     #+sbcl
     (let* ((process (sb-ext:run-program "/bin/sh"
-					(list "-c" command)
-					:input nil
-					:output :stream
-					:error :stream))
+                                        (list "-c" command)
+                                        :input nil
+                                        :output :stream
+                                        :error :stream))
            (output (read-stream-to-string (sb-impl::process-output process)))
            (error (read-stream-to-string (sb-impl::process-error process))))
       (close (sb-impl::process-output process))
       (close (sb-impl::process-error process))
       (values output
-	      error
-	      (sb-impl::process-exit-code process)))
+              error
+              (sb-impl::process-exit-code process)))
     ;;
     ;; CMU and Scieneer
     #+(or cmu scl)
     (let* ((process (ext:run-program "/bin/sh"
-				     (list "-c" command)
-				     :input nil 
-				     :output :stream 
-				     :error :stream))
+                                     (list "-c" command)
+                                     :input nil 
+                                     :output :stream 
+                                     :error :stream))
            (output (read-stream-to-string (ext::process-output process)))
            (error (read-stream-to-string (ext::process-error process))))
       (close (ext::process-output process))
       (close (ext::process-error process))
       (values output
-	      error
-	      (ext::process-exit-code process)))
+              error
+              (ext::process-exit-code process)))
     ;;
     ;; Allegro
     #+(and allegro unix)
@@ -91,13 +94,13 @@ returns (VALUES string-output error-output exit-status)"
     ;; BUG: Lispworks combines output and error streams
     (let ((output (make-string-output-stream)))
       (unwind-protect
-	   (let ((status
-		  (system:call-system-showing-output
-		   command
-		   :prefix ""
-		   :show-cmd nil
-		   :output-stream output)))
-	     (values (get-output-stream-string output) nil status))
+           (let ((status
+                  (system:call-system-showing-output
+                   command
+                   :prefix ""
+                   :show-cmd nil
+                   :output-stream output)))
+             (values (get-output-stream-string output) nil status))
         (close output)))
     ;;
     ;; CLISP
@@ -111,11 +114,11 @@ returns (VALUES string-output error-output exit-status)"
     ;; OpenMCL
     #+openmcl
     (let* ((process (ccl:run-program "/bin/sh"
-				     (list "-c" command)
-				     :input nil
-				     :output :stream 
-				     :error :stream
-				     :wait t))
+                                     (list "-c" command)
+                                     :input nil
+                                     :output :stream 
+                                     :error :stream
+                                     :wait t))
            (output (read-stream-to-string (ccl::external-process-output-stream process)))
            (error (read-stream-to-string (ccl::external-process-error-stream process))))
       (close (ccl::external-process-output-stream process))
@@ -129,30 +132,38 @@ returns (VALUES string-output error-output exit-status)"
     (error "COMMAND-OUTPUT not implemented.")))
 
 (defun run-shell-command (program &rest args)
-  "This function provides a quick and dirty interface to COMMAND-OUTPUT, but it will only
-return the exit status."
+  "This function provides a quick and dirty interface to
+COMMAND-OUTPUT, but it will only return the exit status."
   (let ((command (apply #'format nil program args)))
     (multiple-value-bind (output error status)
-	(command-output command)
+        (command-output command)
       (declare (ignore output error))
       status)))
 
-(defun delete-directory-and-files (dir &key (if-does-not-exist :error) (quiet t) force)
-  #+allegro (excl:delete-directory-and-files dir :if-does-not-exist if-does-not-exist
-                                             :quiet quiet :force force)
-  #-(or allegro) (declare (ignore force))
-  #-(or allegro) (cond
-                   ((probe-directory dir)
-                    (let ((cmd (format nil "rm -rf ~A" (namestring dir))))
-                      (unless quiet
-                        (format *trace-output* ";; ~A" cmd))
-                      (command-output cmd)))
-                   ((eq if-does-not-exist :error)
-                    (error "Directory ~A does not exist [delete-directory-and-files]." dir))))
+(defun delete-directory-and-files (dir &key (if-does-not-exist :error)
+                                   (quiet t) force)
+  #+allegro
+  (excl:delete-directory-and-files
+   dir 
+   :if-does-not-exist if-does-not-exist
+   :quiet quiet :force force)
+  #-(or allegro)
+  (declare (ignore force))
+  #-(or allegro)
+  (cond
+    ((probe-directory dir)
+     (let ((cmd (format nil "rm -rf ~A" (namestring dir))))
+       (unless quiet
+         (format *trace-output* ";; ~A" cmd))
+       (command-output cmd)))
+    ((eq if-does-not-exist :error)
+     (error "Directory ~A does not exist." dir))))
+
 (defun file-size (file)
   (when (probe-file file)
-    #+allegro (let ((stat (excl.osi:stat (namestring file))))
-                (excl.osi:stat-size stat))
+    #+allegro
+    (let ((stat (excl.osi:stat (namestring file))))
+      (excl.osi:stat-size stat))
     #-allegro
     (with-open-file (in file :direction :input)
       (file-length in))))
@@ -165,11 +176,13 @@ return the exit status."
   #+sbcl (sb-posix:getpid)
   #+cmu (unix:unix-getpid)
   #+openmcl (ccl::getpid)
-  #+(and clisp unix) (system::process-id)
-  #+(and clisp win32) (cond ((find-package :win32)
-                             (funcall (find-symbol "GetCurrentProcessId"
-                                                   :win32)))
-                            (t
-                             (system::getenv "PID"))))
+  #+(and clisp unix)
+  (system::process-id)
+  #+(and clisp win32)
+  (cond ((find-package :win32)
+         (funcall (find-symbol "GetCurrentProcessId"
+                               :win32)))
+        (t
+         (system::getenv "PID"))))
 
 ;;; os.lisp ends here

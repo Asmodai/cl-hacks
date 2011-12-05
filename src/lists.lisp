@@ -1,18 +1,17 @@
-;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
 ;;;
-;;; lists.lisp --- List-based functions
+;;; lists.lisp --- Various list functionality
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:29:51 asmodai>
-;;; Revision:   13
+;;; Time-stamp: <Monday Dec  5, 2011 05:07:14 asmodai>
+;;; Revision:   7
 ;;;
-;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
-;;; Copyright (c) 2002 Keven M. Rosenberg
+;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
 ;;; Author:     Paul Ward <asmodai@gmail.com>
 ;;; Maintainer: Paul Ward <asmodai@gmail.com>
-;;; Created:    Tue Sep  1 19:00:00 2009
-;;; Keywords:   Common Lisp CLOS Hacks
-;;; URL:        http://unixware.kicks-ass.org/
+;;; Created:    01 Dec 2011 16:08:26
+;;; Keywords:   
+;;; URL:        not distributed yet
 ;;;
 ;;; {{{ License:
 ;;;
@@ -35,431 +34,534 @@
 ;;; 02111-1307  USA
 ;;;
 ;;; }}}
+;;; {{{ Commentary:
+;;;
+;;; }}}
+
 #-genera
 (in-package #:cl-hacks)
 
-(defun last-but-one (lst)
-  "Return the last two elements in a list."
-  (let ((rlst (reverse lst)))
-    (cond ((null rlst)
-	   nil)
-	  ((<= (length rlst) 2) 
-	   lst)
-	  (t
-	   (list (second rlst) (first rlst))))))
+#||
+Return the last two elements in a list.
+||#
+(defun last-but-one (list)
+  (cond ((endp list)
+         nil)
+        ((endp (rest list))
+         nil)
+        (t
+         (last list 2))))
 
-;; This is like nth, but the index base is 1
-(defun element-at (lst pos &optional (initial 1))
-  (if (eql initial pos)
-      (car lst)
-      (element-at (cdr lst) pos (1+ initial))))
+#||
+This is like NTH, but the index base is 1 rather than 0.
+||#
+(defun element-at (list pos)
+  (cond ((not (integerp pos))
+         (error "Non integer index ~A" pos))
+        ((not (plusp pos))
+         (error "Non positive index ~A" pos))
+        (t
+         (elt list (1- pos)))))
 
-(defun flatten-list (lst)
-  (cond ((atom lst)
-	 lst)
-	((listp (car lst))
-	 (append (flatten-list (car lst)) (flatten-list (cdr lst))))
-	(t
-	 (append (list (car lst)) (flatten-list (cdr lst))))))
-;;
-;;
-(defun list-palindromic-p (lst)
-  (equal lst (reverse lst)))
+#||
+Returns T if the list is palindromic.
+||#
+(defun list-palindromic-p (list)
+  (loop with data = (coerce list 'vector)
+        for i from 0
+        for j from (1- (length data)) by -1
+        while (< i j)
+        always (eql (aref data i) (aref data j))))
 
-(defun compress-list (lst)
-  (cond ((null lst)
-	 lst)
-	((null (cdr lst))
-	 lst)
-	((eql (car lst) (cadr lst))
-	 (compress-list (cdr lst)))
-	(t
-	 (cons (car lst) (compress-list (cdr lst))))))
+#||
+Elimininates consecutive duplicates of the list given in LIST.
+
+If the list contains repeated elements, they are replaced with a
+single copy of the element.  The order of the elements is not
+changed.
+||#
+(defun compress-list (list)
+  (reduce #'(lambda (item result)
+              (cond ((endp result)
+                     (list item))
+                    ((eql (first result) item)
+                     result)
+                    (t
+                     (cons item result))))
+          list
+          :from-end t
+          :initial-value '()))
+
+#||
+Pack consecutive duplicates of list elements into a sublist.
+||#
+(defun pack-list (list)
+  (reduce #'(lambda (item result)
+              (cond ((endp result)
+                     (list (list item)))
+                    ((eql (first (first result)) item)
+                     (cons (cons item (first result))
+                           (rest result)))
+                    (t
+                     (cons (list item) result))))
+          list
+          :from-end t
+          :initial-value '()))
+            
+
+(defun run-length-encode (list)
+  (when list
+    (loop with count = 0
+          with last-item = nil
+          with result = '()
+          for item in list
+          do (cond ((zerop count)
+                    (setf count 1
+                          last-item item))
+                   ((eql item last-item)
+                    (incf count))
+                   (t
+                    (push (list count last-item) result)
+                    (setf count 1
+                          last-item item)))
+             finally (when (plusp count)
+                       (push (list count last-item) result))
+                     (return-from run-length-encode
+                       (nreverse result)))))
+
+#||
+Runlength-encode a list.
+||#
+(defun run-length-encode/simplified (list)
+  (let ((result '())
+        (count 0)
+        (last-item nil))
+    (labels ((collect-result ()
+               (push (if (= 1 count)
+                         last-item
+                         (list count last-item))
+                     result))
+             (new-item (item)
+               (setf count 1
+                     last-item item))
+             (same-item ()
+               (incf count))
+             (return-result ()
+               (when (plusp count)
+                 (collect-result))
+               (nreverse result)))
+      (dolist (item list (return-result))
+        (cond ((zerop count)
+               (new-item item))
+              ((eql item last-item)
+               (same-item))
+              (t
+               (collect-result)
+               (new-item item)))))))
+
+#||
+Decode a runlength-encoded list.
+||#
+(defun run-length-decode (rle-list)
+  (loop with result = '()
+        for item in (reverse rle-list)
+        do (if (atom item)
+               (push item result)
+               (loop repeat (first item)
+                     do (push (second item) result)))
+        finally (return-from run-length-decode result)))
+
+#||
+Replicate the elements of a list a given number of times.
+||#
+(defun replicate-list (list count)
+  (mapcan #'(lambda (item)
+              (make-list count :initial-element item))
+          list))
+
+#||
+Duplicate the elements of a list.
+||#
+(defsubst duplicate-list (list)
+  (replicate-list list 2))
+
+#||
+Drop every NUM element from LST.
+||#
+(defun drop-every-nth (list elm &aux (m (1- elm)))
+  (loop for a = list then (cdr b)
+        for b = (nthcdr m a)
+        if b
+          nconc (ldiff a b)
+        else
+          nconc a
+          and
+            do (loop-finish)))
+
+#||
+Split a list into two parts.
+||#
+(defun split-list (list count)
+  (list (subseq list 0 count)
+        (nthcdr count list)))
 
 
-(defun pack-list-group (lst)
-  (cond ((eql lst nil)
-	 nil)
-	((eql (cdr lst) nil)
-	 lst)
-	((equal (car lst) (cadr lst))
-	 (cons (car lst) (pack-list-group (cdr lst))))
-	(t
-	 (list (car lst)))))
-
-(defun pack-list-rest (lst)
-  (cond ((eql lst nil)
-	 nil)
-	((eql (car lst) (cadr lst))
-	 (pack-list-rest (cdr lst)))
-	(t
-	 (cdr lst))))
-
-(defun pack-list (lst)
-  (if (eql lst nil)
-      nil
-      (cons (pack-list-group lst) (pack-list (pack-list-rest lst)))))
-
-(defun run-length-encode (lst)
-  (labels ((rlencode (lst res &aux (c 0))
-	     (if lst
-		 (rlencode (member-if-not #'(lambda (e)
-					      (if (eql (car lst) e)
-						  (incf c)))
-					  lst)
-			   (cons (if (= c 1)
-				     (car lst)
-				     (list c (car lst)))
-				 res))
-		 (nreverse res))))
-    (rlencode lst nil)))
-
-(defun unpack-rle (lst)
-  (loop for i from 1 to (car lst)
-	collect (cadr lst)))
-
-(defun run-length-decode (lst)
-  (cond ((null lst)
-	 nil)
-	((atom (car lst))
-	 (append (list (car lst)) (run-length-decode (cdr lst))))
-	((listp (car lst))
-	 (append (unpack-rle (car lst)) (run-length-decode (cdr lst))))))
-
-(defun duplicate-list (lst)
-  (if (eql lst nil)
-      nil
-      (append (list (car lst) (car lst)) (duplicate-list (cdr lst)))))
-
-(defun replicate-elem (lst count)
-  (labels ((replicate-aux (e c)
-	     (loop for i from 1 to c
-		   collect e)))
-    (if (eql lst nil)
-	nil
-	(append (replicate-aux (car lst) count)
-		(replicate-elem(cdr lst) count)))))
-
-(defun drop-every-nth (lst num)
-  (loop for c from 0 to (1- (length lst))
-	when (> (mod (1+ c) num) 0)
-	  collect (nth c lst)))
-
-(defun split-list-before (lst pos &optional (initial 0))
-  (if (> pos initial)
-      (cons (car lst) (split-list-before (cdr lst) pos (1+ initial)))))
-
-(defun split-list-after (lst pos &optional (initial 0))
-  (if (> pos initial)
-      (split-list-after (cdr lst) pos (1+ initial))
-      lst))
-
-(defun split-list (lst pos)
-  (if (and pos (listp lst))
-      (list (split-list-before lst pos) (split-list-after lst pos))))
-  
+#||
+Create a slice of the list given in LST.  The slice starts at START
+and ends at END.
+||#
 (defun slice-list (lst start end)
-  (if (null lst)
-      nil
-      (loop for idx from 0 to (1- (length lst))
-	    when (and (>= (1+ idx) start)
-		      (<= (1+ idx) end))
-	      collect (nth idx lst))))
+  (subseq lst (1- start) end))
 
+#||
+Rotate a the list LST by PLACES.
+||#
 (defun rotate-list (lst places)
-  (if (null lst)
-      nil
-      (if (< places 0)
-	  (append (split-list-after lst (+ (length lst) places))
-		  (split-list-before lst (+ (length lst) places)))
-	  (append (split-list-after lst places)
-		  (split-list-before lst places)))))
+  (if (minusp places)
+      (rotate lst (+ (length lst) places))
+      (nconc (subseq lst places)
+             (subseq lst 0 places))))
 
+#||
+Remove the element of the list LST at position POS.
+||#
 (defun remove-at (lst pos)
-  (append (split-list-before lst (1- pos))
-	  (split-list-after lst pos)))
+  (remove-if (constantly t) lst
+             :start (1- pos)
+             :end pos))
 
+#||
+Insert WHAT as a new element of the list LST at the position POS.
+||#
 (defun insert-at (what lst pos)
-  (append (split-list-before lst (1- pos))
-	  (list what)
-	  (split-list-after lst (1- pos))))
+  (append (subseq lst 0 (1- pos))
+          (list what)
+          (nthcdr (1- pos) lst)))
 
-;;;
-;;; move to math.lisp
-(defun make-integer-range (start stop)
-  (loop for i from start to stop
-	collect i))
-;;;
-;;;
+#||
+Create a list containing all integers within a given range.
+||#
+(defun numeric-range (start last)
+  (loop for i from start to last
+        collect i))
 
-(defun select-random (lst pos &optional (selected 0))
-  (if (eql pos selected)
-      nil
-      (let ((rand-pos (1+ (random (length lst)))))
-	(cons (element-at lst rand-pos)
-	      (select-random (remove-at lst rand-pos) pos (1+ selected))))))
+#||
+Extract a given number of randomly selected elements from a list.
+||#
+(defun random-select (list count)
+  (let ((len (length list)))
+    (cond ((zerop count)
+           '())
+          ((<= 1 count len)
+           (loop with indices = '()
+                 with result = '()
+                 while (plusp count)
+                 for i = (random len)
+                 unless (member i indices)
+                   do (progn
+                        (push i indices)
+                        (push (elt list i) result)
+                        (decf count))
+                 finally (return-from random-select result)))
+          (t
+           (error "Invalid count, must be between 0 and ~D" len)))))
 
-(defun random-permutation (lst)
-  (select-random lst (length lst)))
+#||
+Draw N different random numbers from the set 1..M.
+||#
+(defun lottery-select (selection set-size)
+  (random-select (range 1 set-size) selection))
 
-(defun combination-list-elem (elem-list lst)
-  (if (eql lst nil)
-      nil
-      (append (list (append elem-list (list (car lst))))
-	      (combination-list-elem elem-list (cdr lst)))))
+#||
+Generate a random permutation of the elements of a list.
+||#
+(defun random-permutation (list)
+  (when list
+    (loop with len = (length list)
+          with choices = (list-to-circular-list (copy-list list))
+          collect (pop (cdr (nthcdr (random len) choices)))
+          while (plusp (decf len)))))
 
-(defun combination (n-elem lst)
-  (let ((num-elem (1- n-elem)))
-    (if (or (> num-elem (length lst))
-	    (< n-elem 2))
-	nil
-	(let ((elem-list (split-list-before lst num-elem))
-	      (rest-list (split-list-after lst num-elem)))
-	  (append (combination-list-elem elem-list rest-list)
-		  (combination n-elem (cdr lst)))))))
+#||
+Generate the combinations of K distinct objects chosen from the N
+elements of a list.
+||#
+(defun list-combinations (count list)
+  (cond ((zerop count)
+         '(()))
+        ((endp list)
+         '())
+        (t
+         (nconc (mapcar #'(lambda (combi)
+                            (cons (first list) combi))
+                        (list-combinations (1- count) (rest list)))
+                (list-combinations count (rest list))))))
 
-(defun remove-list (lst elem)
-  (if (eql elem nil)
-      lst
-      (remove-list (remove (car elem) lst) (cdr elem))))
+#||
+Group the elements of a set into disjoint subsets.
+||#
+(defun list-group (set sizes)
+  (cond ((endp sizes)
+         (error "Not enough ``sizes'' given."))
+        ((endp (rest sizes))
+         (if (= (first sizes) (length set))
+             (list (list set))
+             (error "Cardinal mismatch: |set| = ~A; required ~A"
+                    (length set)
+                    (first sizes))))
+        (t
+         (mapcan #'(lambda (combi)
+                     (mapcar #'(lambda (group)
+                                 (cons combi group))
+                             (list-group (set-difference set combi)
+                                         (rest sizes))))
+                 (list-combinations (first sizes) set)))))
 
-(defun group-n (num-elem res lst)
-  (combination-list-elem res (combination num-elem
-					  (remove-list lst
-						       (flatten-list res)))))
+#||
+Group the elements of a set into subsets of 2, 3 and 4 elements.
+||#
+(defun list-group3 (set)
+  (list-group set '(2 3 4)))
 
-(defun group-n-list (num-elem res lst)
-  (if (eql res nil)
-      nil
-      (let ((first-elem (car res))
-	    (rest-list (cdr res)))
-	(append (group-n num-elem first-elem lst)
-		(group-n-list num-elem rest-list lst)))))
+#||
+Sort a list of lists according to the length of sublists.
+||#
+(defun lsort (lists)
+  (map 'list (function cdr)
+       (sort (map 'vector #'(lambda (list)
+                              (cons (length list) list))
+                  lists)
+             (function <)
+             :key (function car))))
 
-(defun group3 (lst)
-  (group-n-list 5 (group-n-list 2 (group-n-list 2 nil lst) lst) lst))
+#||
+Sort a list of lists according to the length frequency.
+||#
+(defun lfsort (lists)
+  (let* ((data (map 'vector #'(lambda (list)
+                                (cons (length list) list))
+                    lists))
+         (histo (make-histogram data :key (function car))))
+    (map 'list (function cdr)
+         (sort data
+               (function <)
+               :key #'(lambda (item)
+                        (gethash (car item) histo))))))
 
-(defun group-elements (lst elem-list)
-  (if (eql (cdr elem-list) nil)
-      (group-n (car elem-list) nil lst)
-      (let ((elem-rlist (reverse elem-list)))
-	(group-n-list (car elem-rlist)
-		      (group-elements lst (reverse (cdr elem-rlist))) lst))))
+#||
+Make OBJECT into a list if OBJECT is an atom.
+||#
+(defun mklist (object)
+  (if (listp object)
+      object
+      (list object)))
 
-(defun lsort (lst)
-  (sort lst #'< :key #'length))
-
-(defun lfreq (lst e-length)
-  (if (eql lst nil)
-      0
-      (if (eql (length (car lst)) e-length)
-	  (1+ (lfreq (cdr lst) e-length))
-	  (lfreq (cdr lst) e-length))))
-
-(defun lfmark (rest &optional (lst rest))
-  (if (eql lst nil)
-      nil
-      (cons (list (lfreq lst (length (car rest))) (car rest))
-	    (lfmark (cdr rest) lst))))
-
-(defun lfunmark (lst)
-  (if (eql lst nil)
-      nil
-      (cons (second (car lst)) (lfunmark (cdr lst)))))
-
-(defun lfsort (lst)
-  (let ((marked-list (lfmark lst)))
-    (lfunmark (sort marked-list #'< :key #'(lambda (x) (car x))))))
-
-;;
-;; The following have been borrowed from the KMRCL package
-;;
-
-;; This isn't called MAKE-LIST because we don't want to clobber something defined elsewhere
-(defun mklist (obj)
-  "Make OBJ into a list if OBJ is an atom."
-  (if (listp obj)
-      obj
-      (list obj)))
-
-(defun map-and-remove-nils (fn lst)
-  "Map a list by function, eliminate elements where FN returns NIL."
+#||
+Map a list by function and eliminate elements where FN returns NIL.
+||#
+(defun map-and-remove-nils (fn list)
   (let ((acc nil))
-    (dolist (x lst (nreverse acc))
+    (dolist (x list (nreverse acc))
       (let ((val (funcall fn x)))
-	(when val
-	  (push val acc))))))
+        (when val
+          (push val acc))))))
 
-(defun filter-list (fn lst)
-  "Filter a list by function, eliminating elements where FN returns NIL."
+#||
+Filter a list by function and eliminate elements where FN returns NIL.
+||#
+(defun filter-list (fn list)
   (let ((acc nil))
-    (dolist (x lst (nreverse acc))
+    (dolist (x list (nreverse acc))
       (when (funcall fn x)
-	(push x acc)))))
+        (push x acc)))))
 
+#||
+Append two lists, filtering out elements from the second list that are
+already in the first list.
+||#
 (defun append-list (l1 l2)
-  "Append two lists, filtering out elems from the second list that are already in the first."
   (dolist (elem l2 l1)
     (unless (find elem l1)
       (setq l1 (append l1 (list elem))))))
 
+#||
+Strip from a tree of atoms that satisfy a given predicate.
+||#
 (defun remove-from-tree-if (pred tree &optional atom-processor)
-  "Strip from a tree of atoms that satisfy a given predicate."
   (if (atom tree)
       (unless (funcall pred tree)
-	(if atom-processor
-	    (funcall atom-processor tree)
-	    tree))
-      (let ((car-strip (remove-from-tree-if pred (car tree) atom-processor))
-	    (cdr-strip (remove-from-tree-if pred (cdr tree) atom-processor)))
-	(cond
-	  ((and car-strip (atom (cadr tree)) (null cdr-strip))
-	   (list car-strip))
-	  ((and car-strip cdr-strip)
-	   (cons car-strip cdr-strip))
-	  (car-strip
-	   car-strip)
-	  (cdr-strip
-	   cdr-strip)))))
+        (if atom-processor
+            (funcall atom-processor tree)
+            tree))
+      (let ((car-strip (remove-from-tree-if
+                        pred
+                        (car tree)
+                        atom-processor))
+            (cdr-strip (remove-from-tree-if
+                        pred
+                        (cdr tree)
+                        atom-processor)))
+        (cond
+          ((and car-strip (atom (cadr tree)) (null cdr-strip))
+           (list car-strip))
+          ((and car-strip cdr-strip)
+           (cons car-strip cdr-strip))
+          (car-strip
+           car-strip)
+          (cdr-strip
+           cdr-strip)))))
 
+#||
+Find an atom as a car in a tree and return the cdr of the tree at that
+position.
+||#
 (defun find-in-tree (sym tree)
-  "Find an atom as a car in a tree and returns the cdr of the tree at that position."
-  (if (or (null tree) (atom tree))
+  (if (or (null tree)
+          (atom tree))
       nil
       (if (eql sym (car tree))
-	  (cdr tree)
-	  (aif (find-in-tree sym (car tree))
-	       it
-	       (aif (find-in-tree sym (cdr tree))
-		    it
-		    nil)))))
+          (cdr tree)
+          (aif (find-in-tree sym (car tree))
+               it
+               (aif (find-in-tree sym (cdr tree))
+                    it
+                    nil)))))
 
-#-(or ecl genera)
+#||
+Remove the given keyword from an argument list.
+||#
+;;; This symbol is somehow in USER on my Genera world, but it isn't
+;;; defined.
 (defun remove-keyword (key arglist)
   (loop for sublist = arglist then rest until (null sublist)
-	for (elt arg . rest) = sublist
-	unless (eq key elt) append (list elt arg)))
+        for (elt arg . rest) = sublist
+        unless (eq key elt)
+          append (list elt arg)))
 
-;;; Stop ecl from bitching
-#+ecl
-(defun remove-keyword (key arglist)
-  (declare (ignore key arglist)))
-
-#+genera
-(defun remove-keyword (key arglist)
-  "Remove the given keyword from a list."
-  (zl:loop for elem in arglist
-     if (listp elem)
-       collect (remove-keyword key elem)
-     else
-       unless (eq key elem)
-	 collect elem))
-
-(defun remove-keywords (key-names arglist)
+#||
+Remove all the given keywords from an argument list.
+||#
+(defun remove-keywords (keys arglist)
   (loop for (name val) on arglist by #'cddr
-	unless (member (symbol-name name) key-names
-		       :key #'symbol-name :test 'equal)
-	  append (list name val)))
+        unless (member (symbol-name name) keys
+                       :key #'symbol-name
+                       :test 'equal)
+          append (list name val)))
 
-(defun mapappend (func seq)
-  (apply #'append (mapcar func seq)))
-
+#||
+Concatenate the results of MAPCAR lambda calls.  This function does
+not use tail recursion.
+||#
 (defun mapcar-append-string-nontailrec (func v)
-  "Concatenate the results of a mapcar lambda call, without using tail recursion."
   (aif (car v)
        (concatenate 'string (funcall func it)
-		    (mapcar-append-string-nontailrec func (cdr v)))
+                    (mapcar-append-string-nontailrec func (cdr v)))
        ""))
 
+#||
+Concatenate the results of MAPCAR lambda calls.
+||#
 (defun mapcar-append-string (func v &optional (accum ""))
-  "Concatenate the results of mapcar lambda calls, using tail recursion."
   (aif (car v)
        (mapcar-append-string
-	 func
-	 (cdr v)
-	 (concatenate 'string accum (funcall func it)))
+        func
+        (cdr v)
+        (concatenate 'string accum (funcall func it)))
        accum))
 
-(defun mapcar2-append-string-nontailrec (func la lb)
-  "Concatenate the results of mapcar lambda calls over two lists, without using tail recursion."
-  (let ((a (car la))
-	(b (car lb)))
+#||
+Concatenate the results of MAPCAR lambda calls over two lists.  This
+function does not use tail recursion.
+||#
+(defun mapcar/2-append-string-nontailrec (func l1 l2)
+  (let ((a (car l1))
+        (b (car l2)))
     (if (and a b)
-	(concatenate 'string (funcall func a b)
-		     (mapcar2-append-string-nontailrec func (cdr la) (cdr lb)))
-	"")))
+        (concatenate
+         'string 
+         (funcall func a b)
+         (mapcar/2-append-string-nontailrec func (cdr l1) (cdr l2)))
+        "")))
 
-(defun mapcar2-append-string (func la lb &optional accum)
-  "Concatante the results of mapcar lambda calls over two lists, using tail recursion."
-  (let ((a (car la))
-	(b (car lb)))
+#||
+Concatenate the results of MAPCAR lambda calls over two lists.
+||#
+(defun mapcar/2-append-string (func l1 l2 &optional (accum ""))
+  (let ((a (car l1))
+        (b (car l2)))
     (if (and a b)
-	(mapcar2-append-string func (cdr la) (cdr lb)
-			       (concatenate 'string accum (funcall func a b)))
-	accum)))
+        (mapcar/2-append-string
+         func
+         (cdr l1)
+         (cdr l2)
+         (concatenate 'string accum (funcall func a b)))
+        accum)))
 
-(defun append-sublists (lst)
-  "Takes a list of lists and appends all sublists."
-  (let ((results (car lst)))
-    (dolist (elem (cdr lst) results)
+#||
+Take a list of lists and append all sublists.
+||#
+(defun append-sublists (list)
+  (let ((results (car list)))
+    (dolist (elem (cdr list) results)
       (setq results (append results elem)))))
 
-(defun alist-elem-p (elem)
-  (and (consp elem) (atom (car elem)) (atom (cdr elem))))
+;;;
+;;; The alist stuff below could possible be better placed in CLHI.
+;;;
 
+#||
+Returns T if the object is an alist element.
+||#
+(defun alist-elem-p (elem)
+  (and (consp elem)
+       (atom (car elem))
+       (atom (cdr elem))))
+
+#||
+Returns T if the object is an alist.
+||#
 (defun alistp (alist)
   (when (listp alist)
     (dolist (elem alist)
       (unless (alist-elem-p elem)
-	(return-from alistp nil)))
+        (return-from alistp nil)))
     t))
 
-(defmacro update-alist (akey value alist &key (test '#'eql) (key '#'identity))
-  "Macro to support below (setf get-alist)"
+(defmacro %update-alist (akey value alist
+                         &key (test '#'eql) (key '#'identity))
   (let ((elem (gensym "ELEM-"))
-	(val (gensym "VAL-")))
+        (val (gensym "VAL-")))
     `(let ((,elem (assoc ,akey ,alist :test ,test :key ,key))
-	   (,val ,value))
+           (,val ,value))
        (cond (,elem
-	      (setf (cdr ,elem) ,val))
-	     (,alist
-	      (setf (cdr (last ,alist)) (list (cons ,akey ,val))))
-	     (t
-	      (setf ,alist (list (cons ,akey ,val)))))
+              (set (cdr ,elem) ,val))
+             (,alist
+              (setf (cdr (last ,alist)) (list (cons ,akey ,val))))
+             (t
+              (setf ,alist (list (cons ,akey ,val)))))
        ,alist)))
 
+#||
+Get an element of an alist.
+||#
 (defun get-alist (key alist &key (test #'eql))
   (cdr (assoc key alist :test test)))
 
+#||
+Set the element of an alist.
+||#
 (defun (setf get-alist) (value key alist &key (test #'eql))
-  "This won't work if the alist is NIL."
-  (update-alist key value alist :test test)
+  (%update-alist key value alist :test test)
   value)
 
-(defun alist-plist (alist)
-  (apply #'append (mapcar #'(lambda (x) (list (car x) (cdr x))) alist)))
-
-(defun plist-alist (plist)
-  (do ((alist '())
-       (pl plist (cddr pl)))
-      ((null pl) alist)
-  (setq alist (acons (car pl) (cadr pl) alist))))
-
-(defmacro update-plist (pkey value plist &key (test '#'eql))
-  "Macro to support (setf get-alist)."
-  (let ((pos (gensym)))
-    `(let ((,pos (member ,pkey ,plist :test ,test)))
-       (if ,pos
-	   (progn
-	     (setf (cadr ,pos) ,value)
-	     ,plist)
-	   (setf ,plist (append ,plist (list ,pkey ,value)))))))
-
-(defun unique-slot-values (list slot &key (test #'eql))
+#||
+Obtain a unique list of slot values from a list of instances.
+||#
+(defun unique-slot-values (list slot &key (test 'eql))
   (let ((uniq '()))
     (dolist (item list (nreverse uniq))
       (let ((value (slot-value item slot)))
-	(unless (find value uniq :test test)
-	  (push value uniq))))))
+        (unless (find value uniq :test test)
+          (push value uniq))))))
 
-;; lists.lisp ends here
+;;; lists.lisp ends here

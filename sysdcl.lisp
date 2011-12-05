@@ -1,17 +1,17 @@
-;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: USER; Base: 10; Lowercase: Yes; -*-
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: USER; Base: 10; Lowercase: Yes -*-
 ;;;
-;;; sysdcl.lisp --- DEFSYSTEM for Lisp Machines
+;;; sysdcl.lisp --- DEFSYSTEM for Symbolics gear
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:20:04 asmodai>
-;;; Revision:   12
+;;; Time-stamp: <Monday Dec  5, 2011 05:03:58 asmodai>
+;;; Revision:   4
 ;;;
-;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
+;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
 ;;; Author:     Paul Ward <asmodai@gmail.com>
 ;;; Maintainer: Paul Ward <asmodai@gmail.com>
-;;; Created:    Tue Sep  1 19:00:00 2009
-;;; Keywords:   Common Lisp Hacks
-;;; URL:        http://unixware.kicks-ass.org/
+;;; Created:    25 Nov 2011 19:18:50
+;;; Keywords:   
+;;; URL:        not distributed yet
 ;;;
 ;;; {{{ License:
 ;;;
@@ -34,83 +34,136 @@
 ;;; 02111-1307  USA
 ;;;
 ;;; }}}
+;;; {{{ Commentary:
+;;;
+;;; }}}
 
-#+genera
-(progn
-  (defsystem CL-HACKS
-      (:default-pathname "SYS:CL-HACKS;"
-       :journal-directory "SYS:CL-HACKS;PATCH;"
-       :pretty-name "Common Lisp Hacks"
-       :advertised-in (:herald)
-       :patchable t
-       :maintain-journals t
-       :distribute-binaries t
-       :distribute-sources t
-       :source-category :basic
-       :default-module-type :system)
-    (:parallel
-      (:serial
-	"cl-hacks-internals")))
-  
-  (defsubsystem cl-hacks-internals
-      (:default-pathname "SYS:CL-HACKS;SRC;"
-       :source-category :basic)
-    (:module pkgdcl ("package"))
-    (:module genera ("genera")
-	     (:uses-definitions-from pkgdcl))
-    (:module ifstar ("ifstar")
-	     (:uses-definitions-from pkgdcl))
-    (:module macros ("macros")
-	     (:uses-definitions-from pkgdcl))
-    (:module functions ("functions")
-	     (:uses-definitions-from pkgdcl))
-    (:module equality ("equal")
-	     (:uses-definitions-from macros))
-    (:module lists ("lists")
-	     (:uses-definitions-from macros))
-    (:module seqs ("seqs")
-	     (:uses-definitions-from macros))
-    (:module symbols ("symbols")
-	     (:uses-definitions-from macros))
-    (:module strings ("strings")
-	     (:uses-definitions-from macros))
-    (:module math ("math")
-	     (:uses-definitions-from macros))
-    (:module datetime ("datetime")
-	     (:uses-definitions-from macros))
-    (:module strmatch ("strmatch")
-	     (:uses-definitions-from macros))
-    (:module random ("random")
-	     (:uses-definitions-from pkgdcl))
-    (:module iterate ("iterate")
-	     (:uses-definitions-from macros))
-    (:module impl ("impl")
-	     (:uses-definitions-from macros))
-    (:module color ("color")
-	     (:uses-definitions-from macros))
-    (:module mop ("mop")
-	     (:uses-definitions-from macros))
-    (:module clos ("clos")
-	     (:uses-definitions-from mop))
-    (:module console ("console")
-	     (:uses-definitions-from macros))
-    (:module buffinput ("buff-input")
-	     (:uses-definitions-from macros))
-    (:module bytestream ("byte-stream")
-	     (:uses-definitions-from macros))
-    (:module collecting ("collecting")
-	     (:uses-definitions-from macros))
-    (:module dynstate ("dynamic-state")
-	     (:uses-definitions-from macros))
-    (:module memoize ("memoize")
-	     (:uses-definitions-from macros))
-    (:module opsys ("os")
-	     (:uses-definitions-from macros))
-    (:module io ("io")
-	     (:uses-definitions-from macros))
-    (:module wrapping ("wrapping-standard")
-	     (:uses-definitions-from macros))
-    (:module code ("version")
-	     (:uses-definitions-from pkgdcl))))
+#-genera
+(error "This requires Symbolics Genera.")
+
+(defsubsystem cl-hacks-internals
+    (:pretty-name "CL Hacks internals"
+     :default-pathname "cl-hacks:sys;")
+  (:module clhi-package ("package"))
+  (:module clhi-genera ("genera"))
+  (:module clhi-stage1 ("definitions"
+                        "binding"
+                        "symbols"
+                        "functions"
+                        "ifstar"
+                        "anaphoric"
+                        "conditions"
+                        "macros"
+                        "lists")
+           (:uses-definitions-from clhi-package))
+  (:module clhi-stage2 ("control-flow"
+                        "looping"
+                        "types"
+                        "arrays"
+                        "sequences"
+                        "hash-tables")
+           (:uses-definitions-from clhi-stage1))
+  (:module clhi-stage3 ("features")
+           (:uses-definitions-from clhi-package clhi-stage1
+                                   clhi-stage2))
+  (:module clhi-zwei ("emacs")
+           (:uses-definitions-from clhi-stage1 clhi-stage2
+                                   clhi-stage3))
+  (:serial clhi-package clhi-genera clhi-stage1 clhi-stage2 
+           clhi-stage3 clhi-zwei))
+
+(defsubsystem cl-hacks-fad
+    (:pretty-name "CL Hacks Files and Directories"
+     :default-pathname "cl-hacks:fad;")
+  (:module fad-package ("package"))
+  (:module fad-sources ("fad")
+           (:uses-definitions-from fad-package))
+  (:serial fad-package fad-sources))
+
+(defsubsystem cl-hacks-uuid
+    (:pretty-name "CL Hacks UUID"
+     :default-pathname "cl-hacks:uuid;")
+  (:module uuid-package ("package"))
+  (:module uuid-source ("uuid")
+           (:uses-definitions-from uuid-package))
+  (:serial uuid-package uuid-source))
+
+(defsubsystem cl-hacks-mop
+    (:pretty-name "CL Hacks MOP"
+     :default-pathname "cl-hacks:mop;")
+  (:module mop-package ("package"))
+  (:module mop-sources ("mop-extensions")
+           (:uses-definitions-from mop-package))
+  (:serial mop-package mop-sources))
+
+(defsubsystem cl-hacks-clos
+    (:pretty-name "CL Hacks CLOS"
+     :default-pathname "cl-hacks:clos;")
+  (:module clos-package ("package"))
+  (:module clos-sources ("classes"
+                         "wrapping-standard")
+           (:uses-definitions-from clos-package))
+  (:serial clos-package clos-sources))
+
+(defsubsystem cl-hacks-sys
+    (:pretty-name "CL Hacks source"
+     :default-pathname "cl-hacks:src;")
+  (:module sys-package ("package"))
+  (:module sys-sources ("symbols"
+                        "strings"
+                        "buff-input"
+                        "byte-stream"
+                        "collecting"
+                        "console"
+                        "datetime"
+                        "dynamic-state"
+                        "equal"
+                        "for"
+                        "glex"
+                        "implementations"
+                        "io"
+                        "iterate"
+                        "math"
+                        "lists"
+                        "macros"
+                        "matrix"
+                        "memoize"
+                        ;; mp
+                        "os"
+                        "random"
+                        "version"
+                        "exports")
+           (:uses-definitions-from sys-package))
+  (:serial sys-package sys-sources))
+    
+(defsystem cl-hacks
+    (:pretty-name "Common Lisp Hacks"
+     :short-name "CL-Hacks"
+     ;;
+     ;; Defaults
+     :default-pathname "cl-hacks:site;"
+     ;;
+     ;; Journaling
+     :maintain-journals t
+     :journal-directory "cl-hacks:patch;"
+     :patchable t
+     ;;
+     ;; Misc
+     :advertised-in :herald
+     :initial-status :released
+     :source-category :basic
+     :distribute-sources t
+     :distribute-binaries t)
+  ;;
+  ;; Module definitions
+  (:module internals (cl-hacks-internals) (:type :system))
+  (:module fad (cl-hacks-fad) (:type :system))
+  (:module uuid (cl-hacks-uuid) (:type :system))
+  (:module mop (cl-hacks-mop) (:type :system))
+  (:module clos (cl-hacks-clos) (:type :system))
+  (:module hacks (cl-hacks-sys) (:type :system))
+  ;;
+  ;; What must be done to load the modules
+  (:serial internals fad mop clos hacks))
 
 ;;; sysdcl.lisp ends here

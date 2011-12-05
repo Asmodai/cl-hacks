@@ -1,9 +1,9 @@
-;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; console.lisp --- Various console utilities
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:26:18 asmodai>
-;;; Revision:   7
+;;; Time-stamp: <Monday Dec  5, 2011 05:06:34 asmodai>
+;;; Revision:   11
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -58,7 +58,7 @@ e.g. something like :DEBUG will show console messages when you use
 console messages for that CONDITION.  TEMPLATE and ARGS function
 indentically to (FORMAT *STANDARD-OUTPUT* TEMPLATE ARGS)."
   (when (or (member :verbose *console-message-types*)
-	    (member condition *console-message-types*))
+            (member condition *console-message-types*))
     (apply #'cmsg template args)))
 
 (defun cmsg-add (condition)
@@ -84,11 +84,11 @@ indentically to (FORMAT *STANDARD-OUTPUT* TEMPLATE ARGS)."
 (defun fixme (template &rest args)
   (let ((window (si:follow-syn-stream zl:standard-output)))
     (scl:with-character-style ('(:swiss :roman :normal) window
-				:bind-line-height t)
+                                :bind-line-height t)
       (format window "~&;; ")
       (scl:with-character-face (:bold window)
-	(format window "** FIXME ** "))
-      (scl::with-character-face (:italic window)
-	(apply #'format window template args)))))
+        (format window "** FIXME ** "))
+      (scl:with-character-face (:italic window)
+        (apply #'format window template args)))))
 
 ;;; console.lisp ends here

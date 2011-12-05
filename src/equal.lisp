@@ -1,9 +1,9 @@
-;;; -*- Mode: LISP; Syntax: ANSI-COMMON-LISP; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; equal.lisp --- Generalized equality tests
 ;;;
-;;; Time-stamp: <Monday Mar 29, 2010 12:27:01 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Monday Dec  5, 2011 05:06:46 asmodai>
+;;; Revision:   8
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -48,28 +48,28 @@
         (describe obj2)
         nil)
       (typecase obj1
-	(double-float
-	  (let ((diff (abs (/ (- obj1 obj2) obj1))))
-	    (if (> diff (* 10 double-float-epsilon))
-		nil
-		t)))
-	(complex
-	  (and (generalized-equal (realpart obj1) (realpart obj2))
-	       (generalized-equal (imagpart obj1) (imagpart obj2))))
-	(structure-object
-	  (generalized-equal-fielded-object obj1 obj2))
-	(standard-object
-	  (generalized-equal-fielded-object obj1 obj2))
-	(hash-table
-	  (generalized-equal-hash-table obj1 obj2))
-	(function
-	  (generalized-equal-function obj1 obj2))
-	(string
-	  (string= obj1 obj2))
-	(array
-	  (generalized-equal-array obj1 obj2))
-	(t
-	  (equal obj1 obj2)))))
+        (double-float
+         (let ((diff (abs (/ (- obj1 obj2) obj1))))
+           (if (> diff (* 10 double-float-epsilon))
+               nil
+               t)))
+        (complex
+         (and (generalized-equal (realpart obj1) (realpart obj2))
+              (generalized-equal (imagpart obj1) (imagpart obj2))))
+        (structure-object
+         (generalized-equal-fielded-object obj1 obj2))
+        (standard-object
+         (generalized-equal-fielded-object obj1 obj2))
+        (hash-table
+         (generalized-equal-hash-table obj1 obj2))
+        (function
+         (generalized-equal-function obj1 obj2))
+        (string
+         (string= obj1 obj2))
+        (array
+         (generalized-equal-array obj1 obj2))
+        (t
+         (equal obj1 obj2)))))
 
 
 (defun generalized-equal-function (obj1 obj2)
@@ -90,9 +90,9 @@
       (return-from test nil))
     (maphash
       #'(lambda (k v)
-	  (multiple-value-bind (value found) (gethash k obj2)
-	    (unless (and found (generalized-equal v value))
-	      (return-from test nil))))
+          (multiple-value-bind (value found) (gethash k obj2)
+            (unless (and found (generalized-equal v value))
+              (return-from test nil))))
       obj1)
     (return-from test t)))
 
@@ -101,7 +101,9 @@
     (when (not (equal (class-of obj1) (class-of obj2)))
       (return-from test nil))
     (dolist (field (class-slot-names (class-name (class-of obj1))))
-      (unless (generalized-equal (slot-value obj1 field) (slot-value obj2 field))
+      (unless
+          (generalized-equal (slot-value obj1 field)
+                             (slot-value obj2 field))
         (return-from test nil)))
     (return-from test t)))
 
@@ -117,7 +119,7 @@
              (mapcar #'car (ccl:class-class-slots class)))))
   #+genera
   (mapcar #'clos:slot-definition-name
-	  (clos:class-slots (clos:find-class c-name)))
+          (clos:class-slots (clos:find-class c-name)))
   #-(or genera allegro lispworks cmu sbcl scl (and mcl (not openmcl)))
   (declare (ignore c-name))
   #-(or genera allegro lispworks cmu sbcl scl (and mcl (not openmcl)))
@@ -126,27 +128,31 @@
 
 (defun structure-slot-names (s-name)
   "Given a STRUCTURE-NAME, returns a list of the slots in the structure."
-  #+allegro (class-slot-names s-name)
-  #+lispworks (structure:structure-class-slot-names
-		(find-class s-name))
-  #+(or sbcl cmu) (mapcar #'cl-hacks-mop:slot-definition-name
-                          (cl-hacks-mop:class-slots (cl-hacks-mop:find-class s-name)))
+  #+allegro
+  (class-slot-names s-name)
+  #+lispworks
+  (structure:structure-class-slot-names
+   (find-class s-name))
+  #+(or sbcl cmu)
+  (mapcar #'cl-hacks-mop:slot-definition-name
+          (cl-hacks-mop:class-slots
+           (cl-hacks-mop:find-class s-name)))
   #+genera
   (mapcar #'clos:slot-definition-name
-	  (clos:class-slots (clos:find-class s-name)))
-  #+scl (mapcar #'kernel:dsd-name
-                (kernel:dd-slots
-		  (kernel:layout-info
-		    (kernel:class-layout (find-class s-name)))))
+          (clos:class-slots (clos:find-class s-name)))
+  #+scl
+  (mapcar #'kernel:dsd-name
+          (kernel:dd-slots
+           (kernel:layout-info
+            (kernel:class-layout (find-class s-name)))))
   #+(and mcl (not openmcl))
   (let* ((sd (gethash s-name ccl::%defstructs%))
-	 (slots (if sd (ccl::sd-slots sd))))
+         (slots (if sd (ccl::sd-slots sd))))
     (mapcar #'car (if (symbolp (caar slots)) slots (cdr slots))))
   #-(or genera allegro lispworks cmu sbcl scl (and mcl (not openmcl)))
   (declare (ignore s-name))
   #-(or genera allegro lispworks cmu sbcl scl (and mcl (not openmcl)))
-  (error "structure-slot-names is not defined on this platform")
-  )
+  (error "structure-slot-names is not defined on this platform"))
 
 (defun function-to-string (obj)
   "Returns the lambda code for a function. Relies on
@@ -154,11 +160,11 @@ Allegro implementation-dependent features."
   (multiple-value-bind (lambda closurep name) (function-lambda-expression obj)
     (declare (ignore closurep))
     (if lambda
-	(format nil "#'~s" lambda)
-	(if name
-	    (format nil "#'~s" name)
-	    (progn
-	      (print obj)
-	      (break))))))
+        (format nil "#'~s" lambda)
+        (if name
+            (format nil "#'~s" name)
+            (progn
+              (print obj)
+              (break))))))
 
 ;;; equal.lisp ends here

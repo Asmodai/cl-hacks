@@ -1,0 +1,49 @@
+;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: USER; Base: 10; Lowercase: Yes -*-
+;;;
+;;; cl-hacks.translations --- CL-HACKS logical path translations
+;;;
+;;; Time-stamp: <Friday Nov 25, 2011 23:25:29 asmodai>
+;;; Revision:   2
+;;;
+;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
+;;;
+;;; Author:     Paul Ward <asmodai@gmail.com>
+;;; Maintainer: Paul Ward <asmodai@gmail.com>
+;;; Created:    24 Nov 2011 17:44:59
+;;; Keywords:   
+;;; URL:        not distributed yet
+;;;
+;;; {{{ License:
+;;;
+;;; This code is free software; you can redistribute it and/or modify
+;;; it under the terms of the version 2.1 of the GNU Lesser General
+;;; Public License as published by the Free Software Foundation, as
+;;; clarified by the Franz preamble to the LGPL found in
+;;; http://opensource.franz.com/preamble.html.
+;;;
+;;; This code is distributed in the hope that it will be useful, but
+;;; without any warranty; without even the implied warranty of
+;;; merchantability or fitness for a particular purpose.  See the GNU
+;;; Lesser General Public License for more details.
+;;;
+;;; Version 2.1 of the GNU Lesser General Public License can be found
+;;; at http://opensource.franz.com/license.html. If it is not present,
+;;; you can access it from http://www.gnu.org/copyleft/lesser.txt
+;;; (until superseded by a newer  version) or write to the Free
+;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
+;;; 02111-1307  USA
+;;;
+;;; }}}
+;;; {{{ Commentary:
+;;;
+;;; }}}
+
+#-genera
+(error "Logical pathname translations only work on Lisp Machines.")
+
+(fs::set-logical-pathname-host "cl-hacks"
+  :translations
+  '(("SITE;" "UBUNTU:/home/asmodai/cl-hacks/")
+    ("**;"   "UBUNTU:/home/asmodai/cl-hacks/**/")))
+
+;;; cl-hacks.translations ends here
