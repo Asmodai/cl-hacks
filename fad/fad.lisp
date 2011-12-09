@@ -31,6 +31,9 @@
 #-genera
 (in-package :cl-hacks-fad)
 
+#+sbcl
+(require 'sb-posix)
+
 (defun component-present-p (value)
   "Helper function for DIRECTORY-PATHNAME-P which checks whether VALUE
 is neither NIL nor the keyword :UNSPECIFIC."
@@ -52,9 +55,10 @@ form."
     (when (wild-pathname-p pathname)
       (error "Can't reliably convert wild pathnames."))
     (cond ((not (directory-pathname-p pathspec))
-           (make-pathname :directory (append (or (pathname-directory pathname)
-                                                 (list :relative))
-                                             (list (file-namestring pathname)))
+           (make-pathname :directory
+                          (append (or (pathname-directory pathname)
+                                      (list :relative))
+                                  (list (file-namestring pathname)))
                           :name nil
                           :type nil
                           :defaults pathname))

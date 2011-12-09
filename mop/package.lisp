@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- MOP extensions package definition
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:08:07 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Friday Dec  9, 2011 06:31:48 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;

@@ -2,8 +2,8 @@
 ;;;
 ;;; version.lisp --- Lisp identification functions.
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:07:58 asmodai>
-;;; Revision:   83
+;;; Time-stamp: <Friday Dec  9, 2011 06:01:02 asmodai>
+;;; Revision:   84
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -62,34 +62,34 @@
   "Returns a string that identifies the generic name of the particular
 Common Lisp implementation."
   (let ((lispm
-  #+abcl "Armed Bear Common Lisp"
-  #+(and akcl (not gcl)) "Austin Kyoto Common Lisp"
-  #+allegro "Franz Allegro Common Lisp"
-  #+clisp "GNU Common Lisp (CLISP)"
-  #+CLOE-Runtime "Symbolics CLOE"  ; Is this really needed?
-  #+cmu "CMU Common Lisp"
-  #+cormanlisp "Corman Common Lisp"
-  #+ecl "Embeddable Common Lisp"
-  #+(and excl (not allegro)) "Franz Common Lisp"
-  #+gcl "GNU Common Lisp (GCL)"
-  #+gclisp "Gold Hill Golden Common Lisp"
-  #+genera "Symbolics Common Lisp" ; e.g. LispM with SCL.
-  #+hp-hplabs "HP Common Lisp"
-  #+ibcl "Ibuki Common Lisp"
-  #+(and kcl (not gcl akcl)) "Kyoto Common Lisp"
-  #+lispworks "LispWorks"
-  #+Lucid "Lucid Common Lisp"
-  #+mcl "Macintosh Common Lisp"
-  #+(and openmcl (not clozure)) "OpenMCL"
-  #+clozure "Clozure Common Lisp"
-  #+poplog "Sussex Poplog Common Lisp"
-  #+pyramid "Pyramid Common Lisp"
-  #+sbcl "Steel Bank Common Lisp"
-  #+scl "Scieneer Common Lisp"
-  #+ti "Texas Instruments Common Lisp"
-  #+(and xerox medley) "Xerox InterLisp (Venue Medley)"
-  #+(and xerox (not medley)) "Xerox InterLisp"
- ))
+         #+abcl "Armed Bear Common Lisp"
+         #+(and akcl (not gcl)) "Austin Kyoto Common Lisp"
+         #+allegro "Franz Allegro Common Lisp"
+         #+clisp "GNU Common Lisp (CLISP)"
+         #+CLOE-Runtime "Symbolics CLOE"  ; Is this really needed?
+         #+cmu "CMU Common Lisp"
+         #+cormanlisp "Corman Common Lisp"
+         #+ecl "Embeddable Common Lisp"
+         #+(and excl (not allegro)) "Franz Common Lisp"
+         #+gcl "GNU Common Lisp (GCL)"
+         #+gclisp "Gold Hill Golden Common Lisp"
+         #+genera "Symbolics Common Lisp" ; e.g. LispM with SCL.
+         #+hp-hplabs "HP Common Lisp"
+         #+ibcl "Ibuki Common Lisp"
+         #+(and kcl (not gcl akcl)) "Kyoto Common Lisp"
+         #+lispworks "LispWorks"
+         #+Lucid "Lucid Common Lisp"
+         #+mcl "Macintosh Common Lisp"
+         #+(and openmcl (not clozure)) "OpenMCL"
+         #+clozure "Clozure Common Lisp"
+         #+poplog "Sussex Poplog Common Lisp"
+         #+pyramid "Pyramid Common Lisp"
+         #+sbcl "Steel Bank Common Lisp"
+         #+scl "Scieneer Common Lisp"
+         #+ti "Texas Instruments Common Lisp"
+         #+(and xerox medley) "Xerox InterLisp (Venue Medley)"
+         #+(and xerox (not medley)) "Xerox InterLisp"
+         ))
     lispm))
 
 ;; This is probably really gnarly and redundant... but... let's define
@@ -98,7 +98,7 @@ Common Lisp implementation."
   "Returns a string that identifies the version of a particular Common Lisp
 implementation"
   (common-lisp:lisp-implementation-version))
- 
+
 ;;; }}}
 ;;; ===================================================================
 
@@ -116,36 +116,37 @@ GNU (Kyoto) Common Lisp (a.k.a GCL) seems to have both :LINUX and
 :BSD in *FEATURES*.  I am assuming that the :LINUX symbol is not
 present in BSD."
   (let ((os #+(and linux (not gcl)) "Linux"
-    #+sunos "SunOS"
-    #+osf1 "OSF/1"
-    #+(and gcl linux bsd) "Linux"
-    #+(and gcl bsd (not linux)) "BSD"
-    #+darwin "Darwin"
-    #+freebsd "FreeBSD"
-    #+openbsd "OpenBSD"
-    #+netbsd "NetBSD"
-    #+(or windows mswindows win32 win64) "Microsoft Windows"
-    #+(and unix (not (or bsd linux sunos osd1 darwin
- freebsd openbsd netbsd)))
-    "UNIX"
-    #+genera
-    (progn
-      ;; This is quite complex and based in part on the code
-      ;; found in SYS:SYS2;HERALD.LISP.LATEST
-      (let ((is-open-genera-p #+VLM t #-VLM nil)
-    (is-genera-p t))
-(multiple-value-bind (major minor status open-genera)
-    (sct:get-release-version)
-  (declare (ignore minor))
-  (setq is-open-genera-p (and (member :vlm cl::*features*)
-    (not (null open-genera))))
-  (when (or (null major)
-    (eq status :interim))
-    (setq is-open-genera-p nil
-  is-genera-p nil))
-  (format nil "Symbolics ~:[System~;~:[Genera~;Open Genera~]~]"
-  is-genera-p is-open-genera-p))))
-    ))
+            #+sunos "SunOS"
+            #+osf1 "OSF/1"
+            #+(and gcl linux bsd) "Linux"
+            #+(and gcl bsd (not linux)) "BSD"
+            #+darwin "Darwin"
+            #+freebsd "FreeBSD"
+            #+openbsd "OpenBSD"
+            #+netbsd "NetBSD"
+            #+(or windows mswindows win32 win64) "Microsoft Windows"
+            #+(and unix (not (or bsd linux sunos osd1 darwin
+                                 freebsd openbsd netbsd)))
+            "UNIX"
+            #+genera
+            (progn
+              ;; This is quite complex and based in part on the code
+              ;; found in SYS:SYS2;HERALD.LISP.LATEST
+              (let ((is-open-genera-p #+VLM t #-VLM nil)
+                    (is-genera-p t))
+                (multiple-value-bind (major minor status open-genera)
+                    (sct:get-release-version)
+                  (declare (ignore minor))
+                  (setq is-open-genera-p
+                        (and (member :vlm cl::*features*)
+                             (not (null open-genera))))
+                  (when (or (null major)
+                            (eq status :interim))
+                    (setq is-open-genera-p nil
+                          is-genera-p nil))
+                  (format nil "Symbolics ~:[System~;~:[Genera~;Open Genera~]~]"
+                          is-genera-p is-open-genera-p))))
+            ))
     os))
 
 ;; TODO: Port this to Windows.
@@ -163,32 +164,31 @@ be produced."
   #+genera
   (progn
     (let ((major-version nil)
-  (minor-version nil)
-  (release-status nil)
-  (open-genera-version nil)
-  (open-genera-p nil))
+          (minor-version nil)
+          (release-status nil)
+          (open-genera-version nil)
+          (open-genera-p nil))
       (multiple-value-bind (major minor status open-genera)
-  (sct:get-release-version)
-(setq major-version major
-      minor-version minor
-      release-status status)
-(if (and (member :vlm cl::*features*)
- (not (null open-genera)))
-    (setq open-genera-p t
-  open-genera-version open-genera))
-(when (or (null major)
-  (eq status :interim))
-  (multiple-value-bind (major minor status)
-      (sct:get-system-version)
-    (setq major-version major
-  minor-version minor
-  release-status status))))
+          (sct:get-release-version)
+        (setq major-version major
+              minor-version minor
+              release-status status)
+        (if (and (member :vlm cl::*features*)
+                 (not (null open-genera)))
+            (setq open-genera-p t
+                  open-genera-version open-genera))
+        (when (or (null major)
+                  (eq status :interim))
+          (multiple-value-bind (major minor status)
+              (sct:get-system-version)
+            (setq major-version major
+                  minor-version minor
+                  release-status status))))
       (if open-genera-p
-  (format nil "~a" open-genera-version)
-  (format nil "~d.~d" major-version minor-version))))
+          (format nil "~a" open-genera-version)
+          (format nil "~d.~d" major-version minor-version))))
   #-(or genera unix)
-  nil
-  )
+  nil)
 
 ;;; }}}
 ;;; ===================================================================
@@ -203,11 +203,12 @@ be produced."
 system or the underlaying hardware."
   #+(and linux (not abcl))
   (with-open-file (stream "/proc/cpuinfo"
-  :if-does-not-exist nil)
+                          :if-does-not-exist nil)
     (loop with line while (setf line (read-line stream nil))
-  when (eql (search "model name" line) 0)
-    return (string-trim " " (subseq line
-    (1+ (position #\: line))))))
+          when (eql (search "model name" line) 0)
+            return (string-trim " "
+                                (subseq line
+                                        (1+ (position #\: line))))))
   #+(or bsd darwin)
   (multiple-value-bind (output error status)
       (command-output 
@@ -235,12 +236,12 @@ or from the OS and/or hardware."
     #+genera
     (progn
       (let ((model (si:machine-model)))
-(cond ((eq model :unknown)
-       (setq mtype "Symbolics Lisp Machine"))
-      (t
-       (setq mtype (format nil "Symbolics ~d" model))))))
+        (cond ((eq model :unknown)
+               (setq mtype "Symbolics Lisp Machine"))
+              (t
+               (setq mtype (format nil "Symbolics ~d" model))))))
     #+(or x86 pc386 pc iapx386 i386 i486 i586 i686 pentium
-  pentiummmx pentiumpro pentium2 pentium3 pentium4)
+          pentiummmx pentiumpro pentium2 pentium3 pentium4)
     (setf mtype "x86")
     #+(or x86-64 x86_64)
     (setf mtype "x86-64")
@@ -258,4 +259,3 @@ on which Common Lisp is running."
 ;;; ===================================================================
 
 ;;; version.lisp ends here
-

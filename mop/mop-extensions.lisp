@@ -2,8 +2,8 @@
 ;;;
 ;;; mop-extensions.lisp --- MOP extensions
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:44:50 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Friday Dec  9, 2011 06:32:56 asmodai>
+;;; Revision:   6
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -250,12 +250,12 @@
             process-class-option))
   
   #+sbcl
-  (if (find-package #'sb-mop)
+  (if (find-package 'sb-mop)
       (setq cl:*features* (delete :cl-hacks-sbcl-mop cl:*features*))
       (setq cl:*features* (delete :cl-hacks-sbcl-pcl cl:*features*)))
   
   #+cmu
-  (if (find-package #'mop)
+  (if (find-package 'mop)
       (setq cl:*features* (delete :cl-hacks-cmu-mop cl:*features*))
       (setq cl:*features* (delete :cl-hacks-cmu-pcl cl:*features*)))
   

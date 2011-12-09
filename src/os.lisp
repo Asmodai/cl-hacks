@@ -2,8 +2,8 @@
 ;;;
 ;;; os.lisp --- OS-specific functions
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:07:38 asmodai>
-;;; Revision:   16
+;;; Time-stamp: <Friday Dec  9, 2011 05:53:18 asmodai>
+;;; Revision:   17
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -131,7 +131,7 @@ returns (VALUES string-output error-output exit-status)"
     #-(or openmcl clisp lispworks allegro scl cmu sbcl abcl)
     (error "COMMAND-OUTPUT not implemented.")))
 
-(defun run-shell-command (program &rest args)
+(defun run-system-command (program &rest args)
   "This function provides a quick and dirty interface to
 COMMAND-OUTPUT, but it will only return the exit status."
   (let ((command (apply #'format nil program args)))

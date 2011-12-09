@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- CL-HACKS package definition
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:07:42 asmodai>
-;;; Revision:   9
+;;; Time-stamp: <Friday Dec  9, 2011 06:46:15 asmodai>
+;;; Revision:   11
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -45,7 +45,7 @@
   (:use #-genera #:common-lisp
         #+genera #:future-common-lisp
                  #:cl-hacks-internals
-                 #:cl-hacks-fad
+                 #:cl-fad
                  #:cl-hacks-mop
                  #:cl-hacks-clos)
   ;;
@@ -538,7 +538,7 @@
 ;;; {{{ os.lisp:
 
    #:command-output
-   #:run-shell-command
+   #:run-system-command
    #:delete-directory-and-files
    #:file-size
    #:getpid

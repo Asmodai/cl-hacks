@@ -2,8 +2,8 @@
 ;;;
 ;;; exports.lisp --- Package exports
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:06:50 asmodai>
-;;; Revision:   9
+;;; Time-stamp: <Friday Dec  9, 2011 06:48:13 asmodai>
+;;; Revision:   11
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -83,7 +83,7 @@
       ;;
       ;; Process the packages
       (loop for pkg in '("CL-HACKS-INTERNALS"
-                         "CL-HACKS-FAD"
+                         "CL-FAD"
                          "CL-HACKS-MOP"
                          "CL-HACKS-CLOS")
             doing (let ((fpkg (find-package pkg)))

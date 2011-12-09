@@ -2,8 +2,8 @@
 ;;;
 ;;; lists.lisp --- Various list functionality
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:07:14 asmodai>
-;;; Revision:   7
+;;; Time-stamp: <Friday Dec  9, 2011 06:38:06 asmodai>
+;;; Revision:   10
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -69,7 +69,7 @@ Returns T if the list is palindromic.
 (defun list-palindromic-p (list)
   (loop with data = (coerce list 'vector)
         for i from 0
-        for j from (1- (length data)) by -1
+        for j from (1- (length data)) downto 0 by 1
         while (< i j)
         always (eql (aref data i) (aref data j))))
 

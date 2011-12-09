@@ -2,8 +2,8 @@
 ;;;
 ;;; cl-hacks.asd --- CL-Hacks ASDF package definition
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 06:05:47 asmodai>
-;;; Revision:   1
+;;; Time-stamp: <Friday Dec  9, 2011 06:40:17 asmodai>
+;;; Revision:   10
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -45,13 +45,13 @@ This is only for Common Lisp systems that support ASDF.")
 
 (in-package #:common-lisp-user)
 
-(defpackage cl-hacks
+(defpackage cl-hacks-system
   (:use #:asdf
         #:common-lisp))
 
-(in-package #:fucki-system)
+(in-package #:cl-hacks-system)
 
-(defsystem fucki
+(defsystem cl-hacks
     :name "Common Lisp Hacks"
     :author "Paul Ward <asmodai@gmail.com>"
     :version "3.0"
@@ -60,7 +60,9 @@ This is only for Common Lisp systems that support ASDF.")
     :description "Various Common Lisp hacks"
     :long-description "CL-Hacks provides some common hacks that I use in various Common Lisp code on many implementations, including Symbolics Genera."
 
-    :depends-on ()
+    ;; On Genera we use our own internal version of FAD... no so with
+    ;;; anything else.
+    :depends-on (:cl-fad)
 
     :components
     ((:module :sys
@@ -74,27 +76,35 @@ This is only for Common Lisp systems that support ASDF.")
                (:file "ifstar" :depends-on ("package"))
                (:file "anaphoric" :depends-on ("package"))
                (:file "macros" :depends-on ("package"))
-               (:file "lists" :depends-on ("package"))
-               (:file "control-flow" :depends-on ("package" "macros"))
-               (:file "looping" :depends-on ("package" "macros"))
-               (:file "types" :depends-on ("package" "macros"))
-               (:file "arrays" :depends-on ("package" "macros"))
-               (:file "sequences" :depends-on ("package" "macros"))
-               (:file "hash-tables" :depends-on ("package" "macros"))))
-     (:module :fad
-              :components
-              ((:file "package")
-               (:file "fad" :depends-on ("package"))))
+               (:file "lists" :depends-on ("package"
+                                           "symbols"))
+               (:file "control-flow" :depends-on ("package"
+                                                  "macros"))
+               (:file "looping" :depends-on ("package"
+                                             "macros"))
+               (:file "types" :depends-on ("package"
+                                           "macros"
+                                           "lists"))
+               (:file "arrays" :depends-on ("package"
+                                            "macros"
+                                            "lists"))
+               (:file "sequences" :depends-on ("package"
+                                               "macros"))
+               (:file "hash-tables" :depends-on ("package"
+                                                 "macros"))))
      (:module :mop
+              :depends-on (:sys)
               :components
               ((:file "package")
                (:file "mop-extensions" :depends-on ("package"))))
      (:module :clos
+              :depends-on (:sys :mop)
               :components
               ((:file "package")
                (:file "classes" :depends-on ("package"))
                (:file "wrapping-standard" :depends-on ("package"))))
      (:module :src
+              :depends-on (:sys :mop :clos)
               :components
               ((:file "package")
                (:file "symbols" :depends-on ("package"))

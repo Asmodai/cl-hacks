@@ -2,8 +2,8 @@
 ;;;
 ;;; symbolics.lisp --- Functionality taken from Zetalisp and Symbolics Common Lisp
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:06:08 asmodai>
-;;; Revision:   22
+;;; Time-stamp: <Friday Dec  9, 2011 06:10:27 asmodai>
+;;; Revision:   24
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -95,9 +95,7 @@
   ;; SYS:FIND-BODY-DECLARATIONS
   (defun find-body-declarations (body env &optional
                                  (lambda-list nil lambda-list-p))
-    (declare (values declarations real-body
-                     first-form-already-macro-expanded)
-             (ignore lambda-list))
+    (declare (ignore lambda-list))
     (loop for real-body on body
           for form = (first real-body)
           do (when (and (listp form)
@@ -1115,12 +1113,12 @@ CASE argument controls the case of the article."
                                  nil)
                                 ((nil)
                                  (not (string-equal string "HEU"
-                                                    :endl 3)))))
+                                                    :end1 3)))))
                           ;; "an egg" but "a eunich"
                           (and (or (char= char #\E)
                                    (char= char #\e))
                                (not (string-equal string "EU"
-                                                  :endl 2)))
+                                                  :end1 2)))
                           ;; "an umbrella", but "a unicorn",
                           ;; "uniform", but "an uninformed...", and of
                           ;; course " a unix"
