@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- Package definition
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 09:24:17 asmodai>
-;;; Revision:   12
+;;; Time-stamp: <Friday Dec  9, 2011 09:41:47 asmodai>
+;;; Revision:   13
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -291,6 +291,7 @@
    #:rest1
    #:mem
    #:selectq
+   #:neq
    #:array-mem
    #:named-constant-p
    #:evaluate-constant

@@ -2,8 +2,8 @@
 ;;;
 ;;; symbolics.lisp --- Functionality taken from Zetalisp and Symbolics Common Lisp
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 09:29:49 asmodai>
-;;; Revision:   28
+;;; Time-stamp: <Friday Dec  9, 2011 09:40:26 asmodai>
+;;; Revision:   29
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -315,6 +315,10 @@
 
 ;;; ==================================================================
 ;;; {{{ Zetalisp:
+
+;;; SI:NEQ
+(defsubst neq (x y)
+  (not (eq x y)))
 
 ;;; Taken from ZL:NAMED-LAMBDA
 (defmacro named-lambda (name lambda-list &body body)

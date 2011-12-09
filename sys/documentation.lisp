@@ -2,8 +2,8 @@
 ;;;
 ;;; documentation.lisp --- Documentation strings.
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 09:25:55 asmodai>
-;;; Revision:   18
+;;; Time-stamp: <Friday Dec  9, 2011 09:41:37 asmodai>
+;;; Revision:   19
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -931,6 +931,11 @@ Examples:
     (2 ``two'')
     ((one two) ``1 2'')
     (otherwise ``not one or two'')) => ``two''")
+
+(define-documentation 'neq 'function
+  "(neq x y) = (not (eq x y)).
+
+This is provided simply as an abbreviation for typing convenience.")
 
 (define-documentation 'array-mem 'function
   "Similar to MEM except works on arrays.")
