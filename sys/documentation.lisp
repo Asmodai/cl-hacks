@@ -2,8 +2,8 @@
 ;;;
 ;;; documentation.lisp --- Documentation strings.
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 09:41:37 asmodai>
-;;; Revision:   19
+;;; Time-stamp: <Friday Dec  9, 2011 10:03:35 asmodai>
+;;; Revision:   20
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -646,6 +646,11 @@ Example:
 (define-documentation 'flatten 'function
   "Traverses the tree in order, collecting non-null leaves into a
 list.")
+
+(define-documentation 'push-end 'function
+  "This is similar to PUSH except that it puts the new element at the
+end of the existing list.  This preserves the order of the elements as
+they are added to the list.")
 
 ;;; }}}
 ;;; ------------------------------------------------------------------

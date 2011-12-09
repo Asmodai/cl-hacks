@@ -2,8 +2,8 @@
 ;;;
 ;;; lists.lisp --- List functions
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:05:47 asmodai>
-;;; Revision:   4
+;;; Time-stamp: <Friday Dec  9, 2011 10:03:07 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -274,5 +274,9 @@ place. May modify either argument.")
                      (push subtree list)))))
       (traverse tree))
     (nreverse list)))
+
+#-lispworks
+(defmacro push-end (item item-list)
+  `(setf ,item-list (nconc ,item-list (cons ,item nil))))
 
 ;;; lists.lisp ends here

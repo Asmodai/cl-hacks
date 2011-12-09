@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- Package definition
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 09:41:47 asmodai>
-;;; Revision:   13
+;;; Time-stamp: <Friday Dec  9, 2011 10:04:05 asmodai>
+;;; Revision:   14
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -50,7 +50,8 @@
 ;;; {{{ LispWorks imports:
 
   #+lispworks
-  (:import-from :common-lisp-user #:with-unique-names)
+  (:import-from :common-lisp-user #:with-unique-names
+                                  #:push-end)
 
 ;;; }}}
 ;;; {{{ Symbolics Genera imports:
@@ -241,6 +242,7 @@
    #:set-equal
    #:map-product
    #:flatten
+   #:push-end
 
 ;;; }}}
 ;;; {{{ looping.lisp:
