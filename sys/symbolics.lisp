@@ -2,8 +2,8 @@
 ;;;
 ;;; symbolics.lisp --- Functionality taken from Zetalisp and Symbolics Common Lisp
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 06:10:27 asmodai>
-;;; Revision:   24
+;;; Time-stamp: <Friday Dec  9, 2011 09:29:49 asmodai>
+;;; Revision:   28
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -385,6 +385,12 @@
 
 ;;; ==================================================================
 ;;; {{{ Symbolics Common Lisp:
+
+;;; SI:DEFPROP
+(defmacro defprop (sym value indicator)
+  (when (not (symbolp sym))
+    (error "~S is not a symbol." sym))
+  `(setf (get ',sym ',indicator) ',value))
 
 ;;; SCL:DEFSELECT
 (defmacro defselect (fspec &body methods)

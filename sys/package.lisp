@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- Package definition
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:50:27 asmodai>
-;;; Revision:   11
+;;; Time-stamp: <Friday Dec  9, 2011 09:24:17 asmodai>
+;;; Revision:   12
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -295,6 +295,7 @@
    #:named-constant-p
    #:evaluate-constant
    #:coerce-string-arg
+   #:defprop
    #:defselect
    #:defsubst
    #:string-append

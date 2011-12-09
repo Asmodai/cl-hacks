@@ -2,8 +2,8 @@
 ;;;
 ;;; documentation.lisp --- Documentation strings.
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:05:19 asmodai>
-;;; Revision:   17
+;;; Time-stamp: <Friday Dec  9, 2011 09:25:55 asmodai>
+;;; Revision:   18
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -959,6 +959,12 @@ is a constant and has a value.")
   "Internal Zetalisp function.  Ensures the given argument in ARG-NAME
 is a string.  If DESTRUCTIVE is T, then the type checking is done in a
 destructive manner.")
+
+(define-documentation 'defprop 'function
+  "Give SYM's property list an INDICATOR-property corresponding to
+VALUE.
+
+After this is done, (GET SYM INDICATOR) returns VALUE.")
 
 (define-documentation 'defselect 'function
   "Defines a function that is a select-method.  This function contains

@@ -2,8 +2,8 @@
 ;;;
 ;;; cl-hacks.asd --- CL-Hacks ASDF package definition
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 06:40:17 asmodai>
-;;; Revision:   10
+;;; Time-stamp: <Friday Dec  9, 2011 09:36:48 asmodai>
+;;; Revision:   12
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -58,7 +58,9 @@ This is only for Common Lisp systems that support ASDF.")
     :maintainer "Paul Ward <asmodai@gmail.com>"
     :license "Lisp Lesser General Public License (LLGPL)"
     :description "Various Common Lisp hacks"
-    :long-description "CL-Hacks provides some common hacks that I use in various Common Lisp code on many implementations, including Symbolics Genera."
+    :long-description "CL-Hacks provides some common hacks that I use
+    in various Common Lisp code on many implementations, including
+    Symbolics Genera."
 
     ;; On Genera we use our own internal version of FAD... no so with
     ;;; anything else.
@@ -69,19 +71,28 @@ This is only for Common Lisp systems that support ASDF.")
               :components
               ((:file "package")
                (:file "definitions" :depends-on ("package"))
-               (:file "binding" :depends-on ("package"))
-               (:file "symbolics" :depends-on ("package"))
-               (:file "symbols" :depends-on ("package"))
-               (:file "functions" :depends-on ("package"))
-               (:file "ifstar" :depends-on ("package"))
+               (:file "binding" :depends-on ("package"
+                                             "definitions"))
+               (:file "symbolics" :depends-on ("package"
+                                               "binding"))
+               (:file "symbols" :depends-on ("package"
+                                             "symbolics"))
+               (:file "functions" :depends-on ("package"
+                                               "symbols"))
+               (:file "ifstar" :depends-on ("package"
+                                            "functions"))
                (:file "anaphoric" :depends-on ("package"))
-               (:file "macros" :depends-on ("package"))
+               (:file "macros" :depends-on ("package"
+                                            "functions"))
                (:file "lists" :depends-on ("package"
-                                           "symbols"))
+                                           "symbols"
+                                           "functions"))
                (:file "control-flow" :depends-on ("package"
-                                                  "macros"))
+                                                  "macros"
+                                                  "functions"))
                (:file "looping" :depends-on ("package"
-                                             "macros"))
+                                             "macros"
+                                             "functions"))
                (:file "types" :depends-on ("package"
                                            "macros"
                                            "lists"))
@@ -89,9 +100,27 @@ This is only for Common Lisp systems that support ASDF.")
                                             "macros"
                                             "lists"))
                (:file "sequences" :depends-on ("package"
-                                               "macros"))
+                                               "macros"
+                                               "functions"))
                (:file "hash-tables" :depends-on ("package"
-                                                 "macros"))))
+                                                 "macros"
+                                                 "functions"))
+               (:file "documentation" :depends-on ("package"
+                                                   "definitions"
+                                                   "binding"
+                                                   "symbolics"
+                                                   "symbols"
+                                                   "functions"
+                                                   "ifstar"
+                                                   "anaphoric"
+                                                   "macros"
+                                                   "lists"
+                                                   "control-flow"
+                                                   "looping"
+                                                   "types"
+                                                   "arrays"
+                                                   "sequences"
+                                                   "hash-tables")))
      (:module :mop
               :depends-on (:sys)
               :components
