@@ -2,8 +2,8 @@
 ;;;
 ;;; mop-extensions.lisp --- MOP extensions
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 06:32:56 asmodai>
-;;; Revision:   6
+;;; Time-stamp: <Tuesday Dec 13, 2011 00:55:26 asmodai>
+;;; Revision:   8
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -223,6 +223,8 @@
      clos:generic-function-lambda-list
      clos-internals::compute-slots)))
 
+;;;
+;;; Now export our symbols
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (export '(class-of
             class-name

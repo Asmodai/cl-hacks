@@ -77,6 +77,7 @@
   (:shadowing-import-from :cli #:coerce-string-arg
                                #:string-pluralize-to-stream
                                #:*compound-separators*
+                               #:*string-a-or-an-exceptions-alist*
                                #:*pronounce-aitch*)
 
   #+genera
@@ -90,8 +91,8 @@
                                #:char-flipcase
                                #:string-flipcase
                                #:nstring-flipcase
-                               #:string-capitalize-word
-                               #:nstring-capitalize-word
+                               #:string-capitalize-words
+                               #:nstring-capitalize-words
                                #:string-compare
                                #:string-exact-compare
                                #:string-reverse
@@ -105,7 +106,6 @@
                                #:string-search
                                #:string-search-exact
                                #:string-pluralize
-                               #:*string-a-or-an-exceptions-list*
                                #:string-a-or-an)
 
   #+genera
@@ -327,7 +327,7 @@
    #:string-pluralize
    #:string-pluralize-to-stream
    #:*pronounce-aitch*
-   #:*string-a-or-an-exceptions-list*
+   #:*string-a-or-an-exceptions-alist*
    #:string-a-or-an
 
 ;;; }}}

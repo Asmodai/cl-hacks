@@ -2,8 +2,8 @@
 ;;;
 ;;; genera.lisp --- Genera-specific hacks
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:05:33 asmodai>
-;;; Revision:   8
+;;; Time-stamp: <Tuesday Dec 13, 2011 00:54:09 asmodai>
+;;; Revision:   9
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -67,11 +67,12 @@
   (when (and (fboundp 'read-sequence)
              (fboundp 'write-sequence)
              (fboundp 'ensure-directories-exist))
-    (let ((read-symb (find-symbol "READ-SEQUENCE"))
-          (write-symb (find-symbol "WRITE-SEQUENCE"))
-          (ensure-dir (find-symbol "ENSURE-DIRECTORIES-EXIST")))
-      (import read-symb (find-package 'future-common-lisp))
-      (import write-symb (find-package 'future-common-lisp))
-      (import ensure-dir (find-package 'future-common-lisp)))))
+    (si:with-package-lock (find-package 'future-common-lisp) nil
+      (let ((read-symb (find-symbol "READ-SEQUENCE"))
+            (write-symb (find-symbol "WRITE-SEQUENCE"))
+            (ensure-dir (find-symbol "ENSURE-DIRECTORIES-EXIST")))
+        (import read-symb (find-package 'future-common-lisp))
+        (import write-symb (find-package 'future-common-lisp))
+        (import ensure-dir (find-package 'future-common-lisp))))))
 
 ;; EOF
