@@ -2,8 +2,8 @@
 ;;;
 ;;; cl-hacks.asd --- CL-Hacks ASDF package definition
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 09:36:48 asmodai>
-;;; Revision:   12
+;;; Time-stamp: <Wednesday Dec 14, 2011 23:25:32 asmodai>
+;;; Revision:   14
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -120,7 +120,7 @@ This is only for Common Lisp systems that support ASDF.")
                                                    "types"
                                                    "arrays"
                                                    "sequences"
-                                                   "hash-tables")))
+                                                   "hash-tables"))))
      (:module :mop
               :depends-on (:sys)
               :components

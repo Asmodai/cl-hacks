@@ -2,8 +2,8 @@
 ;;;
 ;;; symbolics.lisp --- Functionality taken from Zetalisp and Symbolics Common Lisp
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 14:32:37 asmodai>
-;;; Revision:   30
+;;; Time-stamp: <Wednesday Dec 14, 2011 23:28:30 asmodai>
+;;; Revision:   31
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -109,6 +109,13 @@
           collect form into declarations
           finally (return (values declarations real-body
                                   (and real-body form)))))
+
+  ;; TODO: Add docstring support.
+  ;; SCL:DEFSUBST
+  (defmacro defsubst (name lambda-list &body body)
+    `(progn
+       (proclaim '(inline ,name))
+       (defun ,name ,lambda-list ,@body)))
 
   ) ;; (eval-when ...)
 
@@ -443,13 +450,6 @@
                (otherwise (apply #',default-handler op args)))
             `(ccase op
                ,@clauses-list)))))
-
-;;; TODO: Add docstring support.
-;;; SCL:DEFSUBST
-(defmacro defsubst (name lambda-list &body body)
-  `(progn
-     (proclaim '(inline ,name))
-     (defun ,name ,lambda-list ,@body)))
 
 ;;; SCL:STRING-LENGTH
 (defun string-length (string)
