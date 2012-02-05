@@ -2,8 +2,8 @@
 ;;;
 ;;; mop-extensions.lisp --- MOP extensions
 ;;;
-;;; Time-stamp: <Tuesday Dec 13, 2011 00:55:26 asmodai>
-;;; Revision:   8
+;;; Time-stamp: <Saturday Dec 17, 2011 12:20:28 asmodai>
+;;; Revision:   14
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -42,10 +42,9 @@
 (in-package #:cl-hacks-mop)
 
 #+sbcl
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (if (find-package 'sb-mop)
-      (pushnew :cl-hacks-sbcl-mop cl:*features*)
-      (pushnew :cl-hacks-sbcl-pcl cl:*features*)))
+(if (find-package 'sb-mop)
+    (pushnew :cl-hacks-sbcl-mop cl:*features*)
+    (pushnew :cl-hacks-sbcl-pcl cl:*features*))
 
 #+cmu
 (eval-when (:compile-toplevel :load-toplevel :execute)
@@ -85,182 +84,113 @@
   (declare (ignore metaclass slot-name)))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (shadowing-import
-   ;;
-   ;; Allegro Common Lisp
-   #+allegro
-   '(excl::compute-effective-slot-definition-initargs)
-   ;;
-   ;; LispWorks
-   #+lispworks
-   '(clos::compute-effective-slot-definition-initargs)
-   ;;
-   ;; CLISP
-   #+clisp
-   '(clos::compute-effective-slot-definition-initargs)
+  #-(or sbcl genera)
+  (error "You need to edit MOP-EXTENSIONS.LISP and add the correct ~
+         ~imports for your Lisp environment.")
+
+  (import
    ;;
    ;; SBCL
    #+sbcl
-   '(#+cl-hacks-sbcl-mop class-of
-     #-cl-hacks-sbcl-mop sb-pcl:class-of
-     #+cl-hacks-sbcl-mop class-name
-     #-cl-hacks-sbcl-mop sb-pcl:class-name
-     #+cl-hacks-sbcl-mop class-slots
-     #-cl-hacks-sbcl-mop sb-pcl:class-slots
-     #+cl-hacks-sbcl-mop find-class
-     #-cl-hacks-sbcl-mop sb-pcl:find-class
+   '(#+cl-hacks-sbcl-mop sb-mop::class-of
+     #-cl-hacks-sbcl-mop sb-pcl::class-of
+     #+cl-hacks-sbcl-mop sb-mop::class-name
+     #-cl-hacks-sbcl-mop sb-pcl::class-name
+     #+cl-hacks-sbcl-mop sb-mop::class-slots
+     #-cl-hacks-sbcl-mop sb-pcl::class-slots
+     #+cl-hacks-sbcl-mop sb-mop::find-class
+     #-cl-hacks-sbcl-mop sb-pcl::find-class
      sb-pcl::standard-class
-     sb-pcl:slot-definition-name
-     sb-pcl::finalize-inheritance
-     sb-pcl::standard-direct-slot-definition
-     sb-pcl::standard-effective-slot-definition
-     sb-pcl::validate-superclass
+     sb-pcl::compute-class-precedence-list
+     sb-pcl::compute-effective-slot-definition
+     sb-pcl::compute-effective-slot-definition-initargs
      sb-pcl::direct-slot-definition-class
      sb-pcl::effective-slot-definition-class
-     sb-pcl::compute-effective-slot-definition
-     sb-pcl:class-direct-slots
-     sb-pcl::compute-effective-slot-definition-initargs
      sb-pcl::slot-value-using-class
-     sb-pcl:class-prototype
-     sb-pcl:generic-function-method-class
-     sb-pcl:intern-eql-specializer
-     sb-pcl:make-method-lambda
-     sb-pcl:generic-function-lambda-list
+     sb-pcl::slot-definition-name
+     sb-pcl::slot-definition-initform
+     sb-pcl::slot-definition-type
+     sb-pcl::slot-definition-writers
+     sb-pcl::slot-definition-readers
+     sb-pcl::generic-function-name
+     sb-pcl::generic-function-lambda-list
+     sb-pcl::generic-function-method-class
+     sb-pcl::standard-direct-slot-definition
+     sb-pcl::standard-effective-slot-definition     
+     sb-pcl::finalize-inheritance
+     sb-pcl::validate-superclass
+     sb-pcl::class-direct-slots
+     sb-pcl::class-prototype
+     sb-pcl::intern-eql-specializer
+     sb-pcl::make-method-lambda
      sb-pcl::compute-slots)
    ;;
-   ;; CMU
-   #+cmu
-   '(pcl:class-of
-     pcl:class-name
-     pcl:class-slots
-     pcl:find-class
-     pcl::standard-clss
-     pcl::slot-definition-name
-     pcl::finalize-inheritance
-     pcl::standard-direct-slot-definition
-     pcl::standard-effective-slot-definition
-     pcl::validate-superclass
-     pcl::direct-slot-definition-class
-     pcl::effective-slot-definition-class
-     pcl:compute-effective-slot-definition
-     pcl:class-direct-slots
-     pcl::compute-effective-slot-definition-initargs
-     pcl::slot-value-using-class
-     pcl:class-prototype
-     pcl:generic-function-method-class
-     pcl:intern-eql-specializer
-     pcl:make-method-lambda
-     pcl:generic-function-lambda-list
-     pcl::compute-slots)
-   ;;
-   ;; Scieneer Common Lisp
-   #+scl
+   ;; Symbolics Genera (Future Common Lisp)
+   #+genera
    '(class-of
      class-name
      class-slots
      find-class
-     clos::standard-class
-     clos::slot-definition-name
-     clos::finalize-inheritance
-     clos::standard-direct-slot-definition
-     clos::standard-effective-slot-definition
-     clos::effective-slot-definition-class
-     clos:class-direct-slots
-     clos::validate-superclass
-     clos:direct-slot-definition-class
-     clos:compute-effective-slot-definition
+     clos::compute-class-precedence-list
+     clos::compute-effective-slot-definition
      clos::compute-effective-slot-definition-initargs
-     clos::slot-value-using-class
-     clos::class-prototype
-     clos:generic-function-method-class
-     clos:intern-eql-specializer
-     clos:make-method-lambda
-     clos:generic-function-lambda-list
-     clos::compute-slots)
-   ;;
-   ;; OpenMCL / Closure Common Lisp
-   #+openmcl
-   '(openmcl-mop::slot-definition-name
-     openmcl-mop:finalize-inheritance
-     openmcl-mop::standard-direct-slot-definition
-     openmcl-mop::standard-effective-slot-definition
-     openmcl-mop::validate-superclass
-     openmcl-mop:direct-slot-definition-class
-     openmcl-mop::effective-slot-definition-class
-     openmcl-mop:compute-effective-slot-definition
-     openmcl-mop:class-direct-slots
-     openmcl-mop::compute-effective-slot-definition-initargs
-     openmcl-mop::slot-value-using-class
-     openmcl-mop:class-prototype
-     openmcl-mop:generic-function-method-class
-     openmcl-mop:intern-eql-specializer
-     openmcl-mop:make-method-lambda
-     openmcl-mop:generic-function-lambda-list
-     openmcl-mop::compute-slots)
-   ;;
-   ;; Symbolics Genera (Future Common Lisp)
-   #+genera
-   '(clos:class-of
-     clos:class-name
-     clos:class-slots
-     clos:find-class
+     clos::direct-slot-definition-class
+     clos::effective-slot-definition-class
      clos::standard-class
-     clos::slot-definition-name
-     clos-internals::finalize-inheritance
-     clos-internals::standard-direct-slot-definition
-     clos-internals::standard-effective-slot-definition
-     clos-internals::effective-slot-definition-class
-     clos-internals::compute-effective-slot-definition
-     clos:class-direct-slots
-     clos-internals::validate-superclass
-     clos-internals::direct-slot-definition-class
-     clos-internals::compute-effective-slot-definition-initargs
      clos::slot-value-using-class
+     clos::slot-definition-name
+     clos::slot-definition-initform
+     clos::slot-definition-type
+     clos::slot-definition-writers
+     clos::slot-definition-readers
+     clos::generic-function-name
+     clos::generic-function-lambda-list
+     clos::generic-function-method-class
+     clos::standard-direct-slot-definition
+     clos::standard-effective-slot-definition     
+     clos::finalize-inheritance
+     clos::validate-superclass
+     clos::class-direct-slots
      clos::class-prototype
-     clos::ensure-generic-function
-     clos:generic-function-method-class
-     clos-internals::make-method-lambda
-     clos:generic-function-lambda-list
-     clos-internals::compute-slots)))
+     clos::intern-eql-specializer
+     clos::make-method-lambda
+     clos::compute-slots)))
 
 ;;;
 ;;; Now export our symbols
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (export '(class-of
-            class-name
-            class-slots
-            find-class
-            standard-class
-            slot-definition-name
-            finalize-inheritance
-            standard-direct-slot-definition
-            standard-effective-slot-definition
-            validate-superclass
-            compute-effective-slot-definition-initargs
-            direct-slot-definition-class
-            effective-slot-definition-class
-            compute-effective-slot-definition
-            slot-value-using-class
-            class-prototype
-            generic-function-method-class
-            intern-eql-specializer
-            make-method-lambda
-            generic-function-lambda-list
-            compute-slots
-            class-direct-slots
-            process-slot-option
-            process-class-option))
-  
-  #+sbcl
-  (if (find-package 'sb-mop)
-      (setq cl:*features* (delete :cl-hacks-sbcl-mop cl:*features*))
-      (setq cl:*features* (delete :cl-hacks-sbcl-pcl cl:*features*)))
-  
-  #+cmu
-  (if (find-package 'mop)
-      (setq cl:*features* (delete :cl-hacks-cmu-mop cl:*features*))
-      (setq cl:*features* (delete :cl-hacks-cmu-pcl cl:*features*)))
-  
+  (when (fboundp 'class-slots)
+    (export '(class-of
+              class-name
+              class-slots
+              find-class
+              standard-class
+              compute-class-precedence-list
+              compute-effective-slot-definition
+              compute-effective-slot-definition-initargs
+              direct-slot-definition-class
+              effective-slot-definition-class
+              slot-value-using-class
+              slot-definition-name
+              slot-definition-initform
+              slot-definition-type
+              slot-definition-writers
+              slot-definition-readers
+              generic-function-name
+              generic-function-lambda-list
+              generic-function-method-class
+              standard-direct-slot-definition
+              standard-effective-slot-definition
+              finalize-inheritance
+              validate-superclass
+              class-direct-slots
+              class-prototype
+              intern-eql-specializer
+              make-method-lambda
+              compute-slots
+              process-slot-option
+              process-class-option)))
+    
   (when (>= (length (generic-function-lambda-list
                      (ensure-generic-function
                       'compute-effective-slot-definition)))

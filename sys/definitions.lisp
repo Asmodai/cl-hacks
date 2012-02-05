@@ -2,8 +2,8 @@
 ;;;
 ;;; definitions.lisp --- Various methods for defining things
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:05:14 asmodai>
-;;; Revision:   6
+;;; Time-stamp: <Tuesday Dec 20, 2011 16:04:29 asmodai>
+;;; Revision:   7
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -107,5 +107,42 @@
 
 ;;; }}}
 ;;; ==================================================================
+
+;;; ==================================================================
+;;; {{{ Constant predicates and evaluation:
+
+(defun named-constant-p (name &optional env)
+  env
+  (when (constantp name)
+    (return-from named-constant-p
+      (values t (symbol-value name))))
+  nil)
+
+(defun evaluate-constant (form &optional env)
+  (setf form (macroexpand form env))
+  (if (atom form)
+      (cond ((not (symbolp form))
+             form)
+            (t
+             (multiple-value-bind (constant-p value)
+                 (named-constant-p form env)
+               (if constant-p
+                   value
+                   (error "Symbol ~S does not have a value."
+                          form)))))
+      (case (first form)
+        (quote
+         (second form))
+        (values
+         (apply #'values
+                (loop for value in (cdr form)
+                      collect (evaluate-constant value env))))
+        (otherwise
+         (error "Constant evaluator called on ~S" form)))))
+
+;;; }}}
+;;; ==================================================================
+
+
 
 ;;; definitions.lisp ends here

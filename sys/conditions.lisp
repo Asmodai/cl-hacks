@@ -132,7 +132,7 @@
          :format-arguments args))
 
 (define-condition simple-parse-error (simple-error
-                                      parser-error)
+                                      parse-error)
   ())
 
 (defun simple-parse-error (message &rest args)

@@ -2,8 +2,8 @@
 ;;;
 ;;; ifstar.lisp --- Franz Incs' IF* implementation
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:05:43 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Sunday Feb  5, 2012 00:32:37 asmodai>
+;;; Revision:   7
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
