@@ -2,8 +2,8 @@
 ;;;
 ;;; control-flow.lisp --- Control flow functions
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:05:10 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Sunday Feb  5, 2012 01:48:39 asmodai>
+;;; Revision:   6
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,16 +33,16 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-internals)
 
 ;;; ==================================================================
-;;; {{{ Utility functions:
+;;;{{{ Utility functions:
 
 (defun extract-function-name (spec)
   (if (and (consp spec)
@@ -79,11 +79,11 @@
                       clauses)
             (t ,default)))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Switch macros:
+;;;{{{ Switch macros:
 
 (defmacro switch (&whole whole
                   (object &key (test 'eql) (key 'identity))
@@ -101,11 +101,11 @@
   (generate-switch-body whole object clauses test key
                         '(cerror "Return NIL from CSWITCH.")))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Conditional evaluation:
+;;;{{{ Conditional evaluation:
 
 (defmacro whichever (&rest possibilities &environment env)
   (setf possibilities (mapcar (lambda (p)
@@ -148,7 +148,7 @@
                   `(nth-value-or ,value ,@(rest forms))
                   nil))))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; control-flow.lisp ends here

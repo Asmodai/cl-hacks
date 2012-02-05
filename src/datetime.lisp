@@ -2,8 +2,8 @@
 ;;;
 ;;; datetime.lisp --- Time and date functions
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 00:54:32 asmodai>
-;;; Revision:   33
+;;; Time-stamp: <Sunday Feb  5, 2012 01:42:05 asmodai>
+;;; Revision:   34
 ;;;
 ;;; Copyright (c) 2009-2011 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -17,7 +17,7 @@
 ;;; Keywords:   Common Lisp CLOS Hacks
 ;;; URL:        http://unixware.kicks-ass.org/
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -37,7 +37,7 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)

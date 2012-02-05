@@ -2,8 +2,8 @@
 ;;;
 ;;; ifstar.lisp --- Franz Incs' IF* implementation
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 00:32:37 asmodai>
-;;; Revision:   7
+;;; Time-stamp: <Sunday Feb  5, 2012 01:51:34 asmodai>
+;;; Revision:   8
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   Common Lisp CLOS Hacks
 ;;; URL:        http://unixware.kicks-ass.org/
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,7 +33,7 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-internals)

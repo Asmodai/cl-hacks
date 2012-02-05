@@ -2,8 +2,8 @@
 ;;;
 ;;; emacs.lisp --- Functionality for Lisp Emacsen and other editors.
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:50:54 asmodai>
-;;; Revision:   10
+;;; Time-stamp: <Sunday Feb  5, 2012 01:50:03 asmodai>
+;;; Revision:   11
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,19 +33,19 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
 ;;; For the most part, the indentation rules are a list of offsets in
 ;;; the format of (no-of-sexprs-to-skip amount-to-change-indentation).
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-internals)
 
 ;;; ==================================================================
-;;; {{{ Implementation-specific functions:
+;;;{{{ Implementation-specific functions:
 
 ;;;
 ;;; Genera provides ZWEI:DEFINDENTATION and ZWEI:GET-INDENTATION to set
@@ -56,7 +56,7 @@
 (pushnew :cl-hacks-emacs cl:*features*)
 
 ;;; ------------------------------------------------------------------
-;;; {{{ LispWorks:
+;;;{{{ LispWorks:
 
 ;;; This function will add an indentation rule to the LispWorks editor
 ;;; substrate.
@@ -76,11 +76,11 @@
      (gethash (string-upcase (string thing)) operators)
      'list)))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ Franz Allegro:
+;;;{{{ Franz Allegro:
 
 ;; This function will add an indentation rule to the Allegro Common Lisp
 ;; editor substrate.
@@ -94,7 +94,7 @@
 (defun %get-indentation (&rest thing)
   (list s (cg:text-edit-indentation thing)))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; Todo: more editor substrates?  DREI? Hemlock? Climacs?
@@ -118,13 +118,13 @@
   (defmacro get-indentation (thing)
     (declare (ignore thing))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Indentation rules for various CL-HACKS forms:
+;;;{{{ Indentation rules for various CL-HACKS forms:
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; emacs.lisp ends here

@@ -2,8 +2,8 @@
 ;;;
 ;;; iterate.lisp --- Applicative iteration
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:07:10 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Sunday Feb  5, 2012 01:44:30 asmodai>
+;;; Revision:   4
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2000-2002 Tim Bradshaw
@@ -14,7 +14,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -34,8 +34,8 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
 ;;; * Applicative iteration (don't need this in CMUCL)
 ;;;
@@ -47,7 +47,7 @@
 ;;; anger, and I would also very much appreciate any feedback or bug
 ;;; fixes.
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)

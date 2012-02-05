@@ -2,8 +2,8 @@
 ;;;
 ;;; memoize.lisp --- Memoization
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:07:30 asmodai>
-;;; Revision:   7
+;;; Time-stamp: <Sunday Feb  5, 2012 01:45:54 asmodai>
+;;; Revision:   8
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 1995-2000 Tim Bradshaw
@@ -14,7 +14,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -34,16 +34,15 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;;
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
 ;;; Norvig, pp269-275
 ;;;
 ;;; Note that memoized functions are not currently thread-safe, since
 ;;; calling them can modify the structure holding the memos.
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)
@@ -218,4 +217,3 @@ DEF-MEMOIZED-FUNCTION."
 (pushnew 'memoized-labels zwei:*definition-list-functions*)
 
 ;;; memoize.lisp ends here
-

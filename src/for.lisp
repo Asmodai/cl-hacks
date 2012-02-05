@@ -2,8 +2,8 @@
 ;;;
 ;;; for.lisp --- Trivial iteration protocol
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:06:54 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Sunday Feb  5, 2012 01:43:08 asmodai>
+;;; Revision:   4
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2004 Tim Bradshaw
@@ -14,7 +14,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -34,8 +34,8 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
 ;;; Rather trivial iteration protocol
 ;;; $Id: //depot/www-tfeb-org/main/www-tfeb-org/html/programs/lisp/for.lisp#1 $
@@ -46,13 +46,13 @@
 ;;; would also very much appreciate any feedback or bug fixes.
 ;;; -- tfb+lisp-toys@tfeb.org
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)
 
 ;;; ------------------------------------------------------------------
-;;; {{{ Iteration protocol:
+;;;{{{ Iteration protocol:
 
 (defgeneric iter (x &key)
   (:documentation "Return an iterator for X")
@@ -67,11 +67,11 @@
   (:method ((iter t))
    (funcall iter)))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ Generators:
+;;;{{{ Generators:
 
 ;;; bindings is either (v form &optional result) or 
 ;;; ((v1 form1 &optional r1) ...).  Constructs iterators for all the forms,
@@ -132,11 +132,11 @@
              ((not ,cont) (values ,@result-forms))
            ,@body)))))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ Useful iterators:
+;;;{{{ Useful iterators:
 
 (defmethod iter ((l list) &key)
   #'(lambda ()
@@ -171,11 +171,11 @@
   ;; truncate?  Seems right
   (iter (truncate f)))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ Ranges:
+;;;{{{ Ranges:
 
 ;;; Ranges are mutable, use-once things.  The alternative would be 
 ;;; to have them immutable, and have their iterators return an object
@@ -271,11 +271,11 @@
               (setf (range-current r) next)
               (values c t))))))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ List comprehension:
+;;;{{{ List comprehension:
 
 ;;; Python-style list comprehension operator.  See examples below
 ;;; Each clause is simply rewritten to a `single-special-argument' macro:
@@ -322,7 +322,7 @@
   when (evenp x))
 ||#
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; for.lisp ends here

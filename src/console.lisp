@@ -2,8 +2,8 @@
 ;;;
 ;;; console.lisp --- Various console utilities
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:06:34 asmodai>
-;;; Revision:   11
+;;; Time-stamp: <Sunday Feb  5, 2012 01:41:49 asmodai>
+;;; Revision:   12
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -14,7 +14,7 @@
 ;;; Keywords:   Common Lisp Console Hacks
 ;;; URL:        http://unixware.kicks-ass.org/
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -34,7 +34,7 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)

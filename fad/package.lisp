@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- FAD package definition
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:08:18 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Sunday Feb  5, 2012 01:40:27 asmodai>
+;;; Revision:   4
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,10 +33,10 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-user)
@@ -72,4 +72,3 @@
            #:walk-directory))
 
 ;;; package.lisp ends here
-

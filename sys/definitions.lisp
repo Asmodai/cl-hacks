@@ -2,8 +2,8 @@
 ;;;
 ;;; definitions.lisp --- Various methods for defining things
 ;;;
-;;; Time-stamp: <Tuesday Dec 20, 2011 16:04:29 asmodai>
-;;; Revision:   7
+;;; Time-stamp: <Sunday Feb  5, 2012 01:48:58 asmodai>
+;;; Revision:   8
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,16 +33,16 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-internals)
 
 ;;; ==================================================================
-;;; {{{ Internal methods:
+;;;{{{ Internal methods:
 
 (defun %re-evaluate-constant (name value test)
   (if (not (boundp name))
@@ -68,11 +68,11 @@
                       :report "Try to redefine the constant."
                       new)))))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Defining constants and variables:
+;;;{{{ Defining constants and variables:
 
 (defmacro define-constant (name initial-value
                            &key (test ''equal) docstr)
@@ -105,11 +105,11 @@
       `(make-array (length ,init) :element-type ,type
                    :initial-contents ,init)))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Constant predicates and evaluation:
+;;;{{{ Constant predicates and evaluation:
 
 (defun named-constant-p (name &optional env)
   env
@@ -140,9 +140,7 @@
         (otherwise
          (error "Constant evaluator called on ~S" form)))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
-
-
 
 ;;; definitions.lisp ends here

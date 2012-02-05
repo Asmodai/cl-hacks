@@ -1,9 +1,9 @@
 ;;; -*- Mode: LISP; Syntax: ANSI-Common-Lisp; Package: CL-HACKS; Base: 10; Lowercase: Yes -*-
 ;;;
 ;;; byte-stream.lisp --- Stuff for manipulating a byte stream.
-;;; Revision:   6
+;;; Revision:   7
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:06:25 asmodai>
+;;; Time-stamp: <Sunday Feb  5, 2012 01:41:20 asmodai>
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -14,7 +14,7 @@
 ;;; Keywords:   Common Lisp CLOS Hacks
 ;;; URL:        http://unixware.kicks-ass.org/
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -34,7 +34,7 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)

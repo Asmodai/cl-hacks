@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- MOP extensions package definition
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 06:31:48 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Sunday Feb  5, 2012 01:40:51 asmodai>
+;;; Revision:   6
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,10 +33,10 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-user)

@@ -2,8 +2,8 @@
 ;;;
 ;;; conditions.lisp --- Conditions
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:04:52 asmodai>
-;;; Revision:   4
+;;; Time-stamp: <Sunday Feb  5, 2012 01:48:21 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,16 +33,16 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-internals)
 
 ;;; ==================================================================
-;;; {{{ User code conditions:
+;;;{{{ User code conditions:
 
 (define-condition code (error)
   ((proc
@@ -105,11 +105,11 @@
                      'required-argument)
           :args (list ,arg)))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Simple conditions:
+;;;{{{ Simple conditions:
 
 (define-condition simple-style-warning (style-warning
                                 simple-warning)
@@ -149,11 +149,11 @@
          :format-control message
          :format-arguments args))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Macros:
+;;;{{{ Macros:
 
 (defmacro ignore-some-conditions ((&rest conditions) &body body)
   `(handler-case
@@ -179,7 +179,7 @@
                               `(when ,gflag ,@forms))
                              (:always
                               `(progn ,@forms)))))))))
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; conditions.lisp ends here

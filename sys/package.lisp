@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- Package definition
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 10:04:05 asmodai>
-;;; Revision:   14
+;;; Time-stamp: <Sunday Feb  5, 2012 01:52:56 asmodai>
+;;; Revision:   15
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,10 +33,10 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-user)
@@ -47,14 +47,14 @@
         #+genera        #:future-common-lisp)
 ;;;
 ;;; Optional imports
-;;; {{{ LispWorks imports:
+;;;{{{ LispWorks imports:
 
   #+lispworks
   (:import-from :common-lisp-user #:with-unique-names
                                   #:push-end)
 
-;;; }}}
-;;; {{{ Symbolics Genera imports:
+;;;}}}
+;;;{{{ Symbolics Genera imports:
 
   #+genera
   (:shadowing-import-from #:scl #:lambda)
@@ -112,12 +112,12 @@
   (:shadowing-import-from :zwei #:defindentation
                                 #:get-indentation)
 
-;;; }}}
+;;;}}}
 ;;;
 ;;; Exports
   (:export
 
-;;; {{{ anaphoric.lisp:
+;;;{{{ anaphoric.lisp:
    
    #:aif
    #:awhen
@@ -131,20 +131,20 @@
    #:awhile2
    #:acond2
 
-;;; }}}
-;;; {{{ arrays.lisp:
+;;;}}}
+;;;{{{ arrays.lisp:
 
    #:copy-array
 
-;;; }}}
-;;; {{{ binding.lisp:
+;;;}}}
+;;;{{{ binding.lisp:
    
    #:if-let
    #:when-let
    #:when-let*
 
-;;; }}}
-;;; {{{ conditions.lisp:
+;;;}}}
+;;;{{{ conditions.lisp:
 
    #:code
    #:case-error
@@ -158,8 +158,8 @@
    #:ignore-some-conditions
    #:unwind-protect-case
 
-;;; }}}
-;;; {{{ control-flow.lisp:
+;;;}}}
+;;;{{{ control-flow.lisp:
 
    #:switch
    #:eswitch
@@ -168,8 +168,8 @@
    #:xor
    #:nth-value-or
 
-;;; }}}
-;;; {{{ definitions.lisp:
+;;;}}}
+;;;{{{ definitions.lisp:
 
    #:define-constant
    #:defconstant*
@@ -177,19 +177,19 @@
    #:defconst
    #:make-typed-array
    
-;;; }}}
-;;; {{{ documentation.lisp:
+;;;}}}
+;;;{{{ documentation.lisp:
 
    #:define-documentation
 
-;;; }}}
-;;; {{{ emacs.lisp:
+;;;}}}
+;;;{{{ emacs.lisp:
 
    #:defindentation
    #:get-indentation
 
-;;; }}}
-;;; {{{ functions.lisp:
+;;;}}}
+;;;{{{ functions.lisp:
 
    #:ensure-function
    #:disjoin
@@ -199,19 +199,19 @@
    #:curry
    #:rcurry
 
-;;; }}}
-;;; {{{ features.lisp:
+;;;}}}
+;;;{{{ features.lisp:
 
    #:featurep
 
-;;; }}}
-;;; {{{ ifstar.lisp:
+;;;}}}
+;;;{{{ ifstar.lisp:
 
    #:if*-keyword-list
    #:if*
 
-;;; }}}
-;;; {{{ lists.lisp:
+;;;}}}
+;;;{{{ lists.lisp:
 
    #:alist-plist
    #:plist-alist
@@ -244,15 +244,15 @@
    #:flatten
    #:push-end
 
-;;; }}}
-;;; {{{ looping.lisp:
+;;;}}}
+;;;{{{ looping.lisp:
 
    #:til
    #:while
    #:loop-for
 
-;;; }}}
-;;; {{{ macros.lisp:
+;;;}}}
+;;;{{{ macros.lisp:
 
    #:with-gensyms
    #:with-unique-names
@@ -262,8 +262,8 @@
    #:parse-body
    #:parse-ordinary-lambda-list
    
-;;; }}}
-;;; {{{ sequences.lisp:
+;;;}}}
+;;;{{{ sequences.lisp:
 
    #:rotate
    #:shuffle
@@ -286,8 +286,8 @@
    #:map-derangements
    #:nsubseq
 
-;;; }}}
-;;; {{{ symbolics.lisp:
+;;;}}}
+;;;{{{ symbolics.lisp:
 
    #:named-lambda
    #:rest1
@@ -330,8 +330,8 @@
    #:*string-a-or-an-exceptions-alist*
    #:string-a-or-an
 
-;;; }}}
-;;; {{{ symbols.lisp:
+;;;}}}
+;;;{{{ symbols.lisp:
 
    #:ensure-symbol
    #:maybe-intern
@@ -341,8 +341,8 @@
    #:make-gensym-list
    #:symbolicate
 
-;;; }}}
-;;; {{{ types.lisp:
+;;;}}}
+;;;{{{ types.lisp:
 
    #:array-index
    #:array-length
@@ -425,7 +425,8 @@
    #:positive-long-float-p
    #:positive-rational-p
 
-;;; }}}
+;;;}}}
 
    ))
+
 ;;; package.lisp ends here

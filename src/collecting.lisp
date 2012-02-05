@@ -2,8 +2,8 @@
 ;;;
 ;;; collecting.lisp --- Collecting lists forwards
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:06:30 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Sunday Feb  5, 2012 01:41:38 asmodai>
+;;; Revision:   4
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 1989-2002 Tim Bradshaw
@@ -14,7 +14,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -34,8 +34,8 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
 ;;; Collecting lists forwards
 ;;; This is an old macro cleaned up a bit
@@ -46,7 +46,7 @@
 ;;; appreciate acknowledgement if you use this in anger, and I would
 ;;; also very much appreciate any feedback or bug fixes.
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)

@@ -2,8 +2,8 @@
 ;;;
 ;;; documentation.lisp --- Documentation strings.
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 10:03:35 asmodai>
-;;; Revision:   20
+;;; Time-stamp: <Sunday Feb  5, 2012 01:49:36 asmodai>
+;;; Revision:   21
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,10 +33,10 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #+genera
 (error "You shouldn't be loading this file, after all pretty much ~
@@ -47,7 +47,7 @@
 (in-package #:cl-hacks-internals)
 
 ;;; ==================================================================
-;;; {{{ Documentation function:
+;;;{{{ Documentation function:
 
 (defmacro define-documentation (name type doc)
   (cond ((eq type 'function)
@@ -62,14 +62,14 @@
          `(ignore-errors
             (setf (documentation ,name ,type) ,doc)))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Doc strings:
+;;;{{{ Doc strings:
 
 ;;; ------------------------------------------------------------------
-;;; {{{ anaphoric.lisp:
+;;;{{{ anaphoric.lisp:
 
 (define-documentation 'aif 'function
   "An anaphoric version of `if' that allows the 'then-form' and
@@ -181,22 +181,22 @@ form rather than the return value.")
   "Similar to `acond', but tests on the failure value of the clauses
 rather than any return values.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ arrays.lisp:
+;;;{{{ arrays.lisp:
 
 (define-documentation 'copy-array 'function
   "Returns an undisplaced copy of ARRAY, with same fill-pointer
 and adjustability (if any) as the original, unless overridden by
 the keyword arguments.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ bindings.lisp:
+;;;{{{ bindings.lisp:
 
 (define-documentation 'if-let 'function
   "Creates new variable bindings, and conditionally executes either
@@ -264,11 +264,11 @@ to NIL.
 If all initial-forms evaluate to true, then FORMS are executed as an
 implicit PROGN.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ conditions.lisp:
+;;;{{{ conditions.lisp:
 
 (define-documentation 'required-argument 'function
   "Signals an error for a missing argument of NAME.
@@ -300,11 +300,11 @@ Examples:
        (protected-form)
      (:always (perform-cleanup-if aborted-p)))")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ control-flow.lisp:
+;;;{{{ control-flow.lisp:
 
 (define-documentation 'extract-function-name 'function
   "Useful for macros that want to mimic the functional interface for
@@ -338,11 +338,11 @@ returned by one of the forms is non-NIL. It then returns all the
 values returned by evaluating that form. If none of the forms return a
 non-nil nth value, this form returns  NIL.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ definitions.lisp:
+;;;{{{ definitions.lisp:
 
 (define-documentation 'define-constant 'function
   "Ensures that the global variable named by NAME is a constant with a
@@ -369,11 +369,11 @@ given TYPE.")
 (define-documentation 'make-typed-array 'function
   "Make an array with elements of TYPE, with initialization.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ emacs.lisp:
+;;;{{{ emacs.lisp:
 
 (define-documentation 'define-indentation 'function
   "Defines an indentation rule for an editor.
@@ -402,22 +402,22 @@ given symbols.
 Right now, DESCRIBE-INDENTATION supports ZWEI, LispWorks, and Franz
 Allegro Common Lisp.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ features.lisp:
+;;;{{{ features.lisp:
 
 (define-documentation 'featurep 'function
   "Returns T if the argument matches the state of the *FEATURES* 
 list; otherwise NIL is returned.  FEATURE-EXPR can be any atom or
 list acceptable to the reader macros #+ and #-.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ functions.lisp:
+;;;{{{ functions.lisp:
 
 (define-documentation 'ensure-function 'function
   "Returns the function designated by FUNCTION-DESIGNATOR: if
@@ -458,11 +458,11 @@ called with to FUNCTION.")
   "Returns a function that applies the arguments it is called with and
 ARGUMENTS to FUNCTION.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ hash-tables.lisp:
+;;;{{{ hash-tables.lisp:
 
 (define-documentation 'copy-hash-table 'function
   "Returns a copy of hash table TABLE, with the same keys and values
@@ -509,11 +509,11 @@ list PLIST. Hash table is initialized using the HASH-TABLE-INITARGS.")
 DEFAULT under key before returning it. Secondary return value is true
 if key was already in the table.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ ifstar.lisp:
+;;;{{{ ifstar.lisp:
 
 (define-documentation 'if* 'function
   "This form consists of a series of clauses introduced by the symbols
@@ -534,11 +534,11 @@ clauses are processed. If no clauses remain, if* returns nil. And
 lastly, when an else clause is encountered, the else-forms are
 evaluated, and the value of the last such form is returned.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ lists.lisp:
+;;;{{{ lists.lisp:
 
 (define-documentation 'alist-plist 'function
   "Returns a property list containing the same keys and values as the
@@ -652,11 +652,11 @@ list.")
 end of the existing list.  This preserves the order of the elements as
 they are added to the list.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ looping.lisp:
+;;;{{{ looping.lisp:
 
 (define-documentation 'til 'function
   "Evaluate the BODY form until TEST-FORM evaluates to T.")
@@ -668,11 +668,11 @@ they are added to the list.")
   "Loop over VAR from START until STOP, evaluating BODY upon each
  iteration.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ macros.lisp:
+;;;{{{ macros.lisp:
 
 (define-documentation 'with-gensyms 'function
   "Binds each variable named by a symbol in NAMES to a unique symbol
@@ -729,11 +729,11 @@ arguments when given.")
 
 Signals a PROGRAM-ERROR is the lambda-list is malformed.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ sequences.lisp:
+;;;{{{ sequences.lisp:
 
 (define-documentation 'rotate 'function
   "Returns a sequence of the same type as SEQUENCE, with the elements
@@ -848,11 +848,11 @@ either the derangement or SEQUENCE.")
 (define-documentation 'nsubseq 'function
   "A destructive version of SUBSEQ.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ symbolics.lisp:
+;;;{{{ symbolics.lisp:
 
 (define-documentation 'named-lambda 'function
   "NAMED-LAMBDA is a Zetalisp compatability macro.  It is synomymous
@@ -1706,11 +1706,11 @@ Examples:
     (string-a-or-an 'rock t :upcase) => ``A ROCK''
     (string-a-or-an ``egg'') => ``an egg''")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ symbols.lisp:
+;;;{{{ symbols.lisp:
 
 (define-documentation 'ensure-symbol 'function
     "Returns a symbol with name designated by NAME, accessible in
@@ -1748,18 +1748,18 @@ argument.")
   "Concatenate together the names of some strings and symbols,
 producing a symbol in the current package.")
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ types.lisp:
+;;;{{{ types.lisp:
 
 
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; documentation.lisp ends here

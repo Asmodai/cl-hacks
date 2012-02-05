@@ -2,8 +2,8 @@
 ;;;
 ;;; genera.lisp --- Genera-specific hacks
 ;;;
-;;; Time-stamp: <Tuesday Dec 13, 2011 00:54:09 asmodai>
-;;; Revision:   9
+;;; Time-stamp: <Sunday Feb  5, 2012 01:51:13 asmodai>
+;;; Revision:   10
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,11 +33,11 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
+;;;}}}
 ;;;
-;;; {{{ Commentary:
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (error "Why do you want these functions in a Common Lisp that probably ~

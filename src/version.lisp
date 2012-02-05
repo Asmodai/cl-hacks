@@ -2,8 +2,8 @@
 ;;;
 ;;; version.lisp --- Lisp identification functions.
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 06:01:02 asmodai>
-;;; Revision:   84
+;;; Time-stamp: <Sunday Feb  5, 2012 01:47:27 asmodai>
+;;; Revision:   85
 ;;;
 ;;; Copyright (c) 2009 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   Common Lisp Version Hacks
 ;;; URL:        http://unixware.kicks-ass.org/
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or
 ;;; modify it under the terms of the version 2.1 of
@@ -34,9 +34,9 @@
 ;;; version) or write to the Free Software Foundation, Inc., 59 Temple
 ;;; Place, Suite 330, Boston, MA  02111-1307  USA
 ;;;
-;;; }}}
+;;;}}}
 ;;;
-;;; {{{ Commentary:
+;;;{{{ Commentary:
 ;;;
 ;;; It appears that there is no real common "standard" for what
 ;;; the SOFTWARE-* and MACHINE-* functions return, so... let's define
@@ -48,13 +48,13 @@
 ;;; grubby hands on, now that's something to treasure for the rest
 ;;; of my life.  Sussman has his suit, I have cl-hacks.
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)
 
 ;;; ===================================================================
-;;; {{{ Lisp information:
+;;;{{{ Lisp information:
 
 ;; If any systems here pre-date Common Lisp, or if any are missing...
 ;; let me know.
@@ -99,11 +99,11 @@ Common Lisp implementation."
 implementation"
   (common-lisp:lisp-implementation-version))
 
-;;; }}}
+;;;}}}
 ;;; ===================================================================
 
 ;;; ===================================================================
-;;; {{{ Software information:
+;;;{{{ Software information:
 
 ;; GCL hackery is ugly isn't it.
 (defun common-software-type ()
@@ -190,11 +190,11 @@ be produced."
   #-(or genera unix)
   nil)
 
-;;; }}}
+;;;}}}
 ;;; ===================================================================
 
 ;;; ===================================================================
-;;; {{{ Machine information:
+;;;{{{ Machine information:
 
 
 ;; TODO: Add support for Windows.
@@ -255,7 +255,7 @@ or from the OS and/or hardware."
 on which Common Lisp is running."
   (common-lisp:machine-instance))
 
-;;; }}}
+;;;}}}
 ;;; ===================================================================
 
 ;;; version.lisp ends here

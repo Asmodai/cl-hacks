@@ -2,8 +2,8 @@
 ;;;
 ;;; types.lisp --- Types
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:06:17 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Sunday Feb  5, 2012 01:54:06 asmodai>
+;;; Revision:   4
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,16 +33,16 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-internals)
 
 ;;; ==================================================================
-;;; {{{ Array types:
+;;;{{{ Array types:
 
 #||
 Type designator for an index into array of LENGTH: an integer between
@@ -61,11 +61,11 @@ ARRAY-DIMENSION-LIMIT.
   `(integer 0 ,length))
 
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ String types:
+;;;{{{ String types:
 
 #||
 A string designator type. A string designator is either a string, a symbol,
@@ -74,11 +74,11 @@ or a character.
 (deftype string-designator ()
   `(or symbol string character))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ CDR5 types:
+;;;{{{ CDR5 types:
 
 ;; This MACROLET will generate most of CDR5
 ;; (http://cdr.eurolisp.org/document/5/)
@@ -174,11 +174,11 @@ or a character.
   (frob double-float)
   (frob long-float))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Functions:
+;;;{{{ Functions:
 
 #||
 Returns a function of one argument, which returns true when its argument is
@@ -218,7 +218,7 @@ determined: primary value of NIL and secondary value of T indicates that the typ
   "Modify-macro for COERCE.")
 
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; types.lisp ends here

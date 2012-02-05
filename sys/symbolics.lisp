@@ -2,8 +2,8 @@
 ;;;
 ;;; symbolics.lisp --- Functionality taken from Zetalisp and Symbolics Common Lisp
 ;;;
-;;; Time-stamp: <Wednesday Dec 14, 2011 23:28:30 asmodai>
-;;; Revision:   31
+;;; Time-stamp: <Sunday Feb  5, 2012 01:53:35 asmodai>
+;;; Revision:   32
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,8 +33,8 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
 ;;; This file is a collection of `stuff' that is taken from both
 ;;; Zetalisp and Symbolics Common Lisp.
@@ -42,13 +42,13 @@
 ;;; Most of the SCL stuff is stuff that never made it into the Common
 ;;; Lisp specification, but is still somewhat handy to have.
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-internals)
 
 ;;; ==================================================================
-;;; {{{ Stuff that needs to load first:
+;;;{{{ Stuff that needs to load first:
 
 (eval-when (:load-toplevel :compile-toplevel :execute)
 
@@ -119,11 +119,11 @@
 
   ) ;; (eval-when ...)
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Internal functions:
+;;;{{{ Internal functions:
 
 ;;; Kludgy... we ignore the Lisp Machine stuff and hope that the CL
 ;;; implementation can optimize it :)
@@ -317,11 +317,11 @@
           (when (char-equal char (aref set j))
             (return)))))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Zetalisp:
+;;;{{{ Zetalisp:
 
 ;;; SI:NEQ
 (defsubst neq (x y)
@@ -391,11 +391,11 @@
         (otherwise
          (error "Constant evaluator called on ~S" form)))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Symbolics Common Lisp:
+;;;{{{ Symbolics Common Lisp:
 
 ;;; SI:DEFPROP
 (defmacro defprop (sym value indicator)
@@ -484,7 +484,7 @@
       (char-upcase char)))
 
 ;;; ------------------------------------------------------------------
-;;; {{{ String functions that take keywords:
+;;;{{{ String functions that take keywords:
 
 ;;;
 ;;; Symbolics Common Lisp provides optimization for these macros... we
@@ -628,11 +628,11 @@
                       (aref string i)))
   string)
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ String searching functions:
+;;;{{{ String searching functions:
 
 ;;;
 ;;; Symbolics Common Lisp provides optimization for these macros... we
@@ -900,11 +900,11 @@
                                            key-len))
                         (return (1+ (- i key-len))))))))))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ String pluralisation:
+;;;{{{ String pluralisation:
 
 (defvar *compound-separators*
   '(;; Prepositions
@@ -1057,11 +1057,11 @@
             add))))
 
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ String articles:
+;;;{{{ String articles:
 
 (defvar *pronounce-aitch* t)
 
@@ -1166,10 +1166,10 @@ CASE argument controls the case of the article."
                 (concatenate 'string article-string " " original-string)
                 article-string))))))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; symbolics.lisp ends here

@@ -2,8 +2,8 @@
 ;;;
 ;;; classes.lisp --- CLOS extensions
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:08:58 asmodai>
-;;; Revision:   4
+;;; Time-stamp: <Sunday Feb  5, 2012 01:39:32 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,16 +33,16 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-clos)
 
 ;;; ==================================================================
-;;; {{{ Singleton classes:                   (Source: Tim Bradshaw)
+;;;{{{ Singleton classes:                   (Source: Tim Bradshaw)
 
 (defclass singleton-class (cl-hacks-mop:standard-class)
   ((instance
@@ -86,11 +86,11 @@
   (:metaclass singleton-class))
 ||#
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Abstract classes:                    (Source: Tim Bradshaw)
+;;;{{{ Abstract classes:                    (Source: Tim Bradshaw)
 
 (defclass abstract-class (cl-hacks-mop:standard-class)
   ())
@@ -129,11 +129,11 @@
 
 ||#
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Final classes:                       (Source: Tim Bradshaw)
+;;;{{{ Final classes:                       (Source: Tim Bradshaw)
 
 (defclass final-class (cl-hacks-mop:standard-class)
   ())
@@ -158,7 +158,7 @@
      @,options
      (:metaclass final-class)))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; classes.lisp ends here

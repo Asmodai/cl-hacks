@@ -2,8 +2,8 @@
 ;;;
 ;;; io.lisp --- I/O functions
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:07:06 asmodai>
-;;; Revision:   3
+;;; Time-stamp: <Sunday Feb  5, 2012 01:44:05 asmodai>
+;;; Revision:   4
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,16 +33,16 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks)
 
 ;;; ------------------------------------------------------------------
-;;; {{{ Files and streams:
+;;;{{{ Files and streams:
 
 (defun print-file-contents (file &optional (stream *standard-output*))
   (when (probe-file file)
@@ -128,11 +128,11 @@
   (dolist (r rows)
     (format stream "~{~A~^ ~}~%" r)))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; ------------------------------------------------------------------
-;;; {{{ Buffered stream substitute:
+;;;{{{ Buffered stream substitute:
 
 (defstruct buf
   vec
@@ -214,7 +214,7 @@
              (setf pos 0))))
     (buf-flush buf out)))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 (declaim (inline write-fixnum))
@@ -247,7 +247,7 @@
             (error "root not directory ~A" root)))))
 
 ;;; ------------------------------------------------------------------
-;;; {{{ Writing stuff out:
+;;;{{{ Writing stuff out:
 
 (defmacro with-utime-decoding ((utime &optional zone) &body body)
   `(multiple-value-bind
@@ -423,7 +423,7 @@
     :do (write-sequence buffer output)
     :finally (write-sequence buffer output :end bytes-read)))
 
-;;; }}}
+;;;}}}
 ;;; ------------------------------------------------------------------
 
 ;;; io.lisp ends here

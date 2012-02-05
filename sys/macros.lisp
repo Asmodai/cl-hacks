@@ -2,8 +2,8 @@
 ;;;
 ;;; macros.lisp --- Various macros
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:05:55 asmodai>
-;;; Revision:   7
+;;; Time-stamp: <Sunday Feb  5, 2012 01:52:15 asmodai>
+;;; Revision:   8
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,16 +33,16 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-hacks-internals)
 
 ;;; ==================================================================
-;;; {{{ Gensym macros:
+;;;{{{ Gensym macros:
 
 (defmacro with-gensyms (names &body forms)
   `(let ,(mapcar (lambda (name)
@@ -61,11 +61,11 @@
 (defmacro with-unique-names (names &body forms)
   `(with-gensyms ,names ,@forms))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Evaluation macros:
+;;;{{{ Evaluation macros:
 
 ;;; Genera already has ONCE-ONLY.
 #-genera
@@ -104,11 +104,11 @@
                  (list 'ignore-errors x))
                forms)))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; ==================================================================
-;;; {{{ Parsing:
+;;;{{{ Parsing:
 
 (defmacro discard-docstring (body-var &optional force-p)
   `(when (and (stringp (car ,body-var))
@@ -258,7 +258,7 @@
             rest (nreverse keys)
             allow-other-keys (nreverse aux))))
 
-;;; }}}
+;;;}}}
 ;;; ==================================================================
 
 ;;; macros.lisp ends here
