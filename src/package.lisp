@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- CL-HACKS package definition
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 06:46:15 asmodai>
-;;; Revision:   11
+;;; Time-stamp: <Sunday Feb  5, 2012 00:34:45 asmodai>
+;;; Revision:   13
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,10 +33,10 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (in-package #:cl-user)
@@ -56,7 +56,7 @@
   ;; Exports
   (:export
 
-;;; {{{ buff-input.lisp:
+;;;{{{ buff-input.lisp:
    
    #:+max-field+
    #:+max-fields-per-line+
@@ -73,8 +73,8 @@
    #:+max-line+
    #:read-buffered-line
 
-;;; }}}
-;;; {{{ byte-stream.lisp:
+;;;}}}
+;;;{{{ byte-stream.lisp:
 
    #+(or cmu sbcl) #:byte-array-output-stream
    #+(or cmu sbcl) #:byte-array-bout
@@ -95,14 +95,14 @@
    #+allegro #:dump-output-stream-data
    #+allegro #:make-byte-array-input-stream
 
-;;; }}}
-;;; {{{ collecting.lisp:
+;;;}}}
+;;;{{{ collecting.lisp:
 
    #:collecting
    #:with-collectors
 
-;;; }}}
-;;; {{{ console.lisp:
+;;;}}}
+;;;{{{ console.lisp:
 
    #:*console-messages*
    #:*console-message-types*
@@ -114,8 +114,8 @@
    #:cmsg-list
    #:fixme
 
-;;; }}}
-;;; {{{ datetime.lisp:
+;;;}}}
+;;;{{{ datetime.lisp:
 
    #:timestamp
    #:subzone
@@ -270,13 +270,13 @@
    #:date-divider
    #:parse-time
    
-;;; }}}
-;;; {{{ dynamic-state.lisp:
+;;;}}}
+;;;{{{ dynamic-state.lisp:
 
    #:define-dynamic-state
 
-;;; }}}
-;;; {{{ equal.lisp:
+;;;}}}
+;;;{{{ equal.lisp:
 
    #:generalized-equal
    #:generalized-equal-function
@@ -287,8 +287,8 @@
    #:structure-slot-names
    #:function-to-string
 
-;;; }}}
-;;; {{{ for.lisp:
+;;;}}}
+;;;{{{ for.lisp:
 
    #:iter
    #:next
@@ -296,16 +296,16 @@
    #:range
    #:gather
 
-;;; }}}
-;;; {{{ glex.lisp:
+;;;}}}
+;;;{{{ glex.lisp:
 
    #:unbound-global-lexical
    #:glex-value
    #:defglex
    #:defglpar
 
-;;; }}}
-;;; {{{ implementations.lisp:
+;;;}}}
+;;;{{{ implementations.lisp:
 
    #:canonicalize-directory-name
    #:probe-directory
@@ -314,8 +314,8 @@
    #:command-line-arguments
    #-genera #:copy-file
 
-;;; }}}
-;;; {{{ io.lisp:
+;;;}}}
+;;;{{{ io.lisp:
 
    #:print-file-contents
    #:read-stream-to-string
@@ -361,15 +361,15 @@
    #:write-file-into-string
    #:copy-buffer-stream
 
-;;; }}}
-;;; {{{ iterate.lisp:
+;;;}}}
+;;;{{{ iterate.lisp:
 
    #:iterate
    #:iterate/labels
    #:iterate/tag
 
-;;; }}}
-;;; {{{ lists.lisp:
+;;;}}}
+;;;{{{ lists.lisp:
 
    #:last-but-one
    #:element-at
@@ -414,8 +414,8 @@
    #:get-alist
    #:unique-slot-values
 
-;;; }}}
-;;; {{{ macros.lisp:
+;;;}}}
+;;;{{{ macros.lisp:
 
    #:with-each-stream-line
    #:with-each-file-line
@@ -429,8 +429,8 @@
    #:pprint-macro-1
    #:ppmx
 
-;;; }}}
-;;; {{{ math.lisp:
+;;;}}}
+;;;{{{ math.lisp:
 
    #:primep
    #:coprime
@@ -462,8 +462,8 @@
    #:negate
    #:reciprocal
 
-;;; }}}
-;;; {{{ matrix.lisp:
+;;;}}}
+;;;{{{ matrix.lisp:
 
    #:matrix-minor
    #:matrix-rows
@@ -509,8 +509,8 @@
    #:matrix-columnspace
    #:print-matrix-four-subspaces
 
-;;; }}}
-;;; {{{ memoize.lisp:
+;;;}}}
+;;;{{{ memoize.lisp:
 
    #:*memoized-functions*
    #:make-memo
@@ -523,8 +523,8 @@
    #:def-memoized-function
    #:memoized-labels
 
-;;; }}}
-;;; {{{ mp.lisp:
+;;;}}}
+;;;{{{ mp.lisp:
 
    ;;; TODO: This requires hackery for Genera
    #-genera #:mp-make-lock
@@ -534,8 +534,8 @@
    #-genera #:destroy-process
    #-genera #:process-active-p
 
-;;; }}}
-;;; {{{ os.lisp:
+;;;}}}
+;;;{{{ os.lisp:
 
    #:command-output
    #:run-system-command
@@ -543,14 +543,24 @@
    #:file-size
    #:getpid
 
-;;; }}}
-;;; {{{ random.lisp:
+;;;}}}
+;;;{{{ random.lisp:
 
    #:seed-random-generator
    #:random-choice
 
-;;; }}}
-;;; {{{ strings.lisp:
+;;;}}}
+;;;{{{ serialize.lisp:
+
+   #:serializer
+   #:save-objects
+   #:load-objects
+   #:open-serializer
+   #:close-serializer
+   #:force-serializer-output
+   
+;;;}}}
+;;;{{{ strings.lisp:
 
    #:list-to-string
    #:count-string-words
@@ -631,8 +641,8 @@
    #:string-beginning-with-p 
    #:string-delimited-by-p
 
-;;; }}}
-;;; {{{ symbols.lisp:
+;;;}}}
+;;;{{{ symbols.lisp:
    
    #:cl-symbols
    #:cl-variables
@@ -647,8 +657,8 @@
    #:show-variables
    #:show-functions
 
-;;; }}}
-;;; {{{ version.lisp:
+;;;}}}
+;;;{{{ version.lisp:
 
    #:common-lisp-implementation-type
    #:common-lisp-implementation-version
@@ -658,7 +668,7 @@
    #:common-machine-type
    #:common-machine-instance
 
-;;; }}}
+;;;}}}
 
    ))
 

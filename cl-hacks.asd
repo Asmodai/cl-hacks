@@ -2,8 +2,8 @@
 ;;;
 ;;; cl-hacks.asd --- CL-Hacks ASDF package definition
 ;;;
-;;; Time-stamp: <Wednesday Dec 14, 2011 23:25:32 asmodai>
-;;; Revision:   14
+;;; Time-stamp: <Tuesday Jan 31, 2012 23:35:05 asmodai>
+;;; Revision:   17
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,11 +33,11 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
+;;;}}}
 ;;;
-;;; {{{ Commentary:
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #+genera
 (error "Please do not load this file into a Symbolics system.
@@ -73,6 +73,8 @@ This is only for Common Lisp systems that support ASDF.")
                (:file "definitions" :depends-on ("package"))
                (:file "binding" :depends-on ("package"
                                              "definitions"))
+               (:file "conditions" :depends-on ("package"
+                                                "definitions"))
                (:file "symbolics" :depends-on ("package"
                                                "binding"))
                (:file "symbols" :depends-on ("package"
@@ -158,8 +160,8 @@ This is only for Common Lisp systems that support ASDF.")
                (:file "mp" :depends-on ("package"))
                (:file "os" :depends-on ("package"))
                (:file "random" :depends-on ("package"))
+               (:file "serialize" :depends-on ("package"))
                (:file "version" :depends-on ("package"))
                (:file "exports" :depends-on ("package"))))))
 
 ;;; cl-hacks.asd ends here
-

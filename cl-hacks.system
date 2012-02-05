@@ -2,8 +2,8 @@
 ;;;
 ;;; cl-hacks.system --- CL-HACKS system definition
 ;;;
-;;; Time-stamp: <Friday Nov 25, 2011 23:30:54 asmodai>
-;;; Revision:   2
+;;; Time-stamp: <Tuesday Jan 31, 2012 23:35:29 asmodai>
+;;; Revision:   3
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,10 +33,10 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (error "This file is meant to be used on a Lisp Machine.")

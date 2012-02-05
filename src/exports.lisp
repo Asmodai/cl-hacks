@@ -2,8 +2,8 @@
 ;;;
 ;;; exports.lisp --- Package exports
 ;;;
-;;; Time-stamp: <Friday Dec  9, 2011 06:48:13 asmodai>
-;;; Revision:   11
+;;; Time-stamp: <Saturday Dec 17, 2011 14:40:46 asmodai>
+;;; Revision:   13
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -94,6 +94,17 @@
                                   (package-name fpkg))
                           (exp-vars fpkg)
                           (exp-funs fpkg))
-                        (warn "~S not found." pkg)))))))
+                        (warn "~S not found." pkg)))))
+
+    ;;
+    ;; Export our conditions
+    (export 'clhi::code mypkg)
+    (export 'clhi::case-error mypkg)
+    (export 'clhi::not-implemented mypkg)
+    (export 'clhi::required-argument-missing mypkg)
+    (export 'clhi::simple-style-warning mypkg)
+    (export 'clhi::simple-reader-error mypkg)
+    (export 'clhi::simple-parse-error mypkg)
+    (export 'clhi::simple-program-error mypkg)))
 
 ;;; exports.lisp ends here

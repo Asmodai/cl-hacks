@@ -2,8 +2,8 @@
 ;;;
 ;;; sysdcl.lisp --- DEFSYSTEM for Symbolics gear
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:03:58 asmodai>
-;;; Revision:   4
+;;; Time-stamp: <Tuesday Jan 31, 2012 23:36:01 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,10 +33,10 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-genera
 (error "This requires Symbolics Genera.")
@@ -131,6 +131,7 @@
                         ;; mp
                         "os"
                         "random"
+                        "serialize"
                         "version"
                         "exports")
            (:uses-definitions-from sys-package))

@@ -2,8 +2,8 @@
 ;;;
 ;;; lw-defsys.lisp --- LispWorks system definition
 ;;;
-;;; Time-stamp: <Monday Dec  5, 2011 05:04:16 asmodai>
-;;; Revision:   10
+;;; Time-stamp: <Tuesday Jan 31, 2012 23:36:21 asmodai>
+;;; Revision:   12
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -13,7 +13,7 @@
 ;;; Keywords:   
 ;;; URL:        not distributed yet
 ;;;
-;;; {{{ License:
+;;;{{{ License:
 ;;;
 ;;; This code is free software; you can redistribute it and/or modify
 ;;; it under the terms of the version 2.1 of the GNU Lesser General
@@ -33,10 +33,10 @@
 ;;; Software Foundation, Inc., 59 Temple Place, Suite  330, Boston, MA
 ;;; 02111-1307  USA
 ;;;
-;;; }}}
-;;; {{{ Commentary:
+;;;}}}
+;;;{{{ Commentary:
 ;;;
-;;; }}}
+;;;}}}
 
 #-lispworks
 (error "This is meant for LispWorks!")
@@ -135,6 +135,7 @@
             "mp"
             "os"
             "random"
+            "serialize"
             "version"
             "exports")
   :rules ((:in-order-to :compile :all
@@ -151,4 +152,3 @@
            (:requires (:load :serial)))))
 
 ;;; lw-defsys.lisp ends here
-
