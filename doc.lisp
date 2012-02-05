@@ -2,8 +2,8 @@
 ;;;
 ;;; doc.lisp --- DEFSYSTEM for documentation
 ;;;
-;;; Time-stamp: <Friday Nov 25, 2011 22:21:38 asmodai>
-;;; Revision:   2
+;;; Time-stamp: <Sunday Feb  5, 2012 01:59:14 asmodai>
+;;; Revision:   3
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -57,7 +57,7 @@
      :distribute-binaries t
      :source-category :basic)
   ;;
-  (:module cl-hacks ("cl-hacks" "anaphoric"))
+  (:module cl-hacks ("cl-hacks" "anaphoric")))
 
 (sage::register-book "Common Lisp Hacks"
                      :document-type 'sage::3symanual
