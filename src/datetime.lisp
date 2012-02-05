@@ -2,8 +2,8 @@
 ;;;
 ;;; datetime.lisp --- Time and date functions
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 00:42:20 asmodai>
-;;; Revision:   31
+;;; Time-stamp: <Sunday Feb  5, 2012 00:46:42 asmodai>
+;;; Revision:   32
 ;;;
 ;;; Copyright (c) 2009-2011 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -1734,7 +1734,7 @@ You can see examples in +ISO-8601-FORMAT+, +ASCTIME-FORMAT+, and +RFC-1123-FORMA
           (decode-universal-time ut)
         (declare (ignore daylight-p zone))
         (format nil "~A ~D ~A ~D ~2,'0D:~2,'0D:~2,'0D"
-                (elt +day-names+ dow)
+                (elt +day-names+ (mod (1+ dow) 6))
                 day
                 (elt +month-names+ mon)
                 year
