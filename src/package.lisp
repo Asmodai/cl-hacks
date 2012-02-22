@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- CL-HACKS package definition
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 00:34:45 asmodai>
-;;; Revision:   13
+;;; Time-stamp: <Sunday Feb 19, 2012 07:36:28 asmodai>
+;;; Revision:   16
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -560,6 +560,15 @@
    #:force-serializer-output
    
 ;;;}}}
+;;;{{{ simple-actor.lisp:
+
+   #:simple-actor
+   #:run-actor-function
+   #:stop-actor
+   #:start-actor
+   #:actor-running-p
+   
+;;;}}}
 ;;;{{{ strings.lisp:
 
    #:list-to-string
@@ -671,6 +680,9 @@
 ;;;}}}
 
    ))
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (pushnew :cl-hacks cl:*features*))
 
 ;;; package.lisp ends here
 
