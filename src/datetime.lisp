@@ -2,8 +2,8 @@
 ;;;
 ;;; datetime.lisp --- Time and date functions
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 01:42:05 asmodai>
-;;; Revision:   34
+;;; Time-stamp: <Friday Feb 10, 2012 07:50:10 asmodai>
+;;; Revision:   35
 ;;;
 ;;; Copyright (c) 2009-2011 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (c) 2002 Keven M. Rosenberg
@@ -163,6 +163,9 @@
 (defparameter +short-month-names+
   #("" "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov"
     "Dec"))
+(defparameter +month-names-as-keywords+
+  #(:january :february :march :april :may :june :july :august
+    :september :october :november :december))
 (defparameter +day-names+
   #("Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday"))
 (defparameter +day-names-as-keywords+
