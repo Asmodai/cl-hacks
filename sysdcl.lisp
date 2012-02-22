@@ -2,8 +2,8 @@
 ;;;
 ;;; sysdcl.lisp --- DEFSYSTEM for Symbolics gear
 ;;;
-;;; Time-stamp: <Tuesday Jan 31, 2012 23:36:01 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Sunday Feb  5, 2012 06:30:20 asmodai>
+;;; Revision:   6
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -132,6 +132,7 @@
                         "os"
                         "random"
                         "serialize"
+                        "simple-actor"
                         "version"
                         "exports")
            (:uses-definitions-from sys-package))

@@ -2,8 +2,8 @@
 ;;;
 ;;; cl-hacks.asd --- CL-Hacks ASDF package definition
 ;;;
-;;; Time-stamp: <Tuesday Jan 31, 2012 23:35:05 asmodai>
-;;; Revision:   17
+;;; Time-stamp: <Sunday Feb  5, 2012 06:29:54 asmodai>
+;;; Revision:   18
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -161,6 +161,8 @@ This is only for Common Lisp systems that support ASDF.")
                (:file "os" :depends-on ("package"))
                (:file "random" :depends-on ("package"))
                (:file "serialize" :depends-on ("package"))
+               (:file "simple-actor" :depends-on ("package"
+                                                  "mp"))
                (:file "version" :depends-on ("package"))
                (:file "exports" :depends-on ("package"))))))
 

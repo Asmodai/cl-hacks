@@ -2,8 +2,8 @@
 ;;;
 ;;; lw-defsys.lisp --- LispWorks system definition
 ;;;
-;;; Time-stamp: <Tuesday Jan 31, 2012 23:36:21 asmodai>
-;;; Revision:   12
+;;; Time-stamp: <Sunday Feb  5, 2012 06:30:09 asmodai>
+;;; Revision:   13
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -136,6 +136,7 @@
             "os"
             "random"
             "serialize"
+            "simple-actor"
             "version"
             "exports")
   :rules ((:in-order-to :compile :all
