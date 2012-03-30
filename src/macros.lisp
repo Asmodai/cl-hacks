@@ -2,8 +2,8 @@
 ;;;
 ;;; macros.lisp --- Various macros
 ;;;
-;;; Time-stamp: <Friday Mar 30, 2012 18:53:30 asmodai>
-;;; Revision:   8
+;;; Time-stamp: <Friday Mar 30, 2012 19:17:20 asmodai>
+;;; Revision:   9
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -166,7 +166,9 @@
             (pprint expr))
            (t
             (format t "~&; First step of expansion:")
-            (pprint exp1)))
+            (pprint exp1)
+            (format t "~%~%Final expansion:")
+            (pprint exp)))
      (format t "~%~%")
      (values)))
 
