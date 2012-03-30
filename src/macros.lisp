@@ -2,8 +2,8 @@
 ;;;
 ;;; macros.lisp --- Various macros
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 01:44:56 asmodai>
-;;; Revision:   7
+;;; Time-stamp: <Friday Mar 30, 2012 18:53:30 asmodai>
+;;; Revision:   8
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -159,7 +159,7 @@
 
 (defmacro ppmx (form)
   `(let* ((exp1 (macroexpand-1 ',form))
-          (expr (macroexpand ',form))
+          (expr (macroexpand exp1))
           (*print-circle* nil))
      (cond ((eql expr exp1)
             (format t "~&; Macro expansion:")
