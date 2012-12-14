@@ -2,8 +2,8 @@
 ;;;
 ;;; classes.lisp --- CLOS extensions
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 01:39:32 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Saturday Mar 17, 2012 16:08:24 asmodai>
+;;; Revision:   6
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -155,7 +155,7 @@
     (error "Cannot define a final class with a metaclass."))
   `(defclass ,class ,supers
      ,slots
-     @,options
+     ,@options
      (:metaclass final-class)))
 
 ;;;}}}
