@@ -2,8 +2,8 @@
 ;;;
 ;;; lw-defsys.lisp --- LispWorks system definition
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 06:30:09 asmodai>
-;;; Revision:   13
+;;; Time-stamp: <Friday Dec 14, 2012 04:49:03 asmodai>
+;;; Revision:   14
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -52,13 +52,13 @@
   :members ("package"
             "definitions"
             "binding"
+            "macros"
             "symbolics"
             "symbols"
             "functions"
             "ifstar"
             "anaphoric"
             "conditions"
-            "macros"
             "control-flow"
             "looping"
             "lists"
