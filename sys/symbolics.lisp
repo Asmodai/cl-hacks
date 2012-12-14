@@ -2,8 +2,8 @@
 ;;;
 ;;; symbolics.lisp --- Functionality taken from Zetalisp and Symbolics Common Lisp
 ;;;
-;;; Time-stamp: <Sunday Feb  5, 2012 01:53:35 asmodai>
-;;; Revision:   32
+;;; Time-stamp: <Friday Dec 14, 2012 04:52:55 asmodai>
+;;; Revision:   33
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -110,13 +110,16 @@
           finally (return (values declarations real-body
                                   (and real-body form)))))
 
-  ;; TODO: Add docstring support.
+  ;; TODO: Add better docstring support!
   ;; SCL:DEFSUBST
   (defmacro defsubst (name lambda-list &body body)
-    `(progn
+    (let ((doc-string (discard-docstring body)))
+      `(progn
        (proclaim '(inline ,name))
-       (defun ,name ,lambda-list ,@body)))
-
+       (defun ,name ,lambda-list
+         ,(if doc-string doc-string "")  ; kludge!
+         ,@body))))
+  
   ) ;; (eval-when ...)
 
 ;;;}}}
