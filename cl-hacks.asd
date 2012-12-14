@@ -2,8 +2,8 @@
 ;;;
 ;;; cl-hacks.asd --- CL-Hacks ASDF package definition
 ;;;
-;;; Time-stamp: <Friday Dec 14, 2012 04:48:45 asmodai>
-;;; Revision:   19
+;;; Time-stamp: <Friday Dec 14, 2012 05:38:02 asmodai>
+;;; Revision:   20
 ;;;
 ;;; Copyright (c) 2011 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -75,8 +75,6 @@ This is only for Common Lisp systems that support ASDF.")
                                              "definitions"))
                (:file "conditions" :depends-on ("package"
                                                 "definitions"))
-               (:file "macros" :depends-on ("package"
-                                            "functions"))
                (:file "symbolics" :depends-on ("package"
                                                "binding"
                                                "macros"))
@@ -84,6 +82,8 @@ This is only for Common Lisp systems that support ASDF.")
                                              "symbolics"))
                (:file "functions" :depends-on ("package"
                                                "symbols"))
+               (:file "macros" :depends-on ("package"
+                                            "functions"))
                (:file "ifstar" :depends-on ("package"
                                             "functions"))
                (:file "anaphoric" :depends-on ("package"))
